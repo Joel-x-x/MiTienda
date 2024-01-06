@@ -1,10 +1,9 @@
 package com.mitienda.controller;
 
-
 import com.mitienda.domain.usuario.*;
 import com.mitienda.infra.Estado;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,13 +15,13 @@ public class UsuarioController {
     @Autowired
     RegistrarUsuarioService registrarUsuarioService;
 
-    public Estado registrarUsuarioAdministrador(DatosRegistroUsuario datosRegistroUsuario) {
+    public Estado registrarUsuario(@Valid DatosRegistroUsuario datosRegistroUsuario) {
         registrarUsuarioService.registrarUsuario(datosRegistroUsuario);
 
         return new Estado(true, "usuario registrado!");
     }
 
-    public Estado login(DatosLoginUsuario datosLoginUsuario) {
+    public Estado login(@Valid DatosLoginUsuario datosLoginUsuario) {
        Usuario usuario = usuarioRepository.findByUsuarioAndClave(datosLoginUsuario.usuario(), datosLoginUsuario.clave());
 
        if(usuario == null)

@@ -1,8 +1,8 @@
 package com.mitienda.domain.usuario;
 
 import com.mitienda.domain.usuario.validaciones.ValidacionesRegistrarUsuario;
-import com.mitienda.infra.Estado;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
