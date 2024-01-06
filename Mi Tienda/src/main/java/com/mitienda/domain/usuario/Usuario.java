@@ -24,7 +24,6 @@ public class Usuario {
     private String clave;
     private String nombre;
     private String apellido;
-    private String identificacion;
     @Enumerated(EnumType.STRING)
     private Rol rol;
     private Boolean estado;
@@ -35,7 +34,7 @@ public class Usuario {
         this.clave = datosRegistroUsuario.clave();
         this.nombre = datosRegistroUsuario.nombre();
         this.apellido = datosRegistroUsuario.apellido();
-        this.rol = Rol.ADMINISTRADOR;
+        this.rol = datosRegistroUsuario.rol();
         this.estado = true;
     }
 

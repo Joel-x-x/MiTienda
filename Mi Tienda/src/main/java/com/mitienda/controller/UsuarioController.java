@@ -1,33 +1,34 @@
 package com.mitienda.controller;
 
 
-import com.mitienda.domain.usuario.DatosLoginUsuario;
-import com.mitienda.domain.usuario.DatosRegistroUsuario;
-import com.mitienda.domain.usuario.Usuario;
-import com.mitienda.domain.usuario.UsuarioRepository;
+import com.mitienda.domain.usuario.*;
+import com.mitienda.infra.Estado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
+@Controller
 public class UsuarioController {
 
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    public Boolean registrarUsuarioAdministrador(DatosRegistroUsuario datosRegistroUsuario) {
-        usuarioRepository.save(new Usuario(datosRegistroUsuario));
+    @Autowired
+    RegistrarUsuarioService registrarUsuarioService;
 
-        return true;
+    public Estado registrarUsuarioAdministrador(DatosRegistroUsuario datosRegistroUsuario) {
+        registrarUsuarioService.registrarUsuario(datosRegistroUsuario);
+
+        return new Estado(true, "usuario registrado!");
     }
 
-    public Boolean login(DatosLoginUsuario datosLoginUsuario) {
+    public Estado login(DatosLoginUsuario datosLoginUsuario) {
        Usuario usuario = usuarioRepository.findByUsuarioAndClave(datosLoginUsuario.usuario(), datosLoginUsuario.clave());
 
        if(usuario == null)
-           return false;
+           return new Estado(false, "datos incorrectos");
 
-       return true;
+       return new Estado(true, "datos correctos");
     }
-
 
 }
