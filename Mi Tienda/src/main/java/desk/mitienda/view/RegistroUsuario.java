@@ -13,6 +13,8 @@ import javax.swing.border.LineBorder;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -22,18 +24,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.CaretListener;
+
+import desk.mitienda.model.Rol;
+import desk.mitienda.model.Usuario;
+
 import javax.swing.event.CaretEvent;
 
 public class RegistroUsuario extends JFrame {
 
 	private JPanel contentPane;
+	private JPasswordField txt_confirmar_contraseña;
 	private JPasswordField txt_contraseña;
-	private JPasswordField textField_2;
+	private JTextField txt_usuario;
+	private JTextField txt_cedula;
+	private JTextField txt_apellido;
 	private JTextField txt_nombre;
-	private JTextField textField;
-	private JTextField textField_4;
-	private JTextField textField_5;
 	private JLabel lbl_verificador_contraseña;
+	private JLabel lbl_coincidencia_contraseñas;
 
 	/**
 	 * Launch the application.
@@ -151,12 +158,7 @@ public class RegistroUsuario extends JFrame {
 		JButton btnNewButton = new JButton("LISTO");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String confirmarContraseña = txt_contraseña.getPassword().toString();
-				String contraseña = textField_2.getPassword().toString();
-				String usuario = txt_nombre.getText();
-				String cedula = textField.getText();
-				String apellidos = textField_4.getText();
-				String nombre = textField_5.getText();
+				
 			}
 		});
 		btnNewButton.setForeground(Color.WHITE);
@@ -213,7 +215,16 @@ public class RegistroUsuario extends JFrame {
 		panel_11.add(lblNombreDeDueo);
 		
 		
+		txt_confirmar_contraseña = createPasswordField(10,5);
+		
+		
+		txt_confirmar_contraseña.setBounds(291, 411, 357, 35);
+		panel_11.add(txt_confirmar_contraseña);
+
 		txt_contraseña = createPasswordField(10,5);
+		txt_contraseña.setBounds(291, 354, 357, 35);
+		panel_11.add(txt_contraseña);
+		txt_contraseña.setText("2");
 		
 		txt_contraseña.addCaretListener(new CaretListener() {
 			String contraseña= "";
@@ -259,29 +270,41 @@ public class RegistroUsuario extends JFrame {
         		
 			}
 		});
-		txt_contraseña.setBounds(291, 411, 357, 35);
-		panel_11.add(txt_contraseña);
+		
+		
+		
+		txt_confirmar_contraseña.addCaretListener(new CaretListener() {
+			
+        	
+			public void caretUpdate(CaretEvent e) {
+				if(!String.valueOf(txt_confirmar_contraseña.getPassword()).equals(String.valueOf(txt_contraseña.getPassword()))) {
+                	lbl_coincidencia_contraseñas.setText("Sin coincidencias");
+                	lbl_coincidencia_contraseñas.setForeground(Color.RED);
+                }else if(String.valueOf(txt_confirmar_contraseña.getPassword()).equals(String.valueOf(txt_contraseña.getPassword()))){
+                	lbl_coincidencia_contraseñas.setText("");
+                }
+        		
+			}
+		});
+		txt_usuario = createTextField(10, 5);
+		txt_usuario.setBounds(291, 297, 357, 35);
+		panel_11.add(txt_usuario);
 
-		textField_2 = createPasswordField(10,5);
-		textField_2.setBounds(291, 354, 357, 35);
-		panel_11.add(textField_2);
+		txt_cedula = createTextField(10, 5);
+		txt_cedula.setBounds(291, 240, 357, 35);
+		panel_11.add(txt_cedula);
+		
+
+		txt_apellido = createTextField(10, 5);
+		txt_apellido.setBounds(291, 183, 357, 35);
+		panel_11.add(txt_apellido);
+		
+		
 
 		txt_nombre = createTextField(10, 5);
-		txt_nombre.setBounds(291, 297, 357, 35);
+		txt_nombre.setBounds(291, 126, 357, 35);
 		panel_11.add(txt_nombre);
-		txt_nombre.setText("xdxd");
-
-		textField = createTextField(10, 5);
-		textField.setBounds(291, 240, 357, 35);
-		panel_11.add(textField);
-
-		textField_4 = createTextField(10, 5);
-		textField_4.setBounds(291, 183, 357, 35);
-		panel_11.add(textField_4);
-
-		textField_5 = createTextField(10, 5);
-		textField_5.setBounds(291, 126, 357, 35);
-		panel_11.add(textField_5);
+		
 
 		
 		
@@ -316,5 +339,60 @@ public class RegistroUsuario extends JFrame {
 		lbl_verificador_contraseña= new JLabel("New label");
 		lbl_verificador_contraseña.setBounds(1010, 414, 217, 14);
 		panel.add(lbl_verificador_contraseña);
+		
+		lbl_coincidencia_contraseñas = new JLabel("New label");
+		lbl_coincidencia_contraseñas.setBounds(1010, 462, 217, 14);
+		panel.add(lbl_coincidencia_contraseñas);
 	}
+	
+//	public void registrar() {
+//		Usuario usuario = llenarUsuario();
+//
+//		// Validaciones
+//		if(administrador.getNombre().equals("")) {
+//			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+//			return;
+//		}
+//
+//		if(!Utilidades.validarEmail(textEmail.getText())) {
+//			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+//			return;
+//		}
+//
+//		if(administrador.getPassword().equals("")) {
+//			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");
+//			return;
+//		}
+//
+//		if(!administrador.getPassword().equals(String.valueOf(txt_confirmar_contraseña.getText()))) {
+//			JOptionPane.showMessageDialog(null, "Las contraseñan no coinciden");
+//			return;
+//		}
+//
+//		// Registrar
+//		if(administradorController.registrar(administrador)) {
+//			administrador_id = administradorController.getId();
+//
+//			JOptionPane.showMessageDialog(null, "Registrado con exito");
+//
+//
+//			limpiarFormulario();
+//			registroFrame.mostrarPanelInicioSesion();
+//		} else {
+//			JOptionPane.showMessageDialog(null, "No se pudo registrar verifica la clave");
+//		}
+//	}
+	 public Usuario llenarUsuario() {
+	    	return new Usuario(
+	    			
+	    	null,
+	    	txt_usuario.getText(),
+	    	txt_contraseña.getPassword().toString(),
+	    	txt_nombre.getText(),
+	    	txt_apellido.getText(),
+	    	Rol.ADMINISTRADOR,
+	    	true
+	    	 	);
+	    	
+	    }
 }
