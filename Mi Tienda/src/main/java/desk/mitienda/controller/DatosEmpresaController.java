@@ -15,4 +15,8 @@ public class DatosEmpresaController {
     public Estado guardar(DatosEmpresa datosEmpresa) {
         return datosEmpresaDao.guardar(datosEmpresa);
     }
+
+    public Estado actualizar(DatosEmpresa datosEmpresa) {
+        return datosEmpresaDao.actualizar(datosEmpresa);
+    }
 }

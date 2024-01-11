@@ -1,5 +1,5 @@
 
-package com.mitienda.view.mensajes;
+package desk.mitienda.view.mensajes;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package desk.mitienda.dao;
 
-import desk.mitienda.model.DatosEmpresa;
+import desk.mitienda.model.Cliente;
 import desk.mitienda.model.DatosEmpresa;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
@@ -8,54 +8,54 @@ import org.apache.commons.beanutils.BeanUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-public class DatosEmpresaDao {
+public class ClienteDao {
     private EntityManager em;
     private EntityTransaction transaction;
 
-    public DatosEmpresaDao(EntityManager em) {
+    public ClienteDao(EntityManager em) {
         this.em = em;
         this.transaction = em.getTransaction();
     }
 
-    public Estado guardar(DatosEmpresa datosEmpresa) {
+    public Estado guardar(Cliente cliente) {
         try {
             transaction.begin();
-            this.em.persist(datosEmpresa);
+            this.em.persist(cliente);
             transaction.commit();
-            return new Estado(true, "datos empresa registrados");
+            return new Estado(true, "cliente registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar los datos empresa");
+            return new Estado(false, "no se pudo registrar el cliente");
         } finally {
             em.close();
         }
     }
 
-    public Estado actualizar(DatosEmpresa datosEmpresa) {
+    public Estado actualizar(Cliente cliente) {
 
-        DatosEmpresa datosEmpresaExistente;
+        Cliente clienteExistente;
 
         try {
             transaction.begin();
             // Buscamos cliente por id
-            datosEmpresaExistente = this.em.find(DatosEmpresa.class, datosEmpresa.getId());
+            clienteExistente = this.em.find(Cliente.class, cliente.getId());
             // Pasamos de detached a managed
-            datosEmpresaExistente = this.em.merge(datosEmpresaExistente);
-            // Copiamos las propiedades del cliente al datosEmpresaExistente
-            BeanUtils.copyProperties(datosEmpresaExistente, datosEmpresa);
+            clienteExistente = this.em.merge(clienteExistente);
+            // Copiamos las propiedades del cliente al clienteExistente
+            BeanUtils.copyProperties(clienteExistente, cliente);
             transaction.commit();
-            return new Estado(true, "datos empresa actualizados");
+            return new Estado(true, "cliente actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar datos empresa");
+            return new Estado(false, "no se pudo actualizar el cliente");
         } finally {
             em.close();
         }
