@@ -1,89 +1,89 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Cliente;
-import desk.mitienda.model.DatosEmpresa;
+import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-public class ClienteDao {
+public class ProveedorDao {
     private EntityManager em;
     private EntityTransaction transaction;
 
-    public ClienteDao(EntityManager em) {
+    public ProveedorDao(EntityManager em) {
         this.em = em;
         this.transaction = em.getTransaction();
     }
 
-    public Estado guardar(Cliente cliente) {
+    public Estado guardar(Proveedor proveedor) {
         try {
             transaction.begin();
-            this.em.persist(cliente);
+            this.em.persist(proveedor);
             transaction.commit();
-            return new Estado(true, "cliente registrado");
+            return new Estado(true, "proveedor registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar el cliente");
+            return new Estado(false, "no se pudo registrar el proveedor");
         } finally {
             em.close();
         }
     }
 
-    public Estado actualizar(Cliente cliente) {
+    public Estado actualizar(Proveedor proveedor) {
 
-        Cliente clienteExistente;
+        Proveedor proveedorExistente;
 
         try {
             transaction.begin();
-            // Buscamos cliente por id
-            clienteExistente = this.em.find(Cliente.class, cliente.getId());
+            // Buscamos proveedor por id
+            proveedorExistente = this.em.find(Proveedor.class, proveedor.getId());
             // Pasamos de detached a managed
-            clienteExistente = this.em.merge(clienteExistente);
-            // Copiamos las propiedades del cliente al clienteExistente
-            BeanUtils.copyProperties(clienteExistente, cliente);
+            proveedorExistente = this.em.merge(proveedorExistente);
+            // Copiamos las propiedades del proveedor al proveedorExistente
+            BeanUtils.copyProperties(proveedorExistente, proveedor);
             transaction.commit();
-            return new Estado(true, "cliente actualizado");
+            return new Estado(true, "proveedor actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar el cliente");
+            return new Estado(false, "no se pudo actualizar el proveedor");
         } finally {
             em.close();
         }
     }
+
     public Estado eliminar(Long id) {
-        Cliente cliente;
+        Proveedor proveedor;
 
         try {
             transaction.begin();
-            // Buscamos cliente por id
-            cliente = this.em.find(Cliente.class, id);
+            // Buscamos proveedor por id
+            proveedor = this.em.find(Proveedor.class, id);
             // Pasamos de detached a managed
-            cliente = this.em.merge(cliente);
+            proveedor = this.em.merge(proveedor);
             // Desactivamos el estado a false
-            cliente.desactivar();
+            proveedor.desactivar();
             transaction.commit();
-            return new Estado(true, "cliente eliminado");
+            return new Estado(true, "proveedor eliminado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo eliminar el cliente");
+            return new Estado(false, "no se pudo eliminar el proveedor");
         } finally {
             em.close();
         }
     }
-
 
 }

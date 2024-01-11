@@ -19,4 +19,8 @@ public class ClienteController {
     public Estado actualizar(Cliente cliente) {
         return clienteDao.actualizar(cliente);
     }
+
+    public Estado eliminar(Long id) {
+        return clienteDao.eliminar(id);
+    }
 }
