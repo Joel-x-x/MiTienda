@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -16,31 +17,44 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class RegistroUsuario extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JPasswordField txt_contraseña;
+	private JPasswordField textField_2;
+	private JTextField txt_nombre;
 	private JTextField textField;
 	private JTextField textField_4;
 	private JTextField textField_5;
+	private JLabel lbl_verificador_contraseña;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	
                 try {
                     RegistroUsuario frame = new RegistroUsuario();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                
+                
             }
+            
         });
+        
     }
 	private RoundBorderTextField createTextField() {
 	    RoundBorderTextField textField = new RoundBorderTextField(10, 5); // El segundo parámetro es el radio del borde
@@ -48,6 +62,13 @@ public class RegistroUsuario extends JFrame {
 	    textField.setFont(new Font("Jockey One", Font.PLAIN, 17));
 	    textField.setColumns(10);
 	    return textField;
+	}
+	private RoundBorderPasswordField createPasswordField() {
+	    RoundBorderPasswordField passwordField = new RoundBorderPasswordField(10, 5); // El segundo parámetro es el radio del borde
+	    passwordField.setForeground(Color.WHITE);
+	    passwordField.setFont(new Font("Jockey One", Font.PLAIN, 17));
+	    passwordField.setColumns(10);
+	    return passwordField;
 	}
 
 
@@ -69,16 +90,40 @@ public class RegistroUsuario extends JFrame {
     private RoundBorderTextField createTextField(int columns, int cornerRadius) {
         return new RoundBorderTextField(columns, cornerRadius);
     }
+    
+    
 
-	/**
+    private void setRoundBorder(JPasswordField passwordField) {
+        int cornerRadius = 10;
+        passwordField.setBorder(new LineBorder(new Color(64, 66, 73), 5, true) {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                super.paintBorder(c, g, x, y, width, height);
+                java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create();
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING,
+                        java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.drawRoundRect(x, y, width - 1, height - 1, cornerRadius, cornerRadius);
+                g2d.dispose();
+            }
+        });
+    }
+    private RoundBorderPasswordField createPasswordField(int columns, int cornerRadius) {
+        return new RoundBorderPasswordField(columns, cornerRadius);
+    }
+    /**
 	 * Create the frame.
 	 */
+    
+    
 	public RegistroUsuario() {
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
+		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -104,6 +149,16 @@ public class RegistroUsuario extends JFrame {
 		
 		
 		JButton btnNewButton = new JButton("LISTO");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String confirmarContraseña = txt_contraseña.getPassword().toString();
+				String contraseña = textField_2.getPassword().toString();
+				String usuario = txt_nombre.getText();
+				String cedula = textField.getText();
+				String apellidos = textField_4.getText();
+				String nombre = textField_5.getText();
+			}
+		});
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setFont(new Font("Jockey One", Font.PLAIN, 23));
 		btnNewButton.setBorder(null);
@@ -158,17 +213,63 @@ public class RegistroUsuario extends JFrame {
 		panel_11.add(lblNombreDeDueo);
 		
 		
-		textField_1 = createTextField(10, 5);
-		textField_1.setBounds(291, 411, 357, 35);
-		panel_11.add(textField_1);
+		txt_contraseña = createPasswordField(10,5);
+		
+		txt_contraseña.addCaretListener(new CaretListener() {
+			String contraseña= "";
+        	String contraseña_array [];
+        	
+			public void caretUpdate(CaretEvent e) {
+				contraseña = String.valueOf(txt_contraseña.getPassword());
+        		contraseña_array = new String[contraseña.length()];
+        		
+        		for(int i = 0; i<contraseña.length(); i++) {
+    				contraseña_array[i] = contraseña.substring(i,i+1);
+    			}
+        		if(contraseña.length()>=8) {
+        			boolean mayusculas = false ;
+        			for(int i = 0; i<contraseña.length(); i++) {
+        				if(contraseña.contains(contraseña_array[i].toUpperCase())) {
+        					mayusculas = true;
+        				}
+        			}
+        			
+        			if(mayusculas) {
+        				if(contraseña.matches(".*\\d.*")) {
+        					if(contraseña.matches(".*[^a-zA-Z0-9\\s].*")) {
+        						lbl_verificador_contraseña.setForeground(Color.GREEN);
+        						lbl_verificador_contraseña.setText("Contraseña Valida");
+        					}else {
+        						lbl_verificador_contraseña.setForeground(Color.RED);
+        	        			lbl_verificador_contraseña.setText("Minimo un caracter especial(*,?,+,-,_,....)");
+        	        		}
+        				}else {
+        					lbl_verificador_contraseña.setForeground(Color.RED);
+                			lbl_verificador_contraseña.setText("Minimo un número");
+                		}
+					}else {
+						lbl_verificador_contraseña.setForeground(Color.RED);
+	        			lbl_verificador_contraseña.setText("Minimo una Mayúscula");
+	        		}
+        			
+        		}else {
+        			lbl_verificador_contraseña.setForeground(Color.RED);
+        			lbl_verificador_contraseña.setText("Minimo 8 caracteres");
+        		}
+        		
+			}
+		});
+		txt_contraseña.setBounds(291, 411, 357, 35);
+		panel_11.add(txt_contraseña);
 
-		textField_2 = createTextField(10, 5);
+		textField_2 = createPasswordField(10,5);
 		textField_2.setBounds(291, 354, 357, 35);
 		panel_11.add(textField_2);
 
-		textField_3 = createTextField(10, 5);
-		textField_3.setBounds(291, 297, 357, 35);
-		panel_11.add(textField_3);
+		txt_nombre = createTextField(10, 5);
+		txt_nombre.setBounds(291, 297, 357, 35);
+		panel_11.add(txt_nombre);
+		txt_nombre.setText("xdxd");
 
 		textField = createTextField(10, 5);
 		textField.setBounds(291, 240, 357, 35);
@@ -194,10 +295,26 @@ public class RegistroUsuario extends JFrame {
 		panel_11.add(lblNewLabel);
 		
 		JLabel lblIniciarSesion = new JLabel("INICIAR SESION ");
+		lblIniciarSesion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				IniciarSesionFrame frame = new IniciarSesionFrame();
+				frame.setVisible(true);
+				frame.setLocationRelativeTo(null);
+				
+		    // Cierra el frame al hacer clic en el label
+				dispose();
+		        
+			}
+		});
 		lblIniciarSesion.setForeground(Color.WHITE);
 		lblIniciarSesion.setFont(new Font("Jockey One", Font.PLAIN, 23));
 		lblIniciarSesion.setBorder(null);
 		lblIniciarSesion.setBounds(1081, 702, 189, 47);
 		panel.add(lblIniciarSesion);
+		
+		lbl_verificador_contraseña= new JLabel("New label");
+		lbl_verificador_contraseña.setBounds(1010, 414, 217, 14);
+		panel.add(lbl_verificador_contraseña);
 	}
 }
