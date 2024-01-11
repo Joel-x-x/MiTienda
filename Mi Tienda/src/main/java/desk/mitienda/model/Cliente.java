@@ -20,4 +20,10 @@ public class Cliente {
     private String nombre;
     private String apellido;
     private String celular;
+    private Boolean estado;
+
+
+    public void desactivar() {
+        this.estado = false;
+    }
 }
