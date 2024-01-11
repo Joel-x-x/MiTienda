@@ -5,7 +5,7 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
     <persistence-unit name="mitienda" transaction-type="RESOURCE_LOCAL">
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mitienda?serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mitienda"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.password" value=""/>

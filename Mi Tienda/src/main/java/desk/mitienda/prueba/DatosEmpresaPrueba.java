@@ -2,6 +2,7 @@ package desk.mitienda.prueba;
 
 import desk.mitienda.controller.DatosEmpresaController;
 import desk.mitienda.model.DatosEmpresa;
+import org.flywaydb.core.Flyway;
 
 public class DatosEmpresaPrueba {
 
