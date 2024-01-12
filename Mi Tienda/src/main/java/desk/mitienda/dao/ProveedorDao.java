@@ -22,14 +22,14 @@ public class ProveedorDao {
             transaction.begin();
             this.em.persist(proveedor);
             transaction.commit();
-            return new Estado(true, "proveedor registrado");
+            return new Estado(true, "Proveedor registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar el proveedor");
+            return new Estado(false, "No se pudo registrar el proveedor");
         } finally {
             em.close();
         }
@@ -48,14 +48,14 @@ public class ProveedorDao {
             // Copiamos las propiedades del proveedor al proveedorExistente
             BeanUtils.copyProperties(proveedorExistente, proveedor);
             transaction.commit();
-            return new Estado(true, "proveedor actualizado");
+            return new Estado(true, "Proveedor actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar el proveedor");
+            return new Estado(false, "No se pudo actualizar el proveedor");
         } finally {
             em.close();
         }
@@ -73,14 +73,14 @@ public class ProveedorDao {
             // Desactivamos el estado a false
             proveedor.desactivar();
             transaction.commit();
-            return new Estado(true, "proveedor eliminado");
+            return new Estado(true, "Proveedor eliminado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo eliminar el proveedor");
+            return new Estado(false, "No se pudo eliminar el proveedor");
         } finally {
             em.close();
         }

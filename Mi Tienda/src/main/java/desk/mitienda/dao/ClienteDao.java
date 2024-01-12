@@ -7,6 +7,10 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import java.util.List;
 
 public class ClienteDao {
     private EntityManager em;
@@ -22,14 +26,14 @@ public class ClienteDao {
             transaction.begin();
             this.em.persist(cliente);
             transaction.commit();
-            return new Estado(true, "cliente registrado");
+            return new Estado(true, "Cliente registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar el cliente");
+            return new Estado(false, "No se pudo registrar el cliente");
         } finally {
             em.close();
         }
@@ -48,14 +52,14 @@ public class ClienteDao {
             // Copiamos las propiedades del cliente al clienteExistente
             BeanUtils.copyProperties(clienteExistente, cliente);
             transaction.commit();
-            return new Estado(true, "cliente actualizado");
+            return new Estado(true, "Cliente actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar el cliente");
+            return new Estado(false, "No se pudo actualizar el cliente");
         } finally {
             em.close();
         }
@@ -72,17 +76,28 @@ public class ClienteDao {
             // Desactivamos el estado a false
             cliente.desactivar();
             transaction.commit();
-            return new Estado(true, "cliente eliminado");
+            return new Estado(true, "Cliente eliminado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo eliminar el cliente");
+            return new Estado(false, "No se pudo eliminar el cliente");
         } finally {
             em.close();
         }
+    }
+
+    public List<Cliente> listar(String codigo, String nombre) {
+        CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
+
+        CriteriaQuery<Cliente> createQuery = criteriaBuilder.createQuery(Cliente.class);
+
+        Predicate filtro = criteriaBuilder.and();
+
+        return null;
+
     }
 
 

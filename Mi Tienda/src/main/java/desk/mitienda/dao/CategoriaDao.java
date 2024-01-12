@@ -21,14 +21,14 @@ public class CategoriaDao {
             transaction.begin();
             this.em.persist(categoria);
             transaction.commit();
-            return new Estado(true, "categoria registrada");
+            return new Estado(true, "Categoria registrada");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar la categoria");
+            return new Estado(false, "No se pudo registrar la categoria");
         } finally {
             em.close();
         }
@@ -47,14 +47,14 @@ public class CategoriaDao {
             // Copiamos las propiedades del la categoria a categoriaExistente
             BeanUtils.copyProperties(categoriaExistente, categoria);
             transaction.commit();
-            return new Estado(true, "categoria actualizada");
+            return new Estado(true, "Categoria actualizada");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar la categoria");
+            return new Estado(false, "No se pudo actualizar la categoria");
         } finally {
             em.close();
         }

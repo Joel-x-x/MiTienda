@@ -21,14 +21,14 @@ public class UsuarioDao {
             transaction.begin();
             this.em.persist(usuario);
             transaction.commit();
-            return new Estado(true, "usuario registrado");
+            return new Estado(true, "Usuario registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar el usuario");
+            return new Estado(false, "No se pudo registrar el usuario");
         } finally {
             em.close();
         }
@@ -41,13 +41,13 @@ public class UsuarioDao {
             transaction.begin();
             Usuario usuarioClass = this.em.createQuery(jpql, Usuario.class).setParameter("usuario", usuario).setParameter("clave", clave).getSingleResult();
             transaction.commit();
-            return new Estado(true, "usuario autenticado");
+            return new Estado(true, "Usuario autenticado");
         } catch (Exception e) {
             if(transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-            return new Estado(false, "credenciales incorrectas");
+            return new Estado(false, "Credenciales incorrectas");
         } finally {
             em.close();
         }

@@ -17,7 +17,9 @@ public class DatosEmpresa {
     private Long id;
 
     @Column (unique = true)
-    private String nombre;
+    private String nombreEmpresa;
+    private String nombres;
+    private String apellidos;
     private String direccion;
     private String celular;
     private String correo;
