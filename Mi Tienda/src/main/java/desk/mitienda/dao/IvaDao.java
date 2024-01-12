@@ -47,14 +47,14 @@ public class IvaDao {
             // Copiamos las propiedades del la iva a ivaExistente
             BeanUtils.copyProperties(ivaExistente, iva);
             transaction.commit();
-            return new Estado(true, "iva actualizada");
+            return new Estado(true, "Iva actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar la iva");
+            return new Estado(false, "No se pudo actualizar la iva");
         } finally {
             em.close();
         }

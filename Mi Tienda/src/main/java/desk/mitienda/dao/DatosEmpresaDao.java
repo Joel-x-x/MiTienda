@@ -22,14 +22,14 @@ public class DatosEmpresaDao {
             transaction.begin();
             this.em.persist(datosEmpresa);
             transaction.commit();
-            return new Estado(true, "datos empresa registrados");
+            return new Estado(true, "Datos empresa registrados");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo registrar los datos empresa");
+            return new Estado(false, "No se pudo registrar los datos empresa");
         } finally {
             em.close();
         }
@@ -48,14 +48,14 @@ public class DatosEmpresaDao {
             // Copiamos las propiedades del cliente al datosEmpresaExistente
             BeanUtils.copyProperties(datosEmpresaExistente, datosEmpresa);
             transaction.commit();
-            return new Estado(true, "datos empresa actualizados");
+            return new Estado(true, "Datos empresa actualizados");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "no se pudo actualizar datos empresa");
+            return new Estado(false, "No se pudo actualizar datos empresa");
         } finally {
             em.close();
         }
