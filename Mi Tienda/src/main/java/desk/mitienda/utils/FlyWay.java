@@ -9,4 +9,7 @@ public class FlyWay {
     public static void migrate() {
         flyway.migrate();
     }
+    public static void repair() {
+        flyway.repair();
+    }
 }
