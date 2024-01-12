@@ -1,30 +1,32 @@
 
 package desk.mitienda.view;
 
+import desk.mitienda.model.DatosEmpresa;
+import desk.mitienda.model.Rol;
+import desk.mitienda.model.Usuario;
+import desk.mitienda.utils.Estado;
+import desk.mitienda.utils.Utilidades;
+
 import java.awt.EventQueue;
 import java.awt.BasicStroke;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 
 public class RegistroTiendaFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JTextField txt_correo;
+	private JTextField txt_telefono;
+	private JTextField txt_ruc;
+	private JTextField txt_direccion;
+	private JTextField txt_nombre_tienda;
+	private JTextField txt_nombre_dueno;
 
 	/**
 	 * Launch the application.
@@ -73,6 +75,7 @@ public class RegistroTiendaFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public RegistroTiendaFrame() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
 		contentPane = new JPanel();
@@ -157,29 +160,34 @@ public class RegistroTiendaFrame extends JFrame {
 		panel_11.add(lblNombreDeDueo);
 		
 		
-		textField_1 = createTextField(10, 5);
-		textField_1.setBounds(291, 411, 357, 35);
-		panel_11.add(textField_1);
+		txt_correo = createTextField(10, 5);
+		txt_correo.setBounds(291, 411, 357, 35);
+		panel_11.add(txt_correo);
 
-		textField_2 = createTextField(10, 5);
-		textField_2.setBounds(291, 354, 357, 35);
-		panel_11.add(textField_2);
 
-		textField_3 = createTextField(10, 5);
-		textField_3.setBounds(291, 297, 357, 35);
-		panel_11.add(textField_3);
+		txt_telefono = createTextField(10, 5);
+		txt_telefono.setBounds(291, 354, 357, 35);
+		panel_11.add(txt_telefono);
 
-		textField = createTextField(10, 5);
-		textField.setBounds(291, 240, 357, 35);
-		panel_11.add(textField);
+		txt_ruc = createTextField(10, 5);
+		txt_ruc.setBounds(291, 297, 357, 35);
+		panel_11.add(txt_ruc);
 
-		textField_4 = createTextField(10, 5);
-		textField_4.setBounds(291, 183, 357, 35);
-		panel_11.add(textField_4);
 
-		textField_5 = createTextField(10, 5);
-		textField_5.setBounds(291, 126, 357, 35);
-		panel_11.add(textField_5);
+		txt_direccion = createTextField(10, 5);
+		txt_direccion.setBounds(291, 240, 357, 35);
+		panel_11.add(txt_direccion);
+		txt_direccion.setText("xd");
+
+		txt_nombre_tienda = createTextField(10, 5);
+		txt_nombre_tienda.setBounds(291, 183, 357, 35);
+		panel_11.add(txt_nombre_tienda);
+
+
+		txt_nombre_dueno = createTextField(10, 5);
+		txt_nombre_dueno.setBounds(291, 126, 357, 35);
+		panel_11.add(txt_nombre_dueno);
+
 
 		
 		
@@ -197,5 +205,58 @@ public class RegistroTiendaFrame extends JFrame {
 		lblIniciarSesion.setBorder(null);
 		lblIniciarSesion.setBounds(1081, 702, 189, 47);
 		panel.add(lblIniciarSesion);
+	}
+	public void registrar() {
+
+		DatosEmpresa datosEmpresa = llenarDatosEmpresa();
+
+
+		// Validaciones
+		if(datosEmpresa.getNombre().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+			return;
+		}
+
+		if(!Utilidades.validarEmail(txt_correo.getText())) {
+			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+			return;
+		}
+
+
+
+
+
+		// Registrar
+		Estado estado = usuarioController.registrar(usuario);
+		if(estado.getExito()) {
+
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
+			registroTiendaFrame.setLocationRelativeTo(null);
+			registroTiendaFrame.setVisible(true);
+			dispose();
+
+
+
+
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+		}
+	}
+	public DatosEmpresa llenarDatosEmpresa() {
+
+		return new DatosEmpresa(
+
+				null,
+				txt_nombre_dueno.getText(),
+				txt_direccion.getText(),
+				txt_telefono.getText(),
+				txt_correo.getText(),
+				true,
+				txt_ruc.getText()
+
+		);
+
 	}
 }

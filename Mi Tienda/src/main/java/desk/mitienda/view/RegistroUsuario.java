@@ -25,8 +25,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.CaretListener;
 
+import desk.mitienda.controller.UsuarioController;
 import desk.mitienda.model.Rol;
 import desk.mitienda.model.Usuario;
+import desk.mitienda.utils.Estado;
+import desk.mitienda.utils.FlyWay;
+import desk.mitienda.utils.Utilidades;
 
 import javax.swing.event.CaretEvent;
 
@@ -41,6 +45,8 @@ public class RegistroUsuario extends JFrame {
 	private JTextField txt_nombre;
 	private JLabel lbl_verificador_contraseña;
 	private JLabel lbl_coincidencia_contraseñas;
+	private UsuarioController usuarioController;
+	private int usuario_id;
 
 	/**
 	 * Launch the application.
@@ -123,6 +129,8 @@ public class RegistroUsuario extends JFrame {
     
     
 	public RegistroUsuario() {
+		FlyWay.migrate();
+		usuarioController = new UsuarioController();
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -158,7 +166,8 @@ public class RegistroUsuario extends JFrame {
 		JButton btnNewButton = new JButton("LISTO");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				registrar();
+
 			}
 		});
 		btnNewButton.setForeground(Color.WHITE);
@@ -345,44 +354,49 @@ public class RegistroUsuario extends JFrame {
 		panel.add(lbl_coincidencia_contraseñas);
 	}
 	
-//	public void registrar() {
-//		Usuario usuario = llenarUsuario();
-//
-//		// Validaciones
-//		if(administrador.getNombre().equals("")) {
-//			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
-//			return;
-//		}
-//
-//		if(!Utilidades.validarEmail(textEmail.getText())) {
-//			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
-//			return;
-//		}
-//
-//		if(administrador.getPassword().equals("")) {
-//			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");
-//			return;
-//		}
-//
-//		if(!administrador.getPassword().equals(String.valueOf(txt_confirmar_contraseña.getText()))) {
-//			JOptionPane.showMessageDialog(null, "Las contraseñan no coinciden");
-//			return;
-//		}
-//
-//		// Registrar
-//		if(administradorController.registrar(administrador)) {
-//			administrador_id = administradorController.getId();
-//
-//			JOptionPane.showMessageDialog(null, "Registrado con exito");
-//
-//
-//			limpiarFormulario();
-//			registroFrame.mostrarPanelInicioSesion();
-//		} else {
-//			JOptionPane.showMessageDialog(null, "No se pudo registrar verifica la clave");
-//		}
-//	}
+	public void registrar() {
+
+		Usuario usuario = llenarUsuario();
+
+
+		// Validaciones
+		if(usuario.getNombre().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+			return;
+		}
+
+		if(!Utilidades.validarEmail(txt_usuario.getText())) {
+			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+			return;
+		}
+
+		if(usuario.getClave().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");
+			return;
+		}
+
+
+
+		// Registrar
+		Estado estado = usuarioController.registrar(usuario);
+		if(estado.getExito()) {
+
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
+			registroTiendaFrame.setLocationRelativeTo(null);
+			registroTiendaFrame.setVisible(true);
+			dispose();
+
+
+
+
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+		}
+	}
 	 public Usuario llenarUsuario() {
+
 	    	return new Usuario(
 	    			
 	    	null,
