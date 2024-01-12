@@ -249,6 +249,7 @@ public class RegistroTiendaFrame extends JFrame {
 		return new DatosEmpresa(
 
 				null,
+				txt_nombre_tienda.getText(),
 				txt_nombre_dueno.getText(),
 				txt_direccion.getText(),
 				txt_telefono.getText(),
