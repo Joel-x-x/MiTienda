@@ -4,7 +4,6 @@ create table usuarios (
     clave longblob not null,
     nombre varchar(100),
     apellido varchar(100),
-    identificacion varchar(20),
     rol enum('ADMINISTRADOR','VENDEDOR','BODEGUERO') not null,
     estado tinyint default 1
 );
