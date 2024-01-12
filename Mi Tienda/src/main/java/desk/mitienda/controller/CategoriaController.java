@@ -5,6 +5,8 @@ import desk.mitienda.model.Categoria;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.util.List;
+
 public class CategoriaController {
     CategoriaDao categoriaDao;
 
@@ -18,5 +20,9 @@ public class CategoriaController {
 
     public Estado actualizar(Categoria categoria) {
         return categoriaDao.actualizar(categoria);
+    }
+
+    public List<Categoria> listar() {
+        return categoriaDao.listar();
     }
 }

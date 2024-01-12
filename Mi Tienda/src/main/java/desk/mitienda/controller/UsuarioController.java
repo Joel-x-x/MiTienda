@@ -6,6 +6,7 @@ import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class UsuarioController {
 
@@ -21,5 +22,9 @@ public class UsuarioController {
 
     public Estado login(String usuario, String clave) {
         return usuarioDao.login(usuario, clave);
+    }
+
+    public List<Usuario> listar(String nombre) {
+        return usuarioDao.listar(nombre);
     }
 }

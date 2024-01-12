@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class ClienteDao {
@@ -35,7 +36,7 @@ public class ClienteDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo registrar el cliente");
         } finally {
-            em.close();
+             // em.close();
         }
     }
 
@@ -61,7 +62,7 @@ public class ClienteDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo actualizar el cliente");
         } finally {
-            em.close();
+             // em.close();
         }
     }
     public Estado eliminar(Long id) {
@@ -85,20 +86,29 @@ public class ClienteDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo eliminar el cliente");
         } finally {
-            em.close();
+             // em.close();
         }
     }
 
-    public List<Cliente> listar(String codigo, String nombre) {
+    public List<Cliente> listar(String identificacion, String nombre) {
         CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
 
         CriteriaQuery<Cliente> createQuery = criteriaBuilder.createQuery(Cliente.class);
 
+        Root<Cliente> from = createQuery.from(Cliente.class);
+
         Predicate filtro = criteriaBuilder.and();
 
-        return null;
+        if(identificacion != null && !identificacion.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+        }
+
+        if(nombre != null && !nombre.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
+        }
+
+        return em.createQuery(createQuery.where(filtro)).getResultList();
 
     }
-
 
 }

@@ -31,7 +31,7 @@ public class DatosEmpresaDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo registrar los datos empresa");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -57,7 +57,7 @@ public class DatosEmpresaDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo actualizar datos empresa");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 

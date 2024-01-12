@@ -5,6 +5,8 @@ import desk.mitienda.model.Cliente;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.util.List;
+
 public class ClienteController {
     ClienteDao clienteDao;
 
@@ -22,5 +24,9 @@ public class ClienteController {
 
     public Estado eliminar(Long id) {
         return clienteDao.eliminar(id);
+    }
+
+    public List<Cliente> listar(String codigo, String nombre) {
+        return clienteDao.listar(codigo, nombre);
     }
 }
