@@ -19,7 +19,6 @@ public class DatosEmpresa {
     @Column (unique = true)
     private String nombreEmpresa;
     private String nombres;
-    private String apellidos;
     private String direccion;
     private String celular;
     private String correo;
