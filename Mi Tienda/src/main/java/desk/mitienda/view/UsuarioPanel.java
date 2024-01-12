@@ -30,7 +30,7 @@ public class UsuarioPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public UsuarioPanel() {
+	public UsuarioPanel(int panelAncho, int panelAlto) {
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
 		
