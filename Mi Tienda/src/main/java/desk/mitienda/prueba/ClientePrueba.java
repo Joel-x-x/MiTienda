@@ -14,8 +14,8 @@ public class ClientePrueba {
 
         ClienteController clienteController = new ClienteController();
 
-        Estado estado2 = clienteController.guardar(new Cliente(null, "1839433343","Pablo","Perez","0938384455", true));
-        System.out.println(estado2.getMensaje());
+//        Estado estado2 = clienteController.guardar(new Cliente(null, "1839433343","Pablo","Perez","0938384455", true));
+//        System.out.println(estado2.getMensaje());
 
 //        List<Cliente> clientes = clienteController.listar(null, "");
 //
