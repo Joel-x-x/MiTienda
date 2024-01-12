@@ -1,11 +1,13 @@
 package desk.mitienda.dao;
 
+import desk.mitienda.model.Categoria;
 import desk.mitienda.model.Iva;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.util.List;
 
 public class IvaDao {
     private EntityManager em;
@@ -30,7 +32,7 @@ public class IvaDao {
             e.printStackTrace();
             return new Estado(false, "no se pudo registrar la iva");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -56,8 +58,13 @@ public class IvaDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo actualizar la iva");
         } finally {
-            em.close();
+            // em.close();
         }
+    }
+
+    public List<Iva> listar() {
+        String jpql = "select I from Iva as I";
+        return this.em.createQuery(jpql, Iva.class).getResultList();
     }
 
 }

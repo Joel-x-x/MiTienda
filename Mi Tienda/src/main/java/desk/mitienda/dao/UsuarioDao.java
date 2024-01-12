@@ -1,10 +1,17 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Usuario;
+import desk.mitienda.model.Proveedor;
+import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class UsuarioDao {
 
@@ -30,7 +37,7 @@ public class UsuarioDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo registrar el usuario");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -49,8 +56,13 @@ public class UsuarioDao {
             e.printStackTrace();
             return new Estado(false, "Credenciales incorrectas");
         } finally {
-            em.close();
+            // em.close();
         }
+    }
+
+    public List<Usuario> listar(String nombre) {
+        String jpql = "select U from Usuario as U where U.nombre like :nombre";
+        return this.em.createQuery(jpql, Usuario.class).setParameter("nombre", nombre).getResultList();
     }
 
 }

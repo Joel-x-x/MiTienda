@@ -1,12 +1,17 @@
 package desk.mitienda.dao;
 
-import desk.mitienda.model.Cliente;
+import desk.mitienda.model.Proveedor;
 import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class ProveedorDao {
     private EntityManager em;
@@ -31,7 +36,7 @@ public class ProveedorDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo registrar el proveedor");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -57,7 +62,7 @@ public class ProveedorDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo actualizar el proveedor");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -82,8 +87,29 @@ public class ProveedorDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo eliminar el proveedor");
         } finally {
-            em.close();
+            // em.close();
         }
+    }
+
+    public List<Proveedor> listar(String identificacion, String empresa) {
+        CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
+
+        CriteriaQuery<Proveedor> createQuery = criteriaBuilder.createQuery(Proveedor.class);
+
+        Root<Proveedor> from = createQuery.from(Proveedor.class);
+
+        Predicate filtro = criteriaBuilder.and();
+
+        if(identificacion != null && !identificacion.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+        }
+
+        if(empresa != null && !empresa.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("empresa"), empresa));
+        }
+
+        return em.createQuery(createQuery.where(filtro)).getResultList();
+
     }
 
 }

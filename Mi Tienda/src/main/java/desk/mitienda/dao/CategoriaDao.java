@@ -1,11 +1,17 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Categoria;
+import desk.mitienda.model.Cliente;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class CategoriaDao {
     private EntityManager em;
@@ -30,7 +36,7 @@ public class CategoriaDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo registrar la categoria");
         } finally {
-            em.close();
+            // em.close();
         }
     }
 
@@ -56,8 +62,13 @@ public class CategoriaDao {
             e.printStackTrace();
             return new Estado(false, "No se pudo actualizar la categoria");
         } finally {
-            em.close();
+            // em.close();
         }
+    }
+
+    public List<Categoria> listar() {
+        String jpql = "select C from Categoria as C";
+        return this.em.createQuery(jpql, Categoria.class).getResultList();
     }
 
 }
