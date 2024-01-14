@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class AdminFrame extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = -3509542713044310899L;
-    private BarraPanel barraPanel;
+    private BarraLateral barraPanel;
     private JPanel panelPrincipal;
     private int panelAncho = 1080, panelAlto = 750;
 
@@ -27,7 +27,7 @@ public class AdminFrame extends JFrame implements ActionListener{
         
 
         // BarraPanel
-        barraPanel = new BarraPanel(this);
+        barraPanel = new BarraLateral(this);
         barraPanel.setPreferredSize(new Dimension(200, 750));
 
         // Panel principal
