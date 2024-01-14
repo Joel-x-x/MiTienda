@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -29,10 +31,14 @@ public class ClientePanel extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * @param panelAlto 
+	 * @param panelAncho 
 	 */
-	public ClientePanel() {
+	public ClientePanel(int panelAncho, int panelAlto) {
+		setPreferredSize (new Dimension(panelAncho, panelAlto));
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
+		
 		
 		JLabel lblUsuarios = new JLabel("Clientes");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);

@@ -5,12 +5,16 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+
+import com.itextpdf.awt.geom.Dimension;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.DefaultComboBoxModel;
 
 public class UsuarioPanel extends JPanel {
 	private JTextField txt_usuario;
@@ -31,9 +35,10 @@ public class UsuarioPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public UsuarioPanel(int panelAncho, int panelAlto) {
+		
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
-		
+		setPreferredSize (new Dimension(panelAncho, panelAlto));
 		JLabel lblUsuarios = new JLabel("Usuarios");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuarios.setForeground(Color.WHITE);
@@ -89,6 +94,7 @@ public class UsuarioPanel extends JPanel {
 		add(txt_apellidos);
 		
 		comboBox_rol = new JComboBox();
+		comboBox_rol.setModel(new DefaultComboBoxModel(new String[] {"Bodeguero ", "Vendedor "}));
 		comboBox_rol.setBounds(22, 189, 169, 28);
 		add(comboBox_rol);
 		
@@ -166,5 +172,10 @@ public class UsuarioPanel extends JPanel {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 
+	}
+
+	private void setPreferredSize(Dimension dimension) {
+		// TODO Auto-generated method stub
+		
 	}
 }

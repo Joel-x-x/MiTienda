@@ -17,9 +17,7 @@ import javax.swing.JCheckBox;
 
 public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
-	private JPasswordField txt_psw_contraseña;
 	private JTextField txt_nombres;
-	private JTextField txt_apellidos;
 	private JButton btn_agregar_usuario;
 	private JComboBox comboBox_rol;
 	private JButton btn_modificar;
@@ -30,6 +28,8 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_busqueda_usuarios;
 	private JTable table;
 	private JPasswordField passwordField;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Create the panel.
@@ -39,7 +39,7 @@ public class ProductoPanel extends JPanel {
 	public ProductoPanel(int panelAncho, int panelAlto) {
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
-		//setPreferredSize (new Dimension(panelAlto, panelAlto));
+		setPreferredSize (new Dimension(panelAncho, panelAlto));
 		
 		JLabel lblUsuarios = new JLabel("Productos ");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
@@ -67,10 +67,6 @@ public class ProductoPanel extends JPanel {
 		lblClave.setBounds(201, 69, 114, 38);
 		add(lblClave);
 		
-		txt_psw_contraseña = new JPasswordField();
-		txt_psw_contraseña.setBounds(201, 107, 169, 28);
-		add(txt_psw_contraseña);
-		
 		JLabel lblNombre = new JLabel("Descripcion ");
 		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setFont(new Font("Jockey One", Font.PLAIN, 14));
@@ -82,18 +78,6 @@ public class ProductoPanel extends JPanel {
 		txt_nombres.setColumns(10);
 		txt_nombres.setBounds(380, 107, 169, 28);
 		add(txt_nombres);
-		
-		JLabel lblApellidos = new JLabel("Apellidos");
-		lblApellidos.setForeground(Color.WHITE);
-		lblApellidos.setFont(new Font("Jockey One", Font.PLAIN, 14));
-		lblApellidos.setBorder(null);
-		lblApellidos.setBounds(559, 69, 114, 38);
-		add(lblApellidos);
-		
-		txt_apellidos = new JTextField();
-		txt_apellidos.setColumns(10);
-		txt_apellidos.setBounds(559, 107, 169, 28);
-		add(txt_apellidos);
 		
 		comboBox_rol = new JComboBox();
 		comboBox_rol.setBounds(22, 189, 169, 28);
@@ -187,6 +171,25 @@ public class ProductoPanel extends JPanel {
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Tiene IVA");
 		chckbxNewCheckBox.setBounds(381, 193, 93, 21);
 		add(chckbxNewCheckBox);
+		
+		JLabel lblIva = new JLabel("IVA ");
+		lblIva.setForeground(Color.WHITE);
+		lblIva.setFont(new Font("Jockey One", Font.PLAIN, 14));
+		lblIva.setBorder(null);
+		lblIva.setBounds(493, 151, 114, 38);
+		add(lblIva);
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(493, 189, 169, 28);
+		add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(201, 107, 169, 28);
+		add(textField_1);
 
 	}
+	
+	
 }

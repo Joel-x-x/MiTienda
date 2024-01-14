@@ -27,6 +27,13 @@ public class BarraLateral extends JPanel {
 		setLayout(null);
 		
 		JButton btnNewButton = new JButton("VENTA ");
+		btnNewButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+				
+			}
+		});
 		btnNewButton.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBorder(null);
@@ -36,6 +43,7 @@ public class BarraLateral extends JPanel {
 		
 		JButton btnProductos = new JButton("PRODUCTOS");
 		btnProductos.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				 adminFrame.cambiarPanel(new ProductoPanel(panelAncho, panelAlto));
 			}
@@ -48,6 +56,12 @@ public class BarraLateral extends JPanel {
 		add(btnProductos);
 		
 		JButton btnClientes = new JButton("CLIENTES");
+		btnClientes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new ClientePanel(panelAncho, panelAlto));
+			}
+		});
 		btnClientes.setForeground(Color.WHITE);
 		btnClientes.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnClientes.setBorder(null);
@@ -72,6 +86,12 @@ public class BarraLateral extends JPanel {
 		add(btnIva);
 		
 		JButton btnNewButton_1_1 = new JButton("USUARIO");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new UsuarioPanel(panelAncho, panelAlto));
+			}
+		});
 		btnNewButton_1_1.setForeground(Color.WHITE);
 		btnNewButton_1_1.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnNewButton_1_1.setBorder(null);
