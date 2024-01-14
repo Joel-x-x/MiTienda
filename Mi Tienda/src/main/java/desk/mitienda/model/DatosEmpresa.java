@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class DatosEmpresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
