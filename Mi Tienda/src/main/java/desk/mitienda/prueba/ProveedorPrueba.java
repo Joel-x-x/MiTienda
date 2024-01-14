@@ -19,8 +19,12 @@ public class ProveedorPrueba {
 //        System.out.println(estado.getMensaje());
 
         // Actualizar
-        Estado estado = proveedorController.actualizar(new Proveedor(1l, "1839433343","Fausto Perez","Pinguino","Manabi y Guayaquil frente a la farmacia el descuento",
-                "0938384455","correo@corre.com","Vende helados pinguino", true));
-        System.out.println(estado.getMensaje());
+//        Estado estado = proveedorController.actualizar(
+//                new Proveedor(1L, "1839433343","Fausto Perez","Pinguino","Manabi y Guayaquil frente a la farmacia el descuento",
+//                "0938384455","correo@corre.com","Vende helados pinguino", true));
+//        System.out.println(estado.getMensaje());
+
+
+
     }
 }

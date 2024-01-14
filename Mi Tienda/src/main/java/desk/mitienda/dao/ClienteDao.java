@@ -43,7 +43,6 @@ public class ClienteDao {
     public Estado actualizar(Cliente cliente) {
 
         Cliente clienteExistente;
-
         try {
             transaction.begin();
             // Buscamos cliente por id
@@ -106,6 +105,8 @@ public class ClienteDao {
         if(nombre != null && !nombre.trim().isEmpty()) {
             filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
         }
+
+        filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
 
         return em.createQuery(createQuery.where(filtro)).getResultList();
 

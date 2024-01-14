@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class DetalleCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +22,8 @@ public class DetalleCompra {
     private Double subtotal;
     private Double iva;
     private Double total;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Producto producto;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Compra compra;
-
-
 }

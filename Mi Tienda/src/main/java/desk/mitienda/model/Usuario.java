@@ -2,6 +2,7 @@ package desk.mitienda.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.beans.ConstructorProperties;
 
 @Entity
 @Table(name = "usuarios")
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,4 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
     private Boolean estado;
-
-
 }

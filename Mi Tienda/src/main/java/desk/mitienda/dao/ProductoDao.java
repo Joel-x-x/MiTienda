@@ -1,6 +1,6 @@
 package desk.mitienda.dao;
 
-import desk.mitienda.model.Proveedor;
+import desk.mitienda.model.Producto;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -12,99 +12,99 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class ProveedorDao {
-    private final EntityManager em;
-    private final EntityTransaction transaction;
+public class ProductoDao {
+    private EntityManager em;
+    private EntityTransaction transaction;
 
-    public ProveedorDao(EntityManager em) {
+    public ProductoDao(EntityManager em) {
         this.em = em;
         this.transaction = em.getTransaction();
     }
 
-    public Estado guardar(Proveedor proveedor) {
+    public Estado guardar(Producto producto) {
         try {
             transaction.begin();
-            this.em.persist(proveedor);
+            this.em.persist(producto);
             transaction.commit();
-            return new Estado(true, "Proveedor registrado");
+            return new Estado(true, "Producto registrado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "No se pudo registrar el proveedor");
+            return new Estado(false, "No se pudo registrar el producto");
         } finally {
             // em.close();
         }
     }
 
-    public Estado actualizar(Proveedor proveedor) {
+    public Estado actualizar(Producto producto) {
 
-        Proveedor proveedorExistente;
+        Producto productoExistente;
 
         try {
             transaction.begin();
-            // Buscamos proveedor por id
-            proveedorExistente = this.em.find(Proveedor.class, proveedor.getId());
+            // Buscamos producto por id
+            productoExistente = this.em.find(Producto.class, producto.getId());
             // Pasamos de detached a managed
-            proveedorExistente = this.em.merge(proveedorExistente);
-            // Copiamos las propiedades del proveedor al proveedorExistente
-            BeanUtils.copyProperties(proveedorExistente, proveedor);
+            productoExistente = this.em.merge(productoExistente);
+            // Copiamos las propiedades del producto al productoExistente
+            BeanUtils.copyProperties(productoExistente, producto);
             transaction.commit();
-            return new Estado(true, "Proveedor actualizado");
+            return new Estado(true, "Producto actualizado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "No se pudo actualizar el proveedor");
+            return new Estado(false, "No se pudo actualizar el producto");
         } finally {
             // em.close();
         }
     }
 
     public Estado eliminar(Long id) {
-        Proveedor proveedor;
+        Producto producto;
 
         try {
             transaction.begin();
-            // Buscamos proveedor por id
-            proveedor = this.em.find(Proveedor.class, id);
+            // Buscamos producto por id
+            producto = this.em.find(Producto.class, id);
             // Pasamos de detached a managed
-            proveedor = this.em.merge(proveedor);
+            producto = this.em.merge(producto);
             // Desactivamos el estado a false
-            proveedor.desactivar();
+            producto.desactivar();
             transaction.commit();
-            return new Estado(true, "Proveedor eliminado");
+            return new Estado(true, "Producto eliminado");
 
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "No se pudo eliminar el proveedor");
+            return new Estado(false, "No se pudo eliminar el producto");
         } finally {
             // em.close();
         }
     }
 
-    public List<Proveedor> listar(String identificacion, String empresa) {
+    public List<Producto> listar(String codigo, String nombre) {
         CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
 
-        CriteriaQuery<Proveedor> createQuery = criteriaBuilder.createQuery(Proveedor.class);
+        CriteriaQuery<Producto> createQuery = criteriaBuilder.createQuery(Producto.class);
 
-        Root<Proveedor> from = createQuery.from(Proveedor.class);
+        Root<Producto> from = createQuery.from(Producto.class);
 
         Predicate filtro = criteriaBuilder.and();
 
-        if(identificacion != null && !identificacion.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+        if(codigo != null && !codigo.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("codigo"), codigo));
         }
 
-        if(empresa != null && !empresa.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("empresa"), empresa));
+        if(nombre != null && !nombre.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
         }
 
         filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));

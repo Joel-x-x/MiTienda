@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class Compra {
     private LocalDate fecha;
     private String formaPago;
     private Double descuento;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Proveedor proveedor;
     private Double subtotal;
     private Double iva;
