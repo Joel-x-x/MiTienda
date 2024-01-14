@@ -4,9 +4,11 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.SwingConstants;
 
-import com.itextpdf.awt.geom.Dimension;
+
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -174,8 +176,5 @@ public class UsuarioPanel extends JPanel {
 
 	}
 
-	private void setPreferredSize(Dimension dimension) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
