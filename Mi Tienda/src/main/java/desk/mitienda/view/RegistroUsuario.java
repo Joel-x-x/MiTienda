@@ -398,16 +398,13 @@ public class RegistroUsuario extends JFrame {
 	}
 	 public Usuario llenarUsuario() {
 
-		 Usuario usuario = new Usuario(
-				 null,
-				 txt_usuario.getText(),
-				 txt_contraseña.getPassword().toString(),
-				 txt_nombre.getText(),
-				 txt_apellido.getText(),
-				 Rol.ADMINISTRADOR,
-				 true
-		 );
-		 return usuario;
-
+		 return Usuario.builder()
+			.usuario(txt_usuario.getText())
+			.clave(new String(txt_contraseña.getPassword()))
+			.nombre(txt_nombre.getText())
+			.apellido(txt_apellido.getText())
+			.rol(Rol.ADMINISTRADOR)
+			.estado(true)
+			.build();
 	    }
 }

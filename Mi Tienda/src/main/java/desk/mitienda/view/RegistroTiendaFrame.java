@@ -147,19 +147,11 @@ public class RegistroTiendaFrame extends JFrame {
 		lblCorreo.setBounds(10, 411, 357, 47);
 		panel_11.add(lblCorreo);
 
-
-
-
-
-
-
 		JLabel lblDireccin = new JLabel("Dirección");
 		lblDireccin.setForeground(Color.WHITE);
 		lblDireccin.setFont(new Font("Jockey One", Font.PLAIN, 23));
 		lblDireccin.setBounds(10, 240, 357, 47);
 		panel_11.add(lblDireccin);
-
-
 
 		JLabel lblNombreDeLa = new JLabel("Nombre de la Tienda ");
 		lblNombreDeLa.setForeground(Color.WHITE);
@@ -189,7 +181,6 @@ public class RegistroTiendaFrame extends JFrame {
 		txt_ruc.setBounds(291, 297, 357, 35);
 		panel_11.add(txt_ruc);
 
-
 		txt_direccion = createTextField(10, 5);
 		txt_direccion.setBounds(291, 240, 357, 35);
 		panel_11.add(txt_direccion);
@@ -199,15 +190,9 @@ public class RegistroTiendaFrame extends JFrame {
 		txt_nombre_tienda.setBounds(291, 183, 357, 35);
 		panel_11.add(txt_nombre_tienda);
 
-
 		txt_nombre_dueno = createTextField(10, 5);
 		txt_nombre_dueno.setBounds(291, 126, 357, 35);
 		panel_11.add(txt_nombre_dueno);
-
-
-
-
-
 
 		JLabel lblNewLabel = new JLabel("REGISTRO DE DATOS DE TIENDA ");
 		lblNewLabel.setForeground(Color.WHITE);
@@ -234,50 +219,44 @@ public class RegistroTiendaFrame extends JFrame {
 		lblIniciarSesion.setBounds(1081, 702, 189, 47);
 		panel.add(lblIniciarSesion);
 	}
-//	public void registrar() {
-//
-//		DatosEmpresa datosEmpresa = llenarDatosEmpresa();
-//
-//
-//		// Validaciones
-////		if(datosEmpresa.getNombreEmpresa().equals("")) {
-////			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
-////			return;
-////		}
-////		if(datosEmpresa.getNombres().equals("")) {
-//
-//		// Registrar
-//		Estado estado = datosEmpresaController.guardar(datosEmpresa);
-//		if(estado.getExito()) {
-//
-//
-//			JOptionPane.showMessageDialog(null, estado.getMensaje());
-//			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
-//			registroTiendaFrame.setLocationRelativeTo(null);
-//			registroTiendaFrame.setVisible(true);
-//			dispose();
-//
-//
-//
-//
-//		} else {
-//			JOptionPane.showMessageDialog(null, estado.getMensaje());
+	public void registrar() {
+
+		DatosEmpresa datosEmpresa = llenarDatosEmpresa();
+
+
+		// Validaciones
+//		if(datosEmpresa.getNombreEmpresa().equals("")) {
+//			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+//			return;
 //		}
-//	}
-//	public DatosEmpresa llenarDatosEmpresa() {
-//
-//		return new DatosEmpresa(
-//				null,
-//				txt_nombre_tienda.getText(),
-//				txt_nombre_dueno.getText(),
-//				txt_direccion.getText(),
-//				txt_telefono.getText(),
-//				txt_correo.getText(),
-//				true,
-//				txt_ruc.getText()
-//		);
-//
-//	}
+//		if(datosEmpresa.getNombres().equals("")) {
+
+		// Registrar
+		Estado estado = datosEmpresaController.guardar(datosEmpresa);
+		if(estado.getExito()) {
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
+			registroTiendaFrame.setLocationRelativeTo(null);
+			registroTiendaFrame.setVisible(true);
+			dispose();
+
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+		}
+	}
+	public DatosEmpresa llenarDatosEmpresa() {
+
+		return DatosEmpresa.builder()
+			.nombreEmpresa(txt_nombre_tienda.getText())
+			.nombres(txt_nombre_dueno.getText())
+			.direccion(txt_direccion.getText())
+			.celular(txt_telefono.getText())
+			.correo(txt_correo.getText())
+			.estado(true)
+			.identificacion(txt_ruc.getText())
+			.build();
+	}
 
 }
 
