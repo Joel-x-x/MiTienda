@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -11,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JCheckBox;
 
 public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
@@ -26,22 +29,26 @@ public class ProductoPanel extends JPanel {
 	private JButton btn_limpiar_lista;
 	private JTextField txt_busqueda_usuarios;
 	private JTable table;
+	private JPasswordField passwordField;
 
 	/**
 	 * Create the panel.
+	 * @param panelAlto 
+	 * @param panelAncho 
 	 */
-	public ProductoPanel() {
+	public ProductoPanel(int panelAncho, int panelAlto) {
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
+		//setPreferredSize (new Dimension(panelAlto, panelAlto));
 		
-		JLabel lblUsuarios = new JLabel("Usuarios");
+		JLabel lblUsuarios = new JLabel("Productos ");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuarios.setForeground(Color.WHITE);
 		lblUsuarios.setFont(new Font("Jockey One", Font.PLAIN, 26));
 		lblUsuarios.setBounds(10, 11, 196, 47);
 		add(lblUsuarios);
 		
-		JLabel lblUsuario = new JLabel("Usuario");
+		JLabel lblUsuario = new JLabel("Codigo");
 		lblUsuario.setForeground(Color.WHITE);
 		lblUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblUsuario.setBorder(null);
@@ -53,7 +60,7 @@ public class ProductoPanel extends JPanel {
 		add(txt_usuario);
 		txt_usuario.setColumns(10);
 		
-		JLabel lblClave = new JLabel("Contraseña");
+		JLabel lblClave = new JLabel("Nombre");
 		lblClave.setForeground(Color.WHITE);
 		lblClave.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblClave.setBorder(null);
@@ -64,7 +71,7 @@ public class ProductoPanel extends JPanel {
 		txt_psw_contraseña.setBounds(201, 107, 169, 28);
 		add(txt_psw_contraseña);
 		
-		JLabel lblNombre = new JLabel("Nombres");
+		JLabel lblNombre = new JLabel("Descripcion ");
 		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblNombre.setBorder(null);
@@ -92,7 +99,7 @@ public class ProductoPanel extends JPanel {
 		comboBox_rol.setBounds(22, 189, 169, 28);
 		add(comboBox_rol);
 		
-		JLabel lblRol = new JLabel("Rol");
+		JLabel lblRol = new JLabel("Categoria ");
 		lblRol.setForeground(Color.WHITE);
 		lblRol.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblRol.setBorder(null);
@@ -165,6 +172,21 @@ public class ProductoPanel extends JPanel {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(201, 189, 169, 28);
+		add(passwordField);
+		
+		JLabel lblUtilidad = new JLabel("Utilidad");
+		lblUtilidad.setForeground(Color.WHITE);
+		lblUtilidad.setFont(new Font("Jockey One", Font.PLAIN, 14));
+		lblUtilidad.setBorder(null);
+		lblUtilidad.setBounds(201, 151, 114, 38);
+		add(lblUtilidad);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Tiene IVA");
+		chckbxNewCheckBox.setBounds(381, 193, 93, 21);
+		add(chckbxNewCheckBox);
 
 	}
 }
