@@ -71,4 +71,8 @@ public class CategoriaDao {
         return this.em.createQuery(jpql, Categoria.class).getResultList();
     }
 
+    public Categoria getCategoriaId(Long id) {
+        return this.em.find(Categoria.class, id);
+    }
+
 }

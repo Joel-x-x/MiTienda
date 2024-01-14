@@ -13,9 +13,9 @@ public class DatosEmpresaPrueba {
 
         DatosEmpresaController datosEmpresaController = new DatosEmpresaController();
 
-        Estado estado = datosEmpresaController.guardar(new DatosEmpresa(null, "Empresa", "Paci", "Direccion", "0999999999","correo@correo.com",true, "1850034232"));
-        System.out.println(estado.getMensaje());
-//        Estado estado = datosEmpresaController.actualizar(new DatosEmpresa(1l, "Empresa", "Paci","Paas", "Direccion", "0999999999","correo@correo.com",true, "1850034232"));
+//        Estado estado = datosEmpresaController.guardar(new DatosEmpresa(null, "Empresa", "Paci", "Direccion", "0999999999","correo@correo.com",true, "1850034232"));
 //        System.out.println(estado.getMensaje());
+        Estado estado = datosEmpresaController.actualizar(new DatosEmpresa(1L, "Empresa", "Paci", "Direccion", "0999999999","correo@correo.com",true, "1850034232"));
+        System.out.println(estado.getMensaje());
     }
 }

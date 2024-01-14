@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +27,18 @@ public class Producto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "iva_id")
     private Iva iva;
+    @Column(name = "tiene_iva")
     private Boolean tieneIva;
     private Double utilidad;
     private Double stock;
+    @Column(name = "ultimo_precio_compra")
     private Double ultimoPrecioCompra;
+    @Column(name = "precio_medio")
     private Double precioMedio;
+    @Column(name = "ultima_fecha_compra")
     private LocalDate ultimaFechaCompra;
-    private String UltimoProveedorCompra;
+    @Column(name = "ultimo_proveedor_compra")
+    private String ultimoProveedorCompra;
     private Boolean estado;
 
     public void desactivar() {

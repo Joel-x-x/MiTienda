@@ -15,11 +15,19 @@ public class IvaController {
         ivaDao = new IvaDao(JPAUtils.getEntityManager());
     }
 
+    public Estado guardar(Iva iva) {
+        return ivaDao.guardar(iva);
+    }
+
     public Estado actualizar(Iva iva) {
         return ivaDao.actualizar(iva);
     }
 
     public List<Iva> listar() {
         return ivaDao.listar();
+    }
+
+    public Iva ultimoIva() {
+        return ivaDao.ultimoIva();
     }
 }

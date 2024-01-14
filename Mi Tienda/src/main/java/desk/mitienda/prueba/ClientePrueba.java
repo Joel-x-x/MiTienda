@@ -25,7 +25,7 @@ public class ClientePrueba {
 //        }
 
         // Actualizar
-        Estado estado = clienteController.actualizar(new Cliente(1l, "1839433343","Maria","Perez","0938384455", true));
+        Estado estado = clienteController.actualizar(new Cliente(1L, "1839433343","Maria","Perez","0938384455", true));
         System.out.println(estado.getMensaje());
 
         // Eliminar

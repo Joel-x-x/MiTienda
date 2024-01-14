@@ -107,6 +107,8 @@ public class ProductoDao {
             filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
         }
 
+        filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
+
         return em.createQuery(createQuery.where(filtro)).getResultList();
 
     }

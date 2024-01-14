@@ -1,7 +1,6 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Proveedor;
-import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -14,8 +13,8 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class ProveedorDao {
-    private EntityManager em;
-    private EntityTransaction transaction;
+    private final EntityManager em;
+    private final EntityTransaction transaction;
 
     public ProveedorDao(EntityManager em) {
         this.em = em;
@@ -107,6 +106,8 @@ public class ProveedorDao {
         if(empresa != null && !empresa.trim().isEmpty()) {
             filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("empresa"), empresa));
         }
+
+        filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
 
         return em.createQuery(createQuery.where(filtro)).getResultList();
 

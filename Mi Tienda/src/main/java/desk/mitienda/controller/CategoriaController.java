@@ -25,4 +25,8 @@ public class CategoriaController {
     public List<Categoria> listar() {
         return categoriaDao.listar();
     }
+
+    public Categoria getCategoriaId(Long id) {
+        return categoriaDao.getCategoriaId(id);
+    }
 }

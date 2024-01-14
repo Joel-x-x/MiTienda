@@ -68,7 +68,7 @@ public class IvaDao {
     }
 
     public Iva ultimoIva() {
-        String jpql = "select max(I.iva) from Iva as I";
+        String jpql = "select I from Iva as I where id = (select max(I.id) from Iva as I)";
         return this.em.createQuery(jpql, Iva.class).getSingleResult();
     }
 
