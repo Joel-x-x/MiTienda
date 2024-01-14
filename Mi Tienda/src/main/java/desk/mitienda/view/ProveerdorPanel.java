@@ -1,5 +1,9 @@
 package desk.mitienda.view;
 
+import desk.mitienda.controller.ProveedorController;
+import desk.mitienda.model.Proveedor;
+
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -16,7 +20,6 @@ import java.awt.event.ActionEvent;
 
 public class ProveerdorPanel extends JPanel {
 	private JTextField txt_usuario;
-	private JPasswordField txt_psw_contraseña;
 	private JTextField txt_nombres;
 	private JTextField txt_apellidos;
 	private JButton btn_agregar_usuario;
@@ -31,11 +34,27 @@ public class ProveerdorPanel extends JPanel {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	private ProveedorController proveedorController;
+	private JTextField textField_3;
 
+
+
+	//Creacion de metodos para botones
+	public void agregar(){
+		Proveedor proveedor = llenarProveedor();
+
+		//Validaciones
+
+		if(!proveedor.getEstado()){
+
+		}
+	}
 	/**
 	 * Create the panel.
 	 */
 	public ProveerdorPanel() {
+
+		proveedorController = new ProveedorController();
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
 		
@@ -64,10 +83,6 @@ public class ProveerdorPanel extends JPanel {
 		lblClave.setBorder(null);
 		lblClave.setBounds(201, 69, 114, 38);
 		add(lblClave);
-		
-		txt_psw_contraseña = new JPasswordField();
-		txt_psw_contraseña.setBounds(201, 107, 169, 28);
-		add(txt_psw_contraseña);
 		
 		JLabel lblNombre = new JLabel("Empresa");
 		lblNombre.setForeground(Color.WHITE);
@@ -101,6 +116,11 @@ public class ProveerdorPanel extends JPanel {
 		add(lblRol);
 		
 		btn_agregar_usuario = new JButton("Agregar");
+		btn_agregar_usuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
 		btn_agregar_usuario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_agregar_usuario.setBorder(null);
@@ -211,6 +231,30 @@ public class ProveerdorPanel extends JPanel {
 		textField_2.setColumns(10);
 		textField_2.setBounds(189, 307, 169, 28);
 		add(textField_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(201, 107, 169, 28);
+		add(textField_3);
+
+	}
+
+
+	//	Llenar datos
+	/**
+	 * @return Llena los campos de proveedor
+	 */
+	public Proveedor llenarProveedor(){
+		return Proveedor.builder()
+				.identificacion(txt_usuario.getText())
+				.razonSocial(textField_3.getText())
+				.empresa(txt_nombres.getText())
+				.direccion(txt_apellidos.getText())
+				.celular(txt_celular.getText())
+				.correo(textField.getText())
+				.descripcion(textField_1.getText())
+				.estado(true)
+				.build();
 
 	}
 }
