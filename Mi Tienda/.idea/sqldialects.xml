@@ -3,5 +3,12 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__create_table_proveedores.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__alter_table_add_columns_nombreEmpresa_nombres_apellidos.sql" dialect="MySQL" />
+<<<<<<< HEAD
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__create_table_categorias.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V7__create_table_ivas.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V8__create_table_productos.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V9__alter_table_ivas_add_default_fecha.sql" dialect="MySQL" />
+=======
+>>>>>>> faaa1fd5b458fc2d38f5a014ffb52be8edb4fdb2
   </component>
 </project>

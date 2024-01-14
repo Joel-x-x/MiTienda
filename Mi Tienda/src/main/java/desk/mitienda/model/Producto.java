@@ -34,4 +34,8 @@ public class Producto {
     private LocalDate ultimaFechaCompra;
     private String UltimoProveedorCompra;
     private Boolean estado;
+
+    public void desactivar() {
+        this.estado = false;
+    }
 }
