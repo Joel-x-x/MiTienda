@@ -90,7 +90,7 @@ public class BarraPanel extends JPanel {
         usuariosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                adminFrame.cambiarPanel(new UsuarioPanel(panelAncho, panelAlto));
+//                adminFrame.cambiarPanel(new UsuarioPanel(panelAncho, panelAlto));
             }
         });
 

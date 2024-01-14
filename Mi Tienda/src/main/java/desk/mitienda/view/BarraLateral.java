@@ -30,7 +30,7 @@ public class BarraLateral extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+//				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
 				
 			}
 		});
@@ -113,6 +113,12 @@ public class BarraLateral extends JPanel {
 		btnNewButton_3_1.setBorder(null);
 		btnNewButton_3_1.setBackground(new Color(64, 66, 73));
 		btnNewButton_3_1.setBounds(10, 500, 180, 42);
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new ProveerdorPanel(panelAncho, panelAlto));
+			}
+		});
 		add(btnNewButton_3_1);
 		
 		JPanel panel = new JPanel();

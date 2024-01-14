@@ -42,7 +42,6 @@ public class ProveedorDao {
     public Estado actualizar(Proveedor proveedor) {
 
         Proveedor proveedorExistente;
-
         try {
             transaction.begin();
             // Buscamos proveedor por id

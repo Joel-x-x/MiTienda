@@ -6,8 +6,7 @@ import desk.mitienda.model.Proveedor;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Color;
+import java.awt.*;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -52,73 +51,74 @@ public class ProveerdorPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ProveerdorPanel() {
+	public ProveerdorPanel(int panelAncho, int panelAlto) {
 
 		proveedorController = new ProveedorController();
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
-		
+		setPreferredSize(new Dimension(panelAncho, panelAlto));
+
 		JLabel lblUsuarios = new JLabel("Proveedores");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuarios.setForeground(Color.WHITE);
 		lblUsuarios.setFont(new Font("Jockey One", Font.PLAIN, 26));
 		lblUsuarios.setBounds(10, 11, 196, 47);
 		add(lblUsuarios);
-		
+
 		JLabel lblUsuario = new JLabel("Identificación");
 		lblUsuario.setForeground(Color.WHITE);
 		lblUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblUsuario.setBorder(null);
 		lblUsuario.setBounds(32, 69, 114, 38);
 		add(lblUsuario);
-		
+
 		txt_usuario = new JTextField();
 		txt_usuario.setBounds(22, 107, 169, 28);
 		add(txt_usuario);
 		txt_usuario.setColumns(10);
-		
+
 		JLabel lblClave = new JLabel("Razon Social");
 		lblClave.setForeground(Color.WHITE);
 		lblClave.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblClave.setBorder(null);
 		lblClave.setBounds(201, 69, 114, 38);
 		add(lblClave);
-		
+
 		JLabel lblNombre = new JLabel("Empresa");
 		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblNombre.setBorder(null);
 		lblNombre.setBounds(380, 69, 114, 38);
 		add(lblNombre);
-		
+
 		txt_nombres = new JTextField();
 		txt_nombres.setColumns(10);
 		txt_nombres.setBounds(380, 107, 169, 28);
 		add(txt_nombres);
-		
+
 		JLabel lblApellidos = new JLabel("Dirección");
 		lblApellidos.setForeground(Color.WHITE);
 		lblApellidos.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblApellidos.setBorder(null);
 		lblApellidos.setBounds(559, 69, 114, 38);
 		add(lblApellidos);
-		
+
 		txt_apellidos = new JTextField();
 		txt_apellidos.setColumns(10);
 		txt_apellidos.setBounds(559, 107, 169, 28);
 		add(txt_apellidos);
-		
+
 		JLabel lblRol = new JLabel("Celular");
 		lblRol.setForeground(Color.WHITE);
 		lblRol.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblRol.setBorder(null);
 		lblRol.setBounds(32, 151, 114, 38);
 		add(lblRol);
-		
+
 		btn_agregar_usuario = new JButton("Agregar");
 		btn_agregar_usuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
@@ -127,7 +127,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_agregar_usuario.setBackground(Color.BLACK);
 		btn_agregar_usuario.setBounds(25, 246, 100, 28);
 		add(btn_agregar_usuario);
-		
+
 		btn_modificar = new JButton("Modificar");
 		btn_modificar.setForeground(Color.WHITE);
 		btn_modificar.setFont(new Font("Jockey One", Font.PLAIN, 15));
@@ -135,7 +135,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_modificar.setBackground(Color.BLACK);
 		btn_modificar.setBounds(135, 246, 100, 28);
 		add(btn_modificar);
-		
+
 		btn_eliminar = new JButton("Eliminar");
 		btn_eliminar.setForeground(Color.WHITE);
 		btn_eliminar.setFont(new Font("Jockey One", Font.PLAIN, 15));
@@ -143,7 +143,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_eliminar.setBackground(Color.BLACK);
 		btn_eliminar.setBounds(245, 246, 100, 28);
 		add(btn_eliminar);
-		
+
 		btn_limpiar_formulario = new JButton("Limpiar");
 		btn_limpiar_formulario.setForeground(Color.WHITE);
 		btn_limpiar_formulario.setFont(new Font("Jockey One", Font.PLAIN, 15));
@@ -151,7 +151,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_limpiar_formulario.setBackground(Color.BLACK);
 		btn_limpiar_formulario.setBounds(355, 246, 100, 28);
 		add(btn_limpiar_formulario);
-		
+
 		btn_buscar = new JButton("Buscar");
 		btn_buscar.setForeground(Color.WHITE);
 		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
@@ -159,7 +159,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_buscar.setBackground(Color.BLACK);
 		btn_buscar.setBounds(397, 307, 100, 28);
 		add(btn_buscar);
-		
+
 		btn_limpiar_lista = new JButton("Limpiar");
 		btn_limpiar_lista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -171,67 +171,67 @@ public class ProveerdorPanel extends JPanel {
 		btn_limpiar_lista.setBackground(Color.BLACK);
 		btn_limpiar_lista.setBounds(507, 307, 100, 28);
 		add(btn_limpiar_lista);
-		
+
 		JLabel lblBuscarPorUsuario = new JLabel("Buscar por identifiación");
 		lblBuscarPorUsuario.setForeground(Color.WHITE);
 		lblBuscarPorUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblBuscarPorUsuario.setBorder(null);
 		lblBuscarPorUsuario.setBounds(10, 274, 155, 38);
 		add(lblBuscarPorUsuario);
-		
+
 		txt_busqueda_usuarios = new JTextField();
 		txt_busqueda_usuarios.setColumns(10);
 		txt_busqueda_usuarios.setBounds(10, 309, 169, 28);
 		add(txt_busqueda_usuarios);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 355, 860, 354);
 		add(scrollPane);
-		
+
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		
+
 		txt_celular = new JTextField();
 		txt_celular.setColumns(10);
 		txt_celular.setBounds(22, 189, 169, 28);
 		add(txt_celular);
-		
+
 		JLabel lblCorreo = new JLabel("Correo");
 		lblCorreo.setForeground(Color.WHITE);
 		lblCorreo.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblCorreo.setBorder(null);
 		lblCorreo.setBounds(201, 151, 114, 38);
 		add(lblCorreo);
-		
+
 		textField = new JTextField();
 		textField.setColumns(10);
 		textField.setBounds(201, 189, 169, 28);
 		add(textField);
-		
+
 		JLabel lblDescripcin = new JLabel("Descripción");
 		lblDescripcin.setForeground(Color.WHITE);
 		lblDescripcin.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblDescripcin.setBorder(null);
 		lblDescripcin.setBounds(380, 151, 114, 38);
 		add(lblDescripcin);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		textField_1.setBounds(380, 189, 169, 28);
 		add(textField_1);
-		
+
 		JLabel lblBuscarPorEmpresa = new JLabel("Buscar por empresa");
 		lblBuscarPorEmpresa.setForeground(Color.WHITE);
 		lblBuscarPorEmpresa.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblBuscarPorEmpresa.setBorder(null);
 		lblBuscarPorEmpresa.setBounds(190, 274, 155, 38);
 		add(lblBuscarPorEmpresa);
-		
+
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(189, 307, 169, 28);
 		add(textField_2);
-		
+
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		textField_3.setBounds(201, 107, 169, 28);
