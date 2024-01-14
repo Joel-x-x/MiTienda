@@ -30,7 +30,7 @@ public class BarraLateral extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
 				
 			}
 		});
@@ -78,6 +78,12 @@ public class BarraLateral extends JPanel {
 		add(btnReportes);
 		
 		JButton btnIva = new JButton("IVA");
+		btnIva.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new IvaPanel(panelAncho, panelAlto));
+			}
+		});
 		btnIva.setForeground(Color.WHITE);
 		btnIva.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnIva.setBorder(null);
@@ -100,6 +106,13 @@ public class BarraLateral extends JPanel {
 		add(btnNewButton_1_1);
 		
 		JButton btnNewButton_2_1 = new JButton("COMPRA");
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new CompraPanel(panelAncho, panelAlto));
+				
+			}
+		});
 		btnNewButton_2_1.setForeground(Color.WHITE);
 		btnNewButton_2_1.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnNewButton_2_1.setBorder(null);
