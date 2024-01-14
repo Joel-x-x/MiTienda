@@ -6,6 +6,8 @@ import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.util.List;
+
 public class ProveedorController {
     ProveedorDao proveedorDao;
 
@@ -23,5 +25,9 @@ public class ProveedorController {
 
     public Estado eliminar(Long id) {
         return proveedorDao.eliminar(id);
+    }
+
+    public List<Proveedor> listar(String identificacion, String empresa) {
+        return proveedorDao.listar(identificacion, empresa);
     }
 }

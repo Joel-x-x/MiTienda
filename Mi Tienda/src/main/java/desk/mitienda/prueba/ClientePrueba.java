@@ -11,6 +11,7 @@ public class ClientePrueba {
 
     public static void main(String[] args) {
         FlyWay.migrate();
+        FlyWay.repair();
 
         ClienteController clienteController = new ClienteController();
 

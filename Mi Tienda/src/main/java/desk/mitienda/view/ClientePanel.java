@@ -20,7 +20,6 @@ public class ClientePanel extends JPanel {
 	private JTextField txt_nombres;
 	private JTextField txt_apellidos;
 	private JButton btn_agregar_usuario;
-	private JComboBox comboBox_rol;
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
@@ -47,7 +46,7 @@ public class ClientePanel extends JPanel {
 		lblUsuarios.setBounds(10, 11, 196, 47);
 		add(lblUsuarios);
 		
-		JLabel lblUsuario = new JLabel("Usuario");
+		JLabel lblUsuario = new JLabel("Identificación");
 		lblUsuario.setForeground(Color.WHITE);
 		lblUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblUsuario.setBorder(null);
@@ -59,7 +58,7 @@ public class ClientePanel extends JPanel {
 		add(txt_usuario);
 		txt_usuario.setColumns(10);
 		
-		JLabel lblClave = new JLabel("Contraseña");
+		JLabel lblClave = new JLabel("Nombre");
 		lblClave.setForeground(Color.WHITE);
 		lblClave.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblClave.setBorder(null);
@@ -70,7 +69,7 @@ public class ClientePanel extends JPanel {
 		txt_psw_contraseña.setBounds(201, 107, 169, 28);
 		add(txt_psw_contraseña);
 		
-		JLabel lblNombre = new JLabel("Nombres");
+		JLabel lblNombre = new JLabel("Apellidos");
 		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblNombre.setBorder(null);
@@ -82,7 +81,7 @@ public class ClientePanel extends JPanel {
 		txt_nombres.setBounds(380, 107, 169, 28);
 		add(txt_nombres);
 		
-		JLabel lblApellidos = new JLabel("Apellidos");
+		JLabel lblApellidos = new JLabel("Celular");
 		lblApellidos.setForeground(Color.WHITE);
 		lblApellidos.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblApellidos.setBorder(null);
@@ -93,17 +92,6 @@ public class ClientePanel extends JPanel {
 		txt_apellidos.setColumns(10);
 		txt_apellidos.setBounds(559, 107, 169, 28);
 		add(txt_apellidos);
-		
-		comboBox_rol = new JComboBox();
-		comboBox_rol.setBounds(22, 189, 169, 28);
-		add(comboBox_rol);
-		
-		JLabel lblRol = new JLabel("Rol");
-		lblRol.setForeground(Color.WHITE);
-		lblRol.setFont(new Font("Jockey One", Font.PLAIN, 14));
-		lblRol.setBorder(null);
-		lblRol.setBounds(32, 151, 114, 38);
-		add(lblRol);
 		
 		btn_agregar_usuario = new JButton("Agregar");
 		btn_agregar_usuario.setForeground(Color.WHITE);
