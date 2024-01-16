@@ -20,8 +20,28 @@ public class CompraPrueba {
         // Nueva Compra
         Compra compra = new Compra();
         // Agregar Productos
+        DetalleCompra detalleCompra = new DetalleCompra(productoController.getProductoId(1L));
+        detalleCompra.inicializar();
 
+        DetalleCompra detalleCompra2 = new DetalleCompra(productoController.getProductoId(2L));
+        detalleCompra2.inicializar();
+        // Actualizar
+//        detalleCompra.setPrecioUnitario(7.33);
 
+        // Agregar a la compra
+        compra.agregarDetalle(detalleCompra);
+        compra.agregarDetalle(detalleCompra2);
+
+        // Agregar datos compra
+        compra.setPuntoEmision("001");
+        compra.setEstablecimiento("001");
+        compra.setNumero("00000012323");
+        compra.setFormaPago("Efectivo");
+        compra.setProveedor(proveedorController.getProveedorId(1L));
+        compra.setTieneProveedor(true);
+        // Cierra el frame no pasa nada la no se ha hecho la persistencia
+        // Guardar
+        compraController.guardar(compra);
 //        Compra compra = Compra
 //                .builder()
 //                .puntoEmision("001")

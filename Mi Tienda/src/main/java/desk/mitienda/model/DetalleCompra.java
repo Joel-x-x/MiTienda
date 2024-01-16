@@ -20,8 +20,8 @@ public class DetalleCompra {
 
     private Double cantidad;
     @Column(name = "precio_unitario")
-    private Double precioUnitario;
-    private Double iva;
+    private BigDecimal precioUnitario;
+    private BigDecimal iva;
     private BigDecimal total;
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto producto;
@@ -33,8 +33,8 @@ public class DetalleCompra {
     }
     public void inicializar() {
         this.cantidad = 1.0;
-        this.precioUnitario = this.producto.getPrecioMedio();
-        this.iva = (this.producto.getPrecioMedio() * (this.producto.getIva().getIva() / 100.0));
-        this.total = new BigDecimal(this.precioUnitario + this.iva);
+        this.precioUnitario = new BigDecimal(this.producto.getPrecioMedio());
+        this.iva = new BigDecimal(this.producto.getPrecioMedio() * (this.producto.getIva().getIva() / 100.0));
+        this.total = this.precioUnitario.add(this.iva);
     }
 }

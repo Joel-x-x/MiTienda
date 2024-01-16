@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,16 +37,18 @@ public class Compra {
     private Proveedor proveedor;
     @Column(name = "tiene_proveedor")
     private Boolean tieneProveedor;
-    private Double subtotal;
-    private Double iva;
+    private BigDecimal subtotal = new BigDecimal(0);
+    private BigDecimal iva = new BigDecimal(0);
     private BigDecimal total = new BigDecimal(0);
 
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
-    private List<DetalleCompra> detalle;
+    private List<DetalleCompra> detalle = new ArrayList<>();
 
     public void agregarDetalle(DetalleCompra detalleCompra) {
         detalleCompra.setCompra(this);
         this.detalle.add(detalleCompra);
+        this.subtotal.add(detalleCompra.getPrecioUnitario());
+        this.iva.add(detalleCompra.getIva());
         this.total.add(detalleCompra.getTotal());
     }
 }
