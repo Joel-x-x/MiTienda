@@ -26,4 +26,18 @@ public class CompraController {
     public Compra getCompraId(Long id) {
         return compraDao.getCompraId(id);
     }
+
+    // Obtiene el ultimo numero de proveedor final y lo itera con el forma de numero de compra
+    public String getSiguienteNumeroProveedorFinal() {
+        String numero = compraDao.getNumeroUltimoProveedorFinal();
+
+        String ceros = "";
+        Integer num = Integer.parseInt(numero);
+        numero = String.valueOf(num + 1);
+        num = 9 - numero.length();
+        for(int i = 0; i < num; i++) {
+            ceros += "0";
+        }
+        return ceros + numero;
+    }
 }

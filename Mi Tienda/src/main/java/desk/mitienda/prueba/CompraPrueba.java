@@ -30,7 +30,7 @@ public class CompraPrueba {
 
         // Agregar a la compra
         compra.agregarDetalle(detalleCompra);
-        compra.agregarDetalle(detalleCompra2);
+//        compra.agregarDetalle(detalleCompra2);
 
         // Agregar datos compra
         compra.setPuntoEmision("001");
@@ -39,29 +39,11 @@ public class CompraPrueba {
         compra.setFormaPago("Efectivo");
         compra.setProveedor(proveedorController.getProveedorId(1L));
         compra.setTieneProveedor(true);
+        // Proveedor fina
+//        compra.proveedorFinal(compraController.getSiguienteNumeroProveedorFinal());
         // Cierra el frame no pasa nada la no se ha hecho la persistencia
         // Guardar
         compraController.guardar(compra);
-//        Compra compra = Compra
-//                .builder()
-//                .puntoEmision("001")
-//                .establecimiento("001")
-//                .numero("00000012323")
-//                .fecha(LocalDate.now())
-//                .formaPago("Efecto")
-//                .proveedor(proveedorController.getProveedorId(1L))
-//                .tieneProveedor(true)
-//                .build();
-//
-//        DetalleCompra detalleCompra = DetalleCompra
-//                .builder()
-//                .producto(productoController.getProductoId(1L))
-//                .cantidad(0.0)
-//                .precioUnitario(0.0)
-//                .subtotal(0.0)
-//                .iva(0.0)
-//                .total(0.0)
-//                .compra(compra)
-//                .build();
+
     }
 }

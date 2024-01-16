@@ -17,5 +17,6 @@ public class DatosEmpresaPrueba {
 //        System.out.println(estado.getMensaje());
         Estado estado = datosEmpresaController.actualizar(new DatosEmpresa(1L, "Empresa", "Paci", "Direccion", "0999999999","correo@correo.com",true, "1850034232"));
         System.out.println(estado.getMensaje());
+
     }
 }

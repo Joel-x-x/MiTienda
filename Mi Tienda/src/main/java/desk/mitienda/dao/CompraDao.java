@@ -2,6 +2,7 @@ package desk.mitienda.dao;
 
 import desk.mitienda.model.Compra;
 import desk.mitienda.model.Compra;
+import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -67,6 +68,15 @@ public class CompraDao {
         return this.em.find(Compra.class, id);
     }
 
-    // Metodo que devuelva el siguiente numero que sigue si este es un proveedor final
-
+    // Metodo que devuelva el ultimo numero de compra cuando es un proveedor final
+    public String getNumeroUltimoProveedorFinal() {
+        try {
+            String jpql = "select C.numero from Compra as C where C.id = (select max(C.id) from Compra as C) and C.tieneProveedor = false";
+            return this.em.createQuery(jpql, String.class).getSingleResult();
+        }
+         catch (Exception e) {
+            e.printStackTrace();
+            return "000000000";
+         }
+    }
 }

@@ -47,8 +47,13 @@ public class Compra {
     public void agregarDetalle(DetalleCompra detalleCompra) {
         detalleCompra.setCompra(this);
         this.detalle.add(detalleCompra);
-        this.subtotal.add(detalleCompra.getPrecioUnitario());
-        this.iva.add(detalleCompra.getIva());
-        this.total.add(detalleCompra.getTotal());
+        this.subtotal = this.subtotal.add(detalleCompra.getPrecioUnitario());
+        this.iva = this.iva.add(detalleCompra.getIva());
+        this.total = this.total.add(detalleCompra.getTotal());
+    }
+
+    public void proveedorFinal(String numero) {
+        this.setTieneProveedor(false);
+        this.setNumero(numero);
     }
 }

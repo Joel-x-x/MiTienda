@@ -3,6 +3,7 @@ package desk.mitienda.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -29,12 +30,12 @@ public class Producto {
     private Iva iva;
     @Column(name = "tiene_iva")
     private Boolean tieneIva;
-    private Double utilidad;
+    private BigDecimal utilidad;
     private Double stock;
     @Column(name = "ultimo_precio_compra")
-    private Double ultimoPrecioCompra;
+    private BigDecimal ultimoPrecioCompra;
     @Column(name = "precio_medio")
-    private Double precioMedio;
+    private BigDecimal precioMedio;
     @Column(name = "ultima_fecha_compra")
     private LocalDate ultimaFechaCompra;
     @Column(name = "ultimo_proveedor_compra")
