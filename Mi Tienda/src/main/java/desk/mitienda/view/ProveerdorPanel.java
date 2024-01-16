@@ -79,17 +79,17 @@ public class ProveerdorPanel extends JPanel {
 
 
 	private void listarProveedores(){
-		FlyWay.migrate();
-		modelo = new DefaultTableModel();
+		modelo = (DefaultTableModel) table.getModel();
 		List <Proveedor> listaproveedores = proveedorController.listar(null, null);
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
-		modelo.addColumn("");
+		System.out.println(listaproveedores.get(0).getRazonSocial());
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+		modelo.addColumn("6");
+		modelo.addColumn("7");
+		modelo.addColumn("8");
 
 		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
 		modelo.addRow(cabeceras);
@@ -103,20 +103,6 @@ public class ProveerdorPanel extends JPanel {
 					proveedor.getCorreo(),
 					proveedor.getDescripcion()
 			}));
-//		for(Proveedor proveedor : listaproveedores){
-//			modelo.addRow(new Object[]{
-//					proveedor.getId(),
-//					proveedor.getIdentificacion(),
-//					proveedor.getRazonSocial(),
-//					proveedor.getEmpresa(),
-//					proveedor.getDireccion(),
-//					proveedor.getCelular(),
-//					proveedor.getCorreo(),
-//					proveedor.getDescripcion()
-//			});
-//		}
-
-
 	}
 
 //--------------------------------------Creacion de metodos para botones---------------------------
