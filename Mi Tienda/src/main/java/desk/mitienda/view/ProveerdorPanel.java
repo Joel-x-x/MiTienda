@@ -2,20 +2,17 @@ package desk.mitienda.view;
 
 import desk.mitienda.controller.ProveedorController;
 import desk.mitienda.model.Proveedor;
+import desk.mitienda.utils.Estado;
+import desk.mitienda.utils.FlyWay;
 
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.Vector;
 
 public class ProveerdorPanel extends JPanel {
 	private JTextField txt_usuario;
@@ -35,19 +32,147 @@ public class ProveerdorPanel extends JPanel {
 	private JTextField textField_2;
 	private ProveedorController proveedorController;
 	private JTextField textField_3;
+	private Long proveedorId;
+	private DefaultTableModel modelo;
+
+	//-------------------------------------Utilidades--------------------------------
+
+	//Limpiar formulario
 
 
+	public void limpiarFormulario(){
+		txt_usuario.setText("");
+		textField_3.setText("");
+		txt_nombres.setText("");
+		txt_apellidos.setText("");
+		txt_celular.setText("");
+		textField.setText("");
+		textField_1.setText("");
+	}
 
-	//Creacion de metodos para botones
+
+	//	Llenar datos
+	/**
+	 * @return Llena los campos de proveedor
+	 */
+	public Proveedor llenarProveedor(){
+		return Proveedor.builder()
+				.identificacion(txt_usuario.getText())
+				.razonSocial(textField_3.getText())
+				.empresa(txt_nombres.getText())
+				.direccion(txt_apellidos.getText())
+				.celular(txt_celular.getText())
+				.correo(textField.getText())
+				.descripcion(textField_1.getText())
+				.estado(true)
+				.build();
+
+	}
+
+
+	// Bloquear botones
+
+	private void bloquearBotones() {
+		btn_eliminar.setEnabled(false);
+		btn_modificar.setEnabled(false);
+	}
+
+
+	private void listarProveedores(){
+		FlyWay.migrate();
+		modelo = new DefaultTableModel();
+		List <Proveedor> listaproveedores = proveedorController.listar(null, null);
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+		modelo.addColumn("");
+
+		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
+		modelo.addRow(cabeceras);
+		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
+					proveedor.getId(),
+					proveedor.getIdentificacion(),
+					proveedor.getRazonSocial(),
+					proveedor.getEmpresa(),
+					proveedor.getDireccion(),
+					proveedor.getCelular(),
+					proveedor.getCorreo(),
+					proveedor.getDescripcion()
+			}));
+//		for(Proveedor proveedor : listaproveedores){
+//			modelo.addRow(new Object[]{
+//					proveedor.getId(),
+//					proveedor.getIdentificacion(),
+//					proveedor.getRazonSocial(),
+//					proveedor.getEmpresa(),
+//					proveedor.getDireccion(),
+//					proveedor.getCelular(),
+//					proveedor.getCorreo(),
+//					proveedor.getDescripcion()
+//			});
+//		}
+
+
+	}
+
+//--------------------------------------Creacion de metodos para botones---------------------------
+
+
+	//Metodo agregar Proveedor
 	public void agregar(){
+
+		//Llenar del proveedor
 		Proveedor proveedor = llenarProveedor();
+		Estado estado = proveedorController.guardar(proveedor);
 
 		//Validaciones
 
-		if(!proveedor.getEstado()){
+		if(proveedor.getIdentificacion().isEmpty()){
+			JOptionPane.showMessageDialog(null, "El campo de identificación esta vacío");
+			return;
+		}
+		if(proveedor.getEmpresa().isEmpty()){
+			JOptionPane.showMessageDialog(null, "El campo de empresa esta vacío");
+			return;
+		}
+
+		//Agregar
+		if(estado.getExito()){
+			proveedorId = proveedor.getId();
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			limpiarFormulario();
+
+		}else{
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+		}
+
+	}
+
+	// Metodo modificar proveedor
+
+	public void actualizar(){
+
+		//Llenar proveedor
+		Proveedor proveedor = llenarProveedor();
+		Estado estado = proveedorController.actualizar(proveedor);
+
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
+			listarProveedores();
+			limpiarFormulario();
+			bloquearBotones();
+		} else {
+			JOptionPane.showMessageDialog(null, "No se pudo modificar");
 
 		}
 	}
+//------------------------------------------------------------------------------------------
 	/**
 	 * Create the panel.
 	 */
@@ -118,7 +243,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_agregar_usuario = new JButton("Agregar");
 		btn_agregar_usuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				agregar();
 			}
 		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
@@ -237,24 +362,9 @@ public class ProveerdorPanel extends JPanel {
 		textField_3.setBounds(201, 107, 169, 28);
 		add(textField_3);
 
-	}
-
-
-	//	Llenar datos
-	/**
-	 * @return Llena los campos de proveedor
-	 */
-	public Proveedor llenarProveedor(){
-		return Proveedor.builder()
-				.identificacion(txt_usuario.getText())
-				.razonSocial(textField_3.getText())
-				.empresa(txt_nombres.getText())
-				.direccion(txt_apellidos.getText())
-				.celular(txt_celular.getText())
-				.correo(textField.getText())
-				.descripcion(textField_1.getText())
-				.estado(true)
-				.build();
+		listarProveedores();
 
 	}
+
+
 }
