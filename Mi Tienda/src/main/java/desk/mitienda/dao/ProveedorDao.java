@@ -112,4 +112,8 @@ public class ProveedorDao {
 
     }
 
+    public Proveedor getProveedorId(Long id) {
+        return this.em.find(Proveedor.class, id);
+    }
+
 }

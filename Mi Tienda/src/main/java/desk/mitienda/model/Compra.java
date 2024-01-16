@@ -1,8 +1,11 @@
 package desk.mitienda.model;
 
 import lombok.*;
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,21 +22,30 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (unique = true)
+    @Column(name = "punto_emision")
     private String puntoEmision;
     private String establecimiento;
     private String numero;
     private LocalDate fecha;
+    @Column(name = "forma_pago")
     private String formaPago;
     private Double descuento;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
+    @Column(name = "tiene_proveedor")
+    private Boolean tieneProveedor;
     private Double subtotal;
     private Double iva;
-    private Double total;
+    private BigDecimal total = new BigDecimal(0);
 
-    @OneToMany
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
     private List<DetalleCompra> detalle;
-    private Boolean tieneProveedor;
 
+    public void agregarDetalle(DetalleCompra detalleCompra) {
+        detalleCompra.setCompra(this);
+        this.detalle.add(detalleCompra);
+        this.total.add(detalleCompra.getTotal());
+    }
 }

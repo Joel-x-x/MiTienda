@@ -14,9 +14,19 @@ public class ProveedorPrueba {
 
         ProveedorController proveedorController = new ProveedorController();
 
-//        Estado estado = proveedorController.guardar(new Proveedor(null, "1839433343","Fausto Perez","Pinguino","Manabi y Guayaquil frente a la farmacia el descuento",
-//                "0938384455","correo@corre.com","Vende helados", true));
-//        System.out.println(estado.getMensaje());
+        Estado estado = proveedorController.guardar(
+                Proveedor.builder()
+                        .identificacion("1839433343")
+                        .razonSocial("Fausto Perez")
+                        .empresa("Pinguino")
+                        .direccion("Manabi y Guayaquil frente a la farmacia el descuento")
+                        .celular("0938384455")
+                        .correo("correo@corre.com")
+                        .descripcion("Vende helados")
+                        .estado(true)
+                        .build()
+        );
+        System.out.println(estado.getMensaje());
 
         // Actualizar
 //        Estado estado = proveedorController.actualizar(

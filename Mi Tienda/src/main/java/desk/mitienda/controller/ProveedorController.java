@@ -30,4 +30,8 @@ public class ProveedorController {
     public List<Proveedor> listar(String identificacion, String empresa) {
         return proveedorDao.listar(identificacion, empresa);
     }
+
+    public Proveedor getProveedorId(Long id) {
+        return proveedorDao.getProveedorId(id);
+    }
 }
