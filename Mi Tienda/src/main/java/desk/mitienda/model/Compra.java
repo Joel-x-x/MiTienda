@@ -45,11 +45,11 @@ public class Compra {
     private List<DetalleCompra> detalle = new ArrayList<>();
 
     public void agregarDetalle(DetalleCompra detalleCompra) {
-        detalleCompra.setCompra(this);
+        detalleCompra.setCompra(this); // Agrega la referencia compra al detalle
         this.detalle.add(detalleCompra);
-        this.subtotal = this.subtotal.add(detalleCompra.getPrecioUnitario());
-        this.iva = this.iva.add(detalleCompra.getIva());
-        this.total = this.total.add(detalleCompra.getTotal());
+        this.subtotal = this.subtotal.add(detalleCompra.getSubtotal()); // Sumando del subtotal
+        this.iva = this.iva.add(detalleCompra.getIva()); // Sumando del iva
+        this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
     }
 
     public void proveedorFinal(String numero) {
