@@ -1,7 +1,6 @@
 package desk.mitienda.controller;
 
 import desk.mitienda.dao.ProveedorDao;
-import desk.mitienda.model.Cliente;
 import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;

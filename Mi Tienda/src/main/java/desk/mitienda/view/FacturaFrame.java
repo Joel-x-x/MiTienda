@@ -48,22 +48,26 @@ public class FacturaFrame extends JFrame {
 		setBounds(100, 100, 1080, 694);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(43, 45, 49));
 		panel.setBounds(0, 0, 1105, 867);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JLabel lblFactura = new JLabel("FACTURA");
+		lblFactura.setForeground(Color.WHITE);
 		lblFactura.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFactura.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblFactura.setBounds(0, 0, 1064, 46);
 		panel.add(lblFactura);
 		
 		JLabel lblNewLabel_1_4_2 = new JLabel("Cliente");
+		lblNewLabel_1_4_2.setForeground(Color.WHITE);
 		lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1_4_2.setBounds(10, 62, 50, 14);
 		panel.add(lblNewLabel_1_4_2);
@@ -81,11 +85,12 @@ public class FacturaFrame extends JFrame {
 		btnBuscarCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscarCliente.setFocusPainted(false);
 		btnBuscarCliente.setBorder(null);
-		btnBuscarCliente.setBackground(new Color(46, 56, 64));
+		btnBuscarCliente.setBackground(Color.BLACK);
 		btnBuscarCliente.setBounds(10, 99, 199, 30);
 		panel.add(btnBuscarCliente);
 		
 		JLabel lblNewLabel_1_4_2_1 = new JLabel("Nombre:");
+		lblNewLabel_1_4_2_1.setForeground(Color.WHITE);
 		lblNewLabel_1_4_2_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_1_4_2_1.setBounds(10, 158, 50, 14);
 		panel.add(lblNewLabel_1_4_2_1);
@@ -100,7 +105,7 @@ public class FacturaFrame extends JFrame {
 		btnBuscarMembresia.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscarMembresia.setFocusPainted(false);
 		btnBuscarMembresia.setBorder(null);
-		btnBuscarMembresia.setBackground(new Color(46, 56, 64));
+		btnBuscarMembresia.setBackground(Color.BLACK);
 		btnBuscarMembresia.setBounds(10, 197, 199, 25);
 		panel.add(btnBuscarMembresia);
 		
@@ -110,11 +115,12 @@ public class FacturaFrame extends JFrame {
 		btnEliminarMembresia.setFocusPainted(false);
 		btnEliminarMembresia.setEnabled(false);
 		btnEliminarMembresia.setBorder(null);
-		btnEliminarMembresia.setBackground(new Color(46, 56, 64));
+		btnEliminarMembresia.setBackground(Color.BLACK);
 		btnEliminarMembresia.setBounds(219, 197, 100, 25);
 		panel.add(btnEliminarMembresia);
 		
 		JLabel lblNewLabel_1_4_2_3 = new JLabel("No Factura");
+		lblNewLabel_1_4_2_3.setForeground(Color.WHITE);
 		lblNewLabel_1_4_2_3.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1_4_2_3.setBounds(658, 57, 77, 14);
 		panel.add(lblNewLabel_1_4_2_3);
@@ -126,12 +132,13 @@ public class FacturaFrame extends JFrame {
 		panel.add(labelEstablecimiento);
 		
 		JLabel labelNumeroFactura = new JLabel("000000001");
-		labelNumeroFactura.setForeground(Color.BLACK);
+		labelNumeroFactura.setForeground(Color.WHITE);
 		labelNumeroFactura.setFont(new Font("Tahoma", Font.BOLD, 24));
 		labelNumeroFactura.setBounds(814, 39, 250, 46);
 		panel.add(labelNumeroFactura);
 		
 		JLabel Establecimiento = new JLabel("Establecimiento");
+		Establecimiento.setForeground(Color.WHITE);
 		Establecimiento.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		Establecimiento.setBounds(658, 98, 99, 14);
 		panel.add(Establecimiento);
@@ -144,11 +151,13 @@ public class FacturaFrame extends JFrame {
 		panel.add(textField_1);
 		
 		JLabel Establecimiento_1 = new JLabel("Forma de pago");
+		Establecimiento_1.setForeground(Color.WHITE);
 		Establecimiento_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		Establecimiento_1.setBounds(658, 140, 99, 14);
 		panel.add(Establecimiento_1);
 		
 		JLabel Establecimiento_1_1 = new JLabel("Descuento %");
+		Establecimiento_1_1.setForeground(Color.WHITE);
 		Establecimiento_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		Establecimiento_1_1.setBounds(658, 180, 77, 14);
 		panel.add(Establecimiento_1_1);
@@ -161,6 +170,7 @@ public class FacturaFrame extends JFrame {
 		panel.add(textField_2);
 		
 		JLabel Establecimiento_1_1_1 = new JLabel("Fecha");
+		Establecimiento_1_1_1.setForeground(Color.WHITE);
 		Establecimiento_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		Establecimiento_1_1_1.setBounds(799, 180, 50, 14);
 		panel.add(Establecimiento_1_1_1);
@@ -173,6 +183,8 @@ public class FacturaFrame extends JFrame {
 		panel.add(scrollPane);
 		
 		JLabel lblDescuento = new JLabel("Descuento");
+		lblDescuento.setForeground(Color.WHITE);
+		lblDescuento.setBackground(Color.BLACK);
 		lblDescuento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDescuento.setBounds(785, 518, 129, 46);
 		panel.add(lblDescuento);
@@ -182,11 +194,13 @@ public class FacturaFrame extends JFrame {
 		panel.add(comboBoxFormaPago);
 		
 		JLabel lblDescuento_1 = new JLabel("Subtotal");
+		lblDescuento_1.setForeground(Color.WHITE);
 		lblDescuento_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDescuento_1.setBounds(785, 565, 129, 46);
 		panel.add(lblDescuento_1);
 		
 		JLabel lblDescuento_2 = new JLabel("IVA");
+		lblDescuento_2.setForeground(Color.WHITE);
 		lblDescuento_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDescuento_2.setBounds(785, 613, 129, 46);
 		panel.add(lblDescuento_2);
@@ -197,16 +211,19 @@ public class FacturaFrame extends JFrame {
 		panel.add(lblTotal);
 		
 		JLabel labelDescuento = new JLabel("0.0");
+		labelDescuento.setForeground(Color.WHITE);
 		labelDescuento.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelDescuento.setBounds(924, 518, 129, 46);
 		panel.add(labelDescuento);
 		
 		JLabel labelSubtotal = new JLabel("0.0");
+		labelSubtotal.setForeground(Color.WHITE);
 		labelSubtotal.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelSubtotal.setBounds(924, 565, 129, 46);
 		panel.add(labelSubtotal);
 		
 		JLabel labelIVA = new JLabel("0.0");
+		labelIVA.setForeground(Color.WHITE);
 		labelIVA.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelIVA.setBounds(924, 613, 129, 46);
 		panel.add(labelIVA);

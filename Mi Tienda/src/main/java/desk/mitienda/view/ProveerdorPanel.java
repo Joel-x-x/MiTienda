@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
@@ -34,21 +36,15 @@ public class ProveerdorPanel extends JPanel {
 	private JTextField textField_3;
 	private Long proveedorId;
 	private DefaultTableModel modelo;
+	private int columna;
+	private int row;
 
 	//-------------------------------------Utilidades--------------------------------
 
 	//Limpiar formulario
 
 
-	public void limpiarFormulario(){
-		txt_usuario.setText("");
-		textField_3.setText("");
-		txt_nombres.setText("");
-		txt_apellidos.setText("");
-		txt_celular.setText("");
-		textField.setText("");
-		textField_1.setText("");
-	}
+
 
 
 	//	Llenar datos
@@ -75,8 +71,40 @@ public class ProveerdorPanel extends JPanel {
 	private void bloquearBotones() {
 		btn_eliminar.setEnabled(false);
 		btn_modificar.setEnabled(false);
+		btn_limpiar_formulario.setEnabled(false);
+
+
+
 	}
 
+	// Llenar formulario segun Id
+
+	private void llenarFormulario(){
+
+		// Obtener el id del proveedor seleccionado
+
+
+		Proveedor proveedor = proveedorController.getProveedorId(proveedorId);
+
+		//Llenar cajas de texto
+		txt_usuario.setText( proveedor.getIdentificacion());
+		textField_3.setText(proveedor.getRazonSocial());
+		txt_nombres.setText(proveedor.getEmpresa());
+		txt_apellidos.setText(proveedor.getDireccion());
+		txt_celular.setText(proveedor.getCelular());
+		textField.setText(proveedor.getCorreo());
+		textField_1.setText(proveedor.getDescripcion());
+
+
+	}
+
+	private void activarBotones() {
+		btn_agregar_usuario.setEnabled(true);
+		btn_eliminar.setEnabled(true);
+		btn_modificar.setEnabled(true);
+		btn_limpiar_formulario.setEnabled(true);
+
+	}
 
 	private void listarProveedores(){
 		modelo = (DefaultTableModel) table.getModel();
@@ -103,6 +131,22 @@ public class ProveerdorPanel extends JPanel {
 					proveedor.getCorreo(),
 					proveedor.getDescripcion()
 			}));
+
+	}
+	private void borrarDatosTabla() {
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
+		modelo.setColumnCount(0);
+	}
+
+	public void limpiarFormulario(){
+		txt_usuario.setText("");
+		textField_3.setText("");
+		txt_nombres.setText("");
+		txt_apellidos.setText("");
+		txt_celular.setText("");
+		textField.setText("");
+		textField_1.setText("");
 	}
 
 //--------------------------------------Creacion de metodos para botones---------------------------
@@ -130,8 +174,11 @@ public class ProveerdorPanel extends JPanel {
 		if(estado.getExito()){
 			proveedorId = proveedor.getId();
 
+
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 			limpiarFormulario();
+			borrarDatosTabla();
+			listarProveedores();
 
 		}else{
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
@@ -146,18 +193,100 @@ public class ProveerdorPanel extends JPanel {
 
 		//Llenar proveedor
 		Proveedor proveedor = llenarProveedor();
+		proveedor.setId(proveedorId);
 		Estado estado = proveedorController.actualizar(proveedor);
+//
+//		if(proveedor == null){
+//			return;
+//		}
 
 		if(estado.getExito()){
-			JOptionPane.showMessageDialog(null, "Modificado con Exito!");
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+			borrarDatosTabla();
 			listarProveedores();
 			limpiarFormulario();
 			bloquearBotones();
 		} else {
-			JOptionPane.showMessageDialog(null, "No se pudo modificar");
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
 
 		}
 	}
+	// Metodo para eliminar proveedor
+	public void eliminar(){
+		Estado estado = proveedorController.eliminar(proveedorId);
+
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null,estado.getMensaje());
+			limpiarFormulario();
+			bloquearBotones();
+			borrarDatosTabla();
+			listarProveedores();
+		}else{
+			JOptionPane.showMessageDialog(null,estado.getMensaje());
+		}
+	}
+
+	public void buscarIdentifiacion(){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		List <Proveedor> listaproveedores = proveedorController.listar(txt_busqueda_usuarios.getText(), null);
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+		modelo.addColumn("6");
+		modelo.addColumn("7");
+		modelo.addColumn("8");
+
+		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
+		modelo.addRow(cabeceras);
+		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
+				proveedor.getId(),
+				proveedor.getIdentificacion(),
+				proveedor.getRazonSocial(),
+				proveedor.getEmpresa(),
+				proveedor.getDireccion(),
+				proveedor.getCelular(),
+				proveedor.getCorreo(),
+				proveedor.getDescripcion()
+		}));
+
+	}
+	public void buscarEmpresa(){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		List <Proveedor> listaproveedores = proveedorController.listar(null,textField_2.getText());
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+		modelo.addColumn("6");
+		modelo.addColumn("7");
+		modelo.addColumn("8");
+
+		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
+		modelo.addRow(cabeceras);
+		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
+				proveedor.getId(),
+				proveedor.getIdentificacion(),
+				proveedor.getRazonSocial(),
+				proveedor.getEmpresa(),
+				proveedor.getDireccion(),
+				proveedor.getCelular(),
+				proveedor.getCorreo(),
+				proveedor.getDescripcion()
+		}));
+
+	}
+	public void limpiarLista(){
+		borrarDatosTabla();
+		listarProveedores();
+	}
+
+
 //------------------------------------------------------------------------------------------
 	/**
 	 * Create the panel.
@@ -230,6 +359,7 @@ public class ProveerdorPanel extends JPanel {
 		btn_agregar_usuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				agregar();
+
 			}
 		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
@@ -240,6 +370,12 @@ public class ProveerdorPanel extends JPanel {
 		add(btn_agregar_usuario);
 
 		btn_modificar = new JButton("Modificar");
+		btn_modificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actualizar();
+
+			}
+		});
 		btn_modificar.setForeground(Color.WHITE);
 		btn_modificar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_modificar.setBorder(null);
@@ -248,6 +384,12 @@ public class ProveerdorPanel extends JPanel {
 		add(btn_modificar);
 
 		btn_eliminar = new JButton("Eliminar");
+		btn_eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminar();
+
+			}
+		});
 		btn_eliminar.setForeground(Color.WHITE);
 		btn_eliminar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_eliminar.setBorder(null);
@@ -256,6 +398,11 @@ public class ProveerdorPanel extends JPanel {
 		add(btn_eliminar);
 
 		btn_limpiar_formulario = new JButton("Limpiar");
+		btn_limpiar_formulario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiarFormulario();
+			}
+		});
 		btn_limpiar_formulario.setForeground(Color.WHITE);
 		btn_limpiar_formulario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_formulario.setBorder(null);
@@ -264,6 +411,15 @@ public class ProveerdorPanel extends JPanel {
 		add(btn_limpiar_formulario);
 
 		btn_buscar = new JButton("Buscar");
+		btn_buscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField_2.getText().isEmpty()){
+					buscarIdentifiacion();
+				}else if(txt_busqueda_usuarios.getText().isEmpty()){
+					buscarEmpresa();
+				}
+			}
+		});
 		btn_buscar.setForeground(Color.WHITE);
 		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_buscar.setBorder(null);
@@ -274,6 +430,9 @@ public class ProveerdorPanel extends JPanel {
 		btn_limpiar_lista = new JButton("Limpiar");
 		btn_limpiar_lista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				limpiarLista();
+				txt_busqueda_usuarios.setText("");
+				textField_2.setText("");
 			}
 		});
 		btn_limpiar_lista.setForeground(Color.WHITE);
@@ -300,7 +459,20 @@ public class ProveerdorPanel extends JPanel {
 		add(scrollPane);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				columna = table.getSelectedColumn();
+				row = table.getSelectedRow();
+				proveedorId = (Long) table.getValueAt(row,columna);
+
+				activarBotones();
+				llenarFormulario();
+				btn_agregar_usuario.setEnabled(false);
+			}
+		});
 		scrollPane.setViewportView(table);
+
 
 		txt_celular = new JTextField();
 		txt_celular.setColumns(10);
@@ -349,8 +521,11 @@ public class ProveerdorPanel extends JPanel {
 		add(textField_3);
 
 		listarProveedores();
+		bloquearBotones();
 
 	}
+
+
 
 
 }
