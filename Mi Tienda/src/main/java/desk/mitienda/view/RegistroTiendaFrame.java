@@ -35,6 +35,8 @@ public class RegistroTiendaFrame extends JFrame {
 	private JTextField txt_nombre_dueno;
 	private DatosEmpresaController datosEmpresaController;
 
+
+	//------------------------------------------------------- MAIN --------------------------------------------------------------------
 	/**
 	 * Launch the application.
 	 */
@@ -43,6 +45,7 @@ public class RegistroTiendaFrame extends JFrame {
             public void run() {
                 try {
                     RegistroTiendaFrame frame = new RegistroTiendaFrame();
+					frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -50,6 +53,8 @@ public class RegistroTiendaFrame extends JFrame {
             }
         });
     }
+
+	// --------------------------------- Redondear Bordes--------------------------------------------------------------------------------------------------------
 	private RoundBorderTextField createTextField() {
 	    RoundBorderTextField textField = new RoundBorderTextField(10, 5); // El segundo parámetro es el radio del borde
 	    textField.setForeground(Color.WHITE);
@@ -77,7 +82,52 @@ public class RegistroTiendaFrame extends JFrame {
     private RoundBorderTextField createTextField(int columns, int cornerRadius) {
         return new RoundBorderTextField(columns, cornerRadius);
     }
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------- Utilidades --------------------------------------------------------------------------------------------------------------
+	public DatosEmpresa llenarDatosEmpresa() {
 
+		return DatosEmpresa.builder()
+			.nombreEmpresa(txt_nombre_tienda.getText())
+			.nombres(txt_nombre_dueno.getText())
+			.direccion(txt_direccion.getText())
+			.celular(txt_telefono.getText())
+			.correo(txt_correo.getText())
+			.estado(true)
+			.identificacion(txt_ruc.getText())
+			.build();
+	}
+
+
+
+//-----------------------------------------------------------Metodos Botones--------------------------------------------------------------------------------------------------------------------------
+	public void registrar() {
+
+		DatosEmpresa datosEmpresa = llenarDatosEmpresa();
+
+		// Validaciones
+		if(datosEmpresa.getNombreEmpresa().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
+			return;
+		}
+		if(datosEmpresa.getNombres().equals("")) {
+			JOptionPane.showMessageDialog(null, "El campo no puede ir vacio");
+		}
+
+		// Registrar
+		Estado estado = datosEmpresaController.guardar(datosEmpresa);
+		if(estado.getExito()) {
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
+			registroTiendaFrame.setLocationRelativeTo(null);
+			registroTiendaFrame.setVisible(true);
+			dispose();
+
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+		}
+	}
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Create the frame.
 	 */
@@ -117,7 +167,7 @@ public class RegistroTiendaFrame extends JFrame {
 		JButton btnNewButton = new JButton("LISTO");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				registrar();
+				registrar();
 
 			}
 		});
@@ -184,7 +234,7 @@ public class RegistroTiendaFrame extends JFrame {
 		txt_direccion = createTextField(10, 5);
 		txt_direccion.setBounds(291, 240, 357, 35);
 		panel_11.add(txt_direccion);
-		txt_direccion.setText("xd");
+
 
 		txt_nombre_tienda = createTextField(10, 5);
 		txt_nombre_tienda.setBounds(291, 183, 357, 35);
@@ -204,9 +254,9 @@ public class RegistroTiendaFrame extends JFrame {
 		lblIniciarSesion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				AdminFrame adminFrame = new AdminFrame();
-				adminFrame.setVisible(true);
-				adminFrame.setLocationRelativeTo(null);
+				IniciarSesionFrame frame = new IniciarSesionFrame();
+				frame.setVisible(true);
+				frame.setLocationRelativeTo(null);
 
 				// Cierra el frame al hacer clic en el label
 				dispose();
@@ -219,44 +269,8 @@ public class RegistroTiendaFrame extends JFrame {
 		lblIniciarSesion.setBounds(1081, 702, 189, 47);
 		panel.add(lblIniciarSesion);
 	}
-	public void registrar() {
-
-		DatosEmpresa datosEmpresa = llenarDatosEmpresa();
 
 
-		// Validaciones
-//		if(datosEmpresa.getNombreEmpresa().equals("")) {
-//			JOptionPane.showMessageDialog(null, "El campo nombre no puede ir vacio");
-//			return;
-//		}
-//		if(datosEmpresa.getNombres().equals("")) {
-
-		// Registrar
-		Estado estado = datosEmpresaController.guardar(datosEmpresa);
-		if(estado.getExito()) {
-
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
-			registroTiendaFrame.setLocationRelativeTo(null);
-			registroTiendaFrame.setVisible(true);
-			dispose();
-
-		} else {
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-		}
-	}
-	public DatosEmpresa llenarDatosEmpresa() {
-
-		return DatosEmpresa.builder()
-			.nombreEmpresa(txt_nombre_tienda.getText())
-			.nombres(txt_nombre_dueno.getText())
-			.direccion(txt_direccion.getText())
-			.celular(txt_telefono.getText())
-			.correo(txt_correo.getText())
-			.estado(true)
-			.identificacion(txt_ruc.getText())
-			.build();
-	}
 
 }
 

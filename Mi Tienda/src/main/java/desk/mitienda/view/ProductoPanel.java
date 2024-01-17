@@ -1,6 +1,7 @@
 package desk.mitienda.view;
 
 import desk.mitienda.controller.IvaController;
+import desk.mitienda.controller.ProductoController;
 import desk.mitienda.model.Categoria;
 import desk.mitienda.model.Iva;
 import desk.mitienda.model.Producto;
@@ -42,7 +43,7 @@ public class ProductoPanel extends JPanel {
 	private JComboBox <Iva> Cmb_iva;
 	private JTextField txt_nombre_producto;
 	private JCheckBox chbx_tiene_iva;
-	private IvaController ivaController;
+	private ProductoController productoController;
 	private Long productoId;
 	private int columna;
 	private int row;
@@ -83,14 +84,11 @@ public class ProductoPanel extends JPanel {
 
 	private void llenarFormulario(){
 
+		Producto producto = productoController.getProductoId(productoId);
 
-
-
-//		Proveedor proveedor = proveedorController.getProveedorId(productoId);
+		//Llenar cajas de texto
+//		txt_usuario.setText( producto.getCodigo());
 //
-//		//Llenar cajas de texto
-//		txt_usuario.setText( proveedor.getIdentificacion());
-//		Cmb_iva_3.setText(proveedor.getRazonSocial());
 //		txt_nombres.setText(proveedor.getEmpresa());
 //		txt_apellidos.setText(proveedor.getDireccion());
 //		txt_celular.setText(proveedor.getCelular());
@@ -140,7 +138,7 @@ public class ProductoPanel extends JPanel {
 //		modelo.setRowCount(0);
 //		modelo.setColumnCount(0);
 //	}
-//
+
 //	public void limpiarFormulario(){
 //		txt_usuario.setText("");
 //		Cmb_iva_3.setText("");
