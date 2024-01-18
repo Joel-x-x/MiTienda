@@ -2,6 +2,7 @@ package desk.mitienda.controller;
 
 import desk.mitienda.dao.ClienteDao;
 import desk.mitienda.model.Cliente;
+import desk.mitienda.model.Cliente;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
@@ -28,5 +29,9 @@ public class ClienteController {
 
     public List<Cliente> listar(String codigo, String nombre) {
         return clienteDao.listar(codigo, nombre);
+    }
+
+    public Cliente getClienteId(Long id) {
+        return clienteDao.getClienteId(id);
     }
 }

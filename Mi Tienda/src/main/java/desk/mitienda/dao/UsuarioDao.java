@@ -71,4 +71,8 @@ public class UsuarioDao {
         }
     }
 
+    public Usuario getUsuarioId(Long id) {
+        return this.em.find(Usuario.class, id);
+    }
+
 }

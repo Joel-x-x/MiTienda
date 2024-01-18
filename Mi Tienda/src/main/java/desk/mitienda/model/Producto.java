@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
@@ -44,5 +45,16 @@ public class Producto {
 
     public void desactivar() {
         this.estado = false;
+    }
+
+    public BigDecimal getPrecioVenta() {
+        BigDecimal utilidad = (this.utilidad.divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP)
+                            .add(new BigDecimal(1.0)));
+
+        BigDecimal iva = (this.iva.getIva().divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP))
+                .add(new BigDecimal(1.0));
+
+        return (this.precioMedio.multiply(utilidad))
+                .multiply(iva);
     }
 }

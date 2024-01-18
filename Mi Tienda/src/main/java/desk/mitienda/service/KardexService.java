@@ -29,7 +29,7 @@ public class KardexService {
             // ((producto.precioUnitario * producto.stock) + precioTotal) / cantidadExistencia
             // (Total anterior + total compra) / cantidadSumaAnteriorMasNueva
             BigDecimal totalAnterior = producto.getPrecioMedio().multiply(BigDecimal.valueOf(producto.getStock())).setScale(4, RoundingMode.HALF_UP);
-            BigDecimal sumaTotal = totalAnterior.add(detalle.getTotal()).setScale(4, RoundingMode.HALF_UP);
+            BigDecimal sumaTotal = totalAnterior.add(detalle.getSubtotal()).setScale(4, RoundingMode.HALF_UP);
             BigDecimal precioMedioPonderado = sumaTotal.divide(BigDecimal.valueOf(cantidadExistencia), 4, RoundingMode.HALF_UP);
 
             BigDecimal costoTotalExistencia = precioMedioPonderado.multiply(BigDecimal.valueOf(cantidadExistencia));
@@ -42,7 +42,7 @@ public class KardexService {
                     .producto(detalle.getProducto())
                     .cantidad(detalle.getCantidad())
                     .precioUnitario(detalle.getPrecioUnitario())
-                    .precioTotal(detalle.getTotal())
+                    .precioTotal(detalle.getSubtotal())
                     .cantidadExistencia(cantidadExistencia)
                     .costoUnitarioExistencia(precioMedioPonderado)
                     .costoTotalExistencia(costoTotalExistencia)

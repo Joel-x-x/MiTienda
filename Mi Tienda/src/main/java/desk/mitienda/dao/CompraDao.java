@@ -58,8 +58,6 @@ public class CompraDao {
             filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("razonSocial"), razonSocial));
         }
 
-        filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
-
         return em.createQuery(createQuery.where(filtro)).getResultList();
 
     }
