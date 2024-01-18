@@ -2,10 +2,7 @@ package desk.mitienda.service;
 
 import desk.mitienda.controller.ProductoController;
 import desk.mitienda.dao.KardexDao;
-import desk.mitienda.model.Compra;
-import desk.mitienda.model.Kardex;
-import desk.mitienda.model.Producto;
-import desk.mitienda.model.Tipo;
+import desk.mitienda.model.*;
 import desk.mitienda.utils.FlyWay;
 import desk.mitienda.utils.JPAUtils;
 
@@ -75,6 +72,47 @@ public class KardexService {
         producto.setUltimoProveedorCompra(ultimoProveedorCompra);
 
         productoController.actualizar(producto);
+    }
+
+    public void registrarNotaVenta(NotaVenta notaVenta) {
+        FlyWay.migrate();
+
+        kardexDao = new KardexDao(JPAUtils.getEntityManager());
+
+        notaVenta.getDetalle().forEach(detalle -> {
+            // Stock anterior más la cantidad de la compra
+            Double cantidadExistencia = detalle.getProducto().getStock() - detalle.getCantidad();
+            Producto producto = detalle.getProducto();
+
+            // En venta el precio no cambia por lo tanto sera el mismo
+            BigDecimal costoTotalExistencia = producto.getPrecioMedio().multiply(BigDecimal.valueOf(cantidadExistencia));
+
+            Kardex kardex = Kardex.builder()
+                    .fecha(LocalDate.now())
+                    .numero(notaVenta.getNumero())
+                    .proveedorCliente(notaVenta.getCliente().getNombre() + " " + notaVenta.getCliente().getApellido())
+                    .tipo(Tipo.SALIDA)
+                    .producto(detalle.getProducto())
+                    .cantidad(detalle.getCantidad())
+                    .precioUnitario(producto.getPrecioMedio())
+                    .precioTotal(producto.getPrecioMedio().multiply(BigDecimal.valueOf(detalle.getCantidad()))) // Tomar en cuenta que es el precio sin iva ni utilidad
+                    .cantidadExistencia(cantidadExistencia)
+                    .costoUnitarioExistencia(producto.getPrecioMedio())
+                    .costoTotalExistencia(costoTotalExistencia)
+                    .build();
+
+            // Persistencia kardex
+            kardexDao.guardar(kardex);
+
+            // Actualizar producto
+            productoController = new ProductoController();
+
+            Producto productoMaganed = productoController.getProductoId(producto.getId());
+
+            productoMaganed.setStock(cantidadExistencia);
+
+            productoController.actualizar(productoMaganed);
+        });
     }
 
 }

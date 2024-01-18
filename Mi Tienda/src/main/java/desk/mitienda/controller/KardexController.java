@@ -3,6 +3,7 @@ package desk.mitienda.controller;
 import desk.mitienda.dao.KardexDao;
 import desk.mitienda.model.Compra;
 import desk.mitienda.model.Kardex;
+import desk.mitienda.model.NotaVenta;
 import desk.mitienda.service.KardexService;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
@@ -22,4 +23,7 @@ public class KardexController {
         kardexService.registrarCompra(compra);
     }
 
+    public void registrarKardexVenta(NotaVenta notaVenta) {
+        kardexService.registrarNotaVenta(notaVenta);
+    }
 }
