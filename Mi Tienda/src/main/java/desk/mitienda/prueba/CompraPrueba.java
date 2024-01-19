@@ -22,16 +22,15 @@ public class CompraPrueba {
         KardexController kardexController = new KardexController();
 
         // Nueva Compra
-        Compra compra = Compra.builder()
-                .puntoEmision("001")
-                .establecimiento("001")
-                .build();
+        Compra compra = new Compra();
+        compra.setPuntoEmision("001");
+        compra.setEstablecimiento("001");
         // Agregar Productos
         DetalleCompra detalleCompra = new DetalleCompra(productoController.getProductoId(1L));
 
 //        DetalleCompra detalleCompra2 = new DetalleCompra(productoController.getProductoId(2L));
         // Actualizar
-        detalleCompra.setCantidad(5.0);
+        detalleCompra.setCantidad(30.0);
         detalleCompra.setPrecioUnitario(new BigDecimal(1.5));
 //        detalleCompra.setPrecioUnitario(7.33);
         // Recalcular valores en base a las nuevas modificaciones
@@ -42,12 +41,12 @@ public class CompraPrueba {
 //        compra.agregarDetalle(detalleCompra2);
 
         // Agregar datos compra
-//        compra.setNumero("00000012323");
+        compra.setNumero("00000012323");
         compra.setFormaPago("Efectivo");
         compra.setFecha(LocalDate.now());
-//        compra.setProveedor(proveedorController.getProveedorId(1L));
+        compra.setProveedor(proveedorController.getProveedorId(1L));
         // Proveedor final
-        compra.proveedorFinal(compraController.getSiguienteNumeroProveedorFinal());
+//        compra.proveedorFinal(compraController.getSiguienteNumeroProveedorFinal());
         // Cierra el frame no pasa nada la no se ha hecho la persistencia
         // Guardar
         compraController.guardar(compra);

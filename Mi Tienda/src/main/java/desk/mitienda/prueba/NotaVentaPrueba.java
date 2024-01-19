@@ -1,6 +1,7 @@
 package desk.mitienda.prueba;
 
 import desk.mitienda.controller.*;
+import desk.mitienda.model.Caja;
 import desk.mitienda.model.DetalleNota;
 import desk.mitienda.model.NotaVenta;
 
@@ -11,6 +12,7 @@ public class NotaVentaPrueba {
         NotaVentaController notaVentaController = new NotaVentaController();
         UsuarioController usuarioController = new UsuarioController();
         KardexController kardexController = new KardexController();
+        CajaController cajaController = new CajaController();
 
         // Nueva venta
         NotaVenta notaVenta = new NotaVenta(notaVentaController.getSiguienteNumeroConsumidorFinal());
@@ -19,7 +21,7 @@ public class NotaVentaPrueba {
         DetalleNota detalleNota = new DetalleNota(productoController.getProductoId(1L));
 
         // Modificaciones
-        detalleNota.setCantidad(3.0);
+        detalleNota.setCantidad(2.0);
         detalleNota.recalcular();
 
         // Agregar detalle a la nota
@@ -32,6 +34,11 @@ public class NotaVentaPrueba {
 
         notaVentaController.guardar(notaVenta);
 
+        // Agregar valor en caja
+        Caja caja = cajaController.getCajaAbiertaUsuarioId(1L);
+        caja.agregarValor(notaVenta.getTotal());
+        cajaController.actualizar(caja);
+        // Registrar kardex
         kardexController.registrarKardexVenta(notaVenta);
     }
 }
