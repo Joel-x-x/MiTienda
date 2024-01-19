@@ -20,6 +20,10 @@ public class UsuarioController {
         return usuarioDao.registrar(usuario);
     }
 
+    public Estado actualizar(Usuario usuario){
+        return usuarioDao.actualizar(usuario);
+    }
+
     public Estado login(String usuario, String clave) {
         return usuarioDao.login(usuario, clave);
     }

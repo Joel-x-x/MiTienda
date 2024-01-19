@@ -153,7 +153,7 @@ public class ProveerdorPanel extends JPanel {
 
 
 	//Metodo agregar Proveedor
-	public void agregar(){
+	private void agregar(){
 
 		//Llenar del proveedor
 		Proveedor proveedor = llenarProveedor();
@@ -189,7 +189,7 @@ public class ProveerdorPanel extends JPanel {
 
 	// Metodo modificar proveedor
 
-	public void actualizar(){
+	private void actualizar(){
 
 		//Llenar proveedor
 		Proveedor proveedor = llenarProveedor();
@@ -213,7 +213,7 @@ public class ProveerdorPanel extends JPanel {
 		}
 	}
 	// Metodo para eliminar proveedor
-	public void eliminar(){
+	private void eliminar(){
 		Estado estado = proveedorController.eliminar(proveedorId);
 
 		if(estado.getExito()){
@@ -227,7 +227,7 @@ public class ProveerdorPanel extends JPanel {
 		}
 	}
 
-	public void buscarIdentifiacion(){
+	private void buscarIdentifiacion(){
 		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
 		List <Proveedor> listaproveedores = proveedorController.listar(txt_busqueda_usuarios.getText(), null);
@@ -254,7 +254,7 @@ public class ProveerdorPanel extends JPanel {
 		}));
 
 	}
-	public void buscarEmpresa(){
+	private void buscarEmpresa(){
 		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
 		List <Proveedor> listaproveedores = proveedorController.listar(null,textField_2.getText());
@@ -281,7 +281,7 @@ public class ProveerdorPanel extends JPanel {
 		}));
 
 	}
-	public void limpiarLista(){
+	private void limpiarLista(){
 		borrarDatosTabla();
 		listarProveedores();
 	}

@@ -1,20 +1,23 @@
 package desk.mitienda.view;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import desk.mitienda.controller.UsuarioController;
+import desk.mitienda.model.Proveedor;
+import desk.mitienda.model.Rol;
+import desk.mitienda.model.Usuario;
+import desk.mitienda.utils.Estado;
+
+import javax.swing.*;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.List;
 
-import javax.swing.SwingConstants;
-
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 
 public class UsuarioPanel extends JPanel {
 	private JTextField txt_usuario;
@@ -22,7 +25,8 @@ public class UsuarioPanel extends JPanel {
 	private JTextField txt_nombres;
 	private JTextField txt_apellidos;
 	private JButton btn_agregar_usuario;
-	private JComboBox comboBox_rol;
+	private JComboBox <Rol> comboBox_rol = new JComboBox<>();
+	private DefaultComboBoxModel <Rol> comboBoxRolModel = new DefaultComboBoxModel<>();
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
@@ -30,11 +34,188 @@ public class UsuarioPanel extends JPanel {
 	private JButton btn_limpiar_lista;
 	private JTextField txt_busqueda_usuarios;
 	private JTable table;
+	private UsuarioController usuarioController;
+	private Long usuarioId;
+	private DefaultTableModel modelo;
+	private int row;
+	private int columna;
+	private Rol rol;
+//--------------------------------------------------------------Utilidades---------------------------------------------------------------------
+//	Set combobox
 
+	private void setCombo(){
+		comboBoxRolModel.removeAllElements();
+		comboBoxRolModel.addAll(Collections.singleton(rol));
+		comboBox_rol.setModel(comboBoxRolModel);
+		comboBox_rol.setSelectedIndex(0);
+	}
+
+	/**
+	 * @return Llena los campos de proveedor
+	 */
+	public Usuario llenarUsuario(){
+		return Usuario.builder()
+				.usuario(txt_usuario.getText())
+				.clave(String.valueOf(txt_psw_contraseña.getPassword()))
+				.nombre(txt_nombres.getText())
+				.apellido(txt_apellidos.getText())
+				.rol((Rol) comboBox_rol.getSelectedItem())
+				.estado(true)
+				.build();
+
+	}
+
+
+	// Bloquear botones
+
+	private void bloquearBotones() {
+		btn_eliminar.setEnabled(false);
+		btn_modificar.setEnabled(false);
+		btn_limpiar_formulario.setEnabled(false);
+
+
+
+	}
+
+	// Llenar formulario segun Id
+
+	private void llenarFormulario(){
+
+		// Obtener el id del proveedor seleccionado
+
+
+		Usuario usuario = usuarioController.getUsuarioId(usuarioId);
+
+		//Llenar cajas de texto
+		txt_usuario.setText(usuario.getUsuario());
+		txt_psw_contraseña.setText(usuario.getClave());
+		txt_nombres.setText(usuario.getNombre());
+		txt_apellidos.setText(usuario.getApellido());
+		comboBox_rol.setSelectedItem(usuario.getRol());
+
+
+
+	}
+
+	private void activarBotones() {
+		btn_agregar_usuario.setEnabled(true);
+		btn_eliminar.setEnabled(true);
+		btn_modificar.setEnabled(true);
+		btn_limpiar_formulario.setEnabled(true);
+
+	}
+
+	private void listarUsuarios(){
+		modelo = (DefaultTableModel) table.getModel();
+		List<Usuario> listaUsuarios = usuarioController.listar(null);
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+
+
+		String[] cabeceras = {"Id","Usuario", "Nombre", "Apellido", "Rol"};
+		modelo.addRow(cabeceras);
+		listaUsuarios.forEach(usuario -> modelo.addRow(new Object[]{
+				usuario.getId(),
+				usuario.getUsuario(),
+				usuario.getNombre(),
+				usuario.getApellido(),
+				usuario.getRol(),
+
+		}));
+
+	}
+	private void borrarDatosTabla() {
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
+		modelo.setColumnCount(0);
+	}
+
+	public void limpiarFormulario(){
+		txt_usuario.setText("");
+		txt_nombres.setText("");
+		txt_apellidos.setText("");
+		txt_psw_contraseña.setText("");
+		comboBox_rol.setSelectedItem(null);
+	}
+
+	public void limpiarLista(){
+		borrarDatosTabla();
+		listarUsuarios();
+	}
+
+//------------------------------------------------------------Metodos Botones-------------------------------------------------------------
+	private void agregar(){
+		Usuario usuario = llenarUsuario();
+		Estado estado = usuarioController.registrar(usuario);
+
+
+
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+		}else{
+			JOptionPane.showMessageDialog(null,estado.getMensaje());
+		}
+
+
+	}
+
+	private void actualizar(){
+
+		Usuario usuario = llenarUsuario();
+		usuario.setId(usuarioId);
+
+		Estado estado = usuarioController.actualizar(usuario);
+
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+			borrarDatosTabla();
+			listarUsuarios();
+			limpiarFormulario();
+			bloquearBotones();
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+		}
+	}
+
+	 private void buscarNombre(){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		 List<Usuario> listaUsuarios = usuarioController.listar(txt_nombres.getText());
+		 modelo.addColumn("1");
+		 modelo.addColumn("2");
+		 modelo.addColumn("3");
+		 modelo.addColumn("4");
+		 modelo.addColumn("5");
+
+
+		 String[] cabeceras = {"Id","Usuario", "Nombre", "Apellido", "Rol"};
+		 modelo.addRow(cabeceras);
+		 listaUsuarios.forEach(usuario -> modelo.addRow(new Object[]{
+				 usuario.getId(),
+				 usuario.getUsuario(),
+				 usuario.getNombre(),
+				 usuario.getApellido(),
+				 usuario.getRol(),
+
+		 }));
+
+
+	}
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------Constructor-------------------------------------------------------------------------------------
 	/**
 	 * Create the panel.
 	 */
 	public UsuarioPanel(int panelAncho, int panelAlto) {
+		setCombo();
+		usuarioController = new UsuarioController();
 
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
@@ -106,6 +287,12 @@ public class UsuarioPanel extends JPanel {
 		add(lblRol);
 
 		btn_agregar_usuario = new JButton("Agregar");
+		btn_agregar_usuario.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				agregar();
+			}
+		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
 		btn_agregar_usuario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_agregar_usuario.setBorder(null);
@@ -114,6 +301,12 @@ public class UsuarioPanel extends JPanel {
 		add(btn_agregar_usuario);
 
 		btn_modificar = new JButton("Modificar");
+		btn_modificar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actualizar();
+			}
+		});
 		btn_modificar.setForeground(Color.WHITE);
 		btn_modificar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_modificar.setBorder(null);
@@ -130,6 +323,12 @@ public class UsuarioPanel extends JPanel {
 		add(btn_eliminar);
 
 		btn_limpiar_formulario = new JButton("Limpiar");
+		btn_limpiar_formulario.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				limpiarFormulario();
+			}
+		});
 		btn_limpiar_formulario.setForeground(Color.WHITE);
 		btn_limpiar_formulario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_formulario.setBorder(null);
@@ -138,6 +337,12 @@ public class UsuarioPanel extends JPanel {
 		add(btn_limpiar_formulario);
 
 		btn_buscar = new JButton("Buscar");
+		btn_buscar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buscarNombre();
+			}
+		});
 		btn_buscar.setForeground(Color.WHITE);
 		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_buscar.setBorder(null);
@@ -146,6 +351,13 @@ public class UsuarioPanel extends JPanel {
 		add(btn_buscar);
 
 		btn_limpiar_lista = new JButton("Limpiar");
+		btn_limpiar_lista.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				limpiarLista();
+				txt_busqueda_usuarios.setText("");
+			}
+		});
 		btn_limpiar_lista.setForeground(Color.WHITE);
 		btn_limpiar_lista.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_lista.setBorder(null);
@@ -170,7 +382,21 @@ public class UsuarioPanel extends JPanel {
 		add(scrollPane);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				columna = table.getSelectedColumn();
+				row = table.getSelectedRow();
+				usuarioId = (Long) table.getValueAt(row,columna);
+
+				activarBotones();
+				llenarFormulario();
+				btn_agregar_usuario.setEnabled(false);
+			}
+		});
 		scrollPane.setViewportView(table);
+		listarUsuarios();
+		bloquearBotones();
 
 	}
 

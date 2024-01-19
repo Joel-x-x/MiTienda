@@ -4,6 +4,7 @@ import desk.mitienda.model.Usuario;
 import desk.mitienda.model.Proveedor;
 import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
+import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -41,6 +42,29 @@ public class UsuarioDao {
             // em.close();
         }
     }
+    public Estado actualizar(Usuario usuario) {
+        Usuario usuarioExistente;
+        try{
+            transaction.begin();
+            // Buscamos proveedor por id
+            usuarioExistente = this.em.find(Usuario.class, usuario.getId());
+            // Pasamos de detached a managed
+            usuarioExistente = this.em.merge(usuarioExistente);
+            // Copiamos las propiedades del proveedor al proveedorExistente
+            BeanUtils.copyProperties(usuarioExistente, usuario);
+            transaction.commit();
+            return new Estado(true, "Usuario actualizado");
+        }catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();  // Revierte la transacción si se produce una excepción
+            }
+            e.printStackTrace();
+            return new Estado(false, "No se pudo actualizar el Usuario");
+        } finally {
+            // em.close();
+        }
+    }
+
 
     public Estado login(String usuario, String clave) {
         String jpql = "select U from Usuario as U where U.usuario = :usuario and U.clave = :clave";
@@ -74,5 +98,6 @@ public class UsuarioDao {
     public Usuario getUsuarioId(Long id) {
         return this.em.find(Usuario.class, id);
     }
+
 
 }

@@ -27,7 +27,7 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
 	private JTextField txt_nombres;
 	private JButton btn_agregar_usuario;
-	private JComboBox <Categoria> comboBox_rol;
+	private JComboBox <Categoria> comboBox_rol = new JComboBox<>();
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
@@ -36,7 +36,7 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_busqueda_usuarios;
 	private JTable table;
 	private JTextField txt_utilidades;
-	private JComboBox <Iva> Cmb_iva;
+	private JComboBox <Iva> Cmb_iva = new JComboBox<>();
 	private JTextField txt_nombre_producto;
 	private JCheckBox chbx_tiene_iva;
 	private ProductoController productoController;
@@ -258,6 +258,7 @@ public class ProductoPanel extends JPanel {
 	 * @param panelAncho 
 	 */
 	public ProductoPanel(int panelAncho, int panelAlto) {
+		iniciarCombos();
 
 		productoController = new ProductoController();
 		categoriaController = new CategoriaController();
