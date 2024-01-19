@@ -1,30 +1,26 @@
 package desk.mitienda.view;
 
+import desk.mitienda.controller.CategoriaController;
 import desk.mitienda.controller.IvaController;
 import desk.mitienda.controller.ProductoController;
 import desk.mitienda.model.Categoria;
 import desk.mitienda.model.Iva;
 import desk.mitienda.model.Producto;
+import desk.mitienda.model.Proveedor;
+import desk.mitienda.utils.Estado;
 
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.*;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 
 public class ProductoPanel extends JPanel {
@@ -47,9 +43,28 @@ public class ProductoPanel extends JPanel {
 	private Long productoId;
 	private int columna;
 	private int row;
+	private DefaultTableModel modelo;
+	private DefaultComboBoxModel <Categoria> comboBoxModelCategoria = new DefaultComboBoxModel<>();
+	private DefaultComboBoxModel <Iva> comboBoxModelIva = new DefaultComboBoxModel<>();
+	private CategoriaController categoriaController;
+	private IvaController ivaController;
 
 	//-------------------------------------Utilidades--------------------------------
+	public void iniciarCombos(){
+		//Combo Categoria
+		comboBoxModelCategoria.removeAllElements();
+		comboBoxModelCategoria.addAll(categoriaController.listar());
+		comboBox_rol.setModel(comboBoxModelCategoria);
+		comboBox_rol.setSelectedIndex(0);
 
+		//Combo Iva
+		comboBoxModelIva.removeAllElements();
+		comboBoxModelIva.addAll(ivaController.listar());
+		Cmb_iva.setModel(comboBoxModelIva);
+		Cmb_iva.setSelectedIndex(0);
+
+
+	}
 	//	Llenar datos
 	/**
 	 * @return Llena los campos de producto
@@ -86,14 +101,13 @@ public class ProductoPanel extends JPanel {
 
 		Producto producto = productoController.getProductoId(productoId);
 
-		//Llenar cajas de texto
-//		txt_usuario.setText( producto.getCodigo());
-//
-//		txt_nombres.setText(proveedor.getEmpresa());
-//		txt_apellidos.setText(proveedor.getDireccion());
-//		txt_celular.setText(proveedor.getCelular());
-//		Cmb_iva.setText(proveedor.getCorreo());
-//		txt_nombre_producto.setText(proveedor.getDescripcion());
+		txt_usuario.setText(producto.getCodigo());
+		txt_nombre_producto.setText(producto.getNombre());
+		txt_nombres.setText(producto.getDescripcion());
+		comboBox_rol.setSelectedItem(producto.getCategoria());
+		txt_utilidades.setText(String.valueOf(producto.getUtilidad()));
+		chbx_tiene_iva.setSelected(producto.getTieneIva());
+		Cmb_iva.setSelectedItem(producto.getIva());
 
 
 	}
@@ -106,56 +120,149 @@ public class ProductoPanel extends JPanel {
 
 	}
 
-//	private void listarProveedores(){
-//		modelo = (DefaultTableModel) table.getModel();
-//		List<Proveedor> listaproveedores = proveedorController.listar(null, null);
-//		System.out.println(listaproveedores.get(0).getRazonSocial());
-//		modelo.addColumn("1");
-//		modelo.addColumn("2");
-//		modelo.addColumn("3");
-//		modelo.addColumn("4");
-//		modelo.addColumn("5");
-//		modelo.addColumn("6");
-//		modelo.addColumn("7");
-//		modelo.addColumn("8");
-//
-//		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
-//		modelo.addRow(cabeceras);
-//		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
-//				proveedor.getId(),
-//				proveedor.getIdentificacion(),
-//				proveedor.getRazonSocial(),
-//				proveedor.getEmpresa(),
-//				proveedor.getDireccion(),
-//				proveedor.getCelular(),
-//				proveedor.getCorreo(),
-//				proveedor.getDescripcion()
-//		}));
-//
-//	}
-//	private void borrarDatosTabla() {
-//		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-//		modelo.setRowCount(0);
-//		modelo.setColumnCount(0);
-//	}
 
-//	public void limpiarFormulario(){
-//		txt_usuario.setText("");
-//		Cmb_iva_3.setText("");
-//		txt_nombres.setText("");
-//		txt_apellidos.setText("");
-//		txt_celular.setText("");
-//		Cmb_iva.setText("");
-//		txt_nombre_producto.setText("");
-//	}
 
-//--------------------------------------------------------------------------------------------------------------
+	private void listarProductos(){
+		modelo = (DefaultTableModel) table.getModel();
+		List<Producto> listaProductos = productoController.listar(null, null);
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+		modelo.addColumn("6");
+		modelo.addColumn("7");
+
+
+		String[] cabeceras = {"Id","Codigo", "Nombre", "Descripcion", "Categoria", "Tiene Iva", "Iva"};
+		modelo.addRow(cabeceras);
+		listaProductos.forEach(producto -> modelo.addRow(new Object[]{
+				producto.getId(),
+				producto.getCodigo(),
+				producto.getNombre(),
+				producto.getDescripcion(),
+				producto.getCategoria(),
+				producto.getTieneIva(),
+				producto.getIva()
+		}));
+
+	}
+	private void borrarDatosTabla() {
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
+		modelo.setColumnCount(0);
+	}
+
+	public void limpiarFormulario(){
+		txt_usuario.setText("");
+		comboBox_rol.setSelectedItem(null);
+		txt_nombres.setText("");
+		txt_nombre_producto.setText("");
+		txt_utilidades.setText("");
+		Cmb_iva.setSelectedItem(null);
+		chbx_tiene_iva.setSelected(false);
+	}
+	public void limpiarLista(){
+		borrarDatosTabla();
+		listarProductos();
+	}
+
+
+//----------------------------------------------------Metodos Botones----------------------------------------------------------
+
+	public void agregar(){
+		Producto producto = llenarProducto();
+		Estado estado = productoController.guardar(producto);
+
+		if(estado.getExito()){
+			productoId = producto.getId();
+
+
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+			limpiarFormulario();
+			borrarDatosTabla();
+			listarProductos();
+
+		}else{
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+		}
+	}
+
+	public void actualizar(){
+
+		Producto producto = llenarProducto();
+		producto.setId(productoId);
+		Estado estado = productoController.actualizar(producto);
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+			borrarDatosTabla();
+			listarProductos();
+			limpiarFormulario();
+			bloquearBotones();
+		} else {
+			JOptionPane.showMessageDialog(null, estado.getMensaje());
+
+		}
+
+	}
+
+	public void eliminar(){
+		Estado estado = productoController.eliminar(productoId);
+
+		if(estado.getExito()){
+			JOptionPane.showMessageDialog(null,estado.getMensaje());
+			limpiarFormulario();
+			bloquearBotones();
+			borrarDatosTabla();
+			listarProductos();
+		}else{
+			JOptionPane.showMessageDialog(null,estado.getMensaje());
+		}
+	}
+
+	public void buscarCodigo(){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		List<Producto> listaProductos = productoController.listar(txt_busqueda_usuarios.getText(), null);
+		modelo.addColumn("1");
+		modelo.addColumn("2");
+		modelo.addColumn("3");
+		modelo.addColumn("4");
+		modelo.addColumn("5");
+		modelo.addColumn("6");
+		modelo.addColumn("7");
+
+
+		String[] cabeceras = {"Id","Codigo", "Nombre", "Descripcion", "Categoria", "Tiene Iva", "Iva"};
+		modelo.addRow(cabeceras);
+		listaProductos.forEach(producto -> modelo.addRow(new Object[]{
+				producto.getId(),
+				producto.getCodigo(),
+				producto.getNombre(),
+				producto.getDescripcion(),
+				producto.getCategoria(),
+				producto.getTieneIva(),
+				producto.getIva()
+		}));
+
+
+	}
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Create the panel.
 	 * @param panelAlto 
 	 * @param panelAncho 
 	 */
 	public ProductoPanel(int panelAncho, int panelAlto) {
+
+		productoController = new ProductoController();
+		categoriaController = new CategoriaController();
+		ivaController = new IvaController();
+
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
 		setPreferredSize (new Dimension(panelAncho, panelAlto));
@@ -210,6 +317,12 @@ public class ProductoPanel extends JPanel {
 		add(lblRol);
 		
 		btn_agregar_usuario = new JButton("Agregar");
+		btn_agregar_usuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				agregar();
+
+			}
+		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
 		btn_agregar_usuario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_agregar_usuario.setBorder(null);
@@ -218,6 +331,12 @@ public class ProductoPanel extends JPanel {
 		add(btn_agregar_usuario);
 		
 		btn_modificar = new JButton("Modificar");
+		btn_modificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actualizar();
+
+			}
+		});
 		btn_modificar.setForeground(Color.WHITE);
 		btn_modificar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_modificar.setBorder(null);
@@ -226,6 +345,12 @@ public class ProductoPanel extends JPanel {
 		add(btn_modificar);
 		
 		btn_eliminar = new JButton("Eliminar");
+		btn_eliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminar();
+
+			}
+		});
 		btn_eliminar.setForeground(Color.WHITE);
 		btn_eliminar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_eliminar.setBorder(null);
@@ -234,6 +359,11 @@ public class ProductoPanel extends JPanel {
 		add(btn_eliminar);
 		
 		btn_limpiar_formulario = new JButton("Limpiar");
+		btn_limpiar_formulario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiarFormulario();
+			}
+		});
 		btn_limpiar_formulario.setForeground(Color.WHITE);
 		btn_limpiar_formulario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_formulario.setBorder(null);
@@ -242,6 +372,11 @@ public class ProductoPanel extends JPanel {
 		add(btn_limpiar_formulario);
 		
 		btn_buscar = new JButton("Buscar");
+		btn_buscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscarCodigo();
+			}
+		});
 		btn_buscar.setForeground(Color.WHITE);
 		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_buscar.setBorder(null);
@@ -250,6 +385,12 @@ public class ProductoPanel extends JPanel {
 		add(btn_buscar);
 		
 		btn_limpiar_lista = new JButton("Limpiar");
+		btn_limpiar_lista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpiarLista();
+				txt_busqueda_usuarios.setText("");
+			}
+		});
 		btn_limpiar_lista.setForeground(Color.WHITE);
 		btn_limpiar_lista.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_lista.setBorder(null);
@@ -288,7 +429,7 @@ public class ProductoPanel extends JPanel {
 		});
 		scrollPane.setViewportView(table);
 		
-		txt_utilidades = new JPasswordField();
+		txt_utilidades = new JTextField();
 		txt_utilidades.setBounds(201, 189, 169, 28);
 		add(txt_utilidades);
 		
@@ -318,6 +459,9 @@ public class ProductoPanel extends JPanel {
 		txt_nombre_producto.setColumns(10);
 		txt_nombre_producto.setBounds(201, 107, 169, 28);
 		add(txt_nombre_producto);
+
+		listarProductos();
+		bloquearBotones();
 
 	}
 	

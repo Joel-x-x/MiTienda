@@ -19,6 +19,8 @@ public class ClienteFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 
+
+
 	/**
 	 * Launch the application.
 	 */

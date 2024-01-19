@@ -27,8 +27,8 @@ public class ClienteController {
         return clienteDao.eliminar(id);
     }
 
-    public List<Cliente> listar(String codigo, String nombre) {
-        return clienteDao.listar(codigo, nombre);
+    public List<Cliente> listar(String identificacion, String nombre) {
+        return clienteDao.listar(identificacion, nombre);
     }
 
     public Cliente getClienteId(Long id) {
