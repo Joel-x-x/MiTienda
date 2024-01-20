@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,8 @@ public class UsuarioPanel extends JPanel {
 	private JTextField txt_nombres;
 	private JTextField txt_apellidos;
 	private JButton btn_agregar_usuario;
-	private JComboBox comboBox_rol;
+	private JComboBox <Rol> comboBox_rol = new JComboBox<>();
+	private DefaultComboBoxModel <Rol> comboBoxRolModel = new DefaultComboBoxModel<>();
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
@@ -184,7 +186,6 @@ public class UsuarioPanel extends JPanel {
 		lblRol.setBounds(32, 151, 114, 38);
 		add(lblRol);
 
-		btn_agregar_usuario = new JButton("Agregar");
 		btn_agregar_usuario.setForeground(Color.WHITE);
 		btn_agregar_usuario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_agregar_usuario.setBorder(null);
@@ -220,6 +221,12 @@ public class UsuarioPanel extends JPanel {
 		add(btn_eliminar);
 
 		btn_limpiar_formulario = new JButton("Limpiar");
+		btn_limpiar_formulario.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				limpiarFormulario();
+			}
+		});
 		btn_limpiar_formulario.setForeground(Color.WHITE);
 		btn_limpiar_formulario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_formulario.setBorder(null);
@@ -241,6 +248,13 @@ public class UsuarioPanel extends JPanel {
 		btn_limpiar_lista.setBorder(null);
 		btn_limpiar_lista.setBackground(Color.BLACK);
 		btn_limpiar_lista.setBounds(407, 307, 100, 28);
+		// btn_limpiar_lista.addActionListener(new ActionListener() {
+		// 	@Override
+		// 	public void actionPerformed(ActionEvent e) {
+		// 		limpiarLista();
+		// 		txt_busqueda_usuarios.setText("");
+		// 	}
+		// });
 		add(btn_limpiar_lista);
 
 		JLabel lblBuscarPorUsuario = new JLabel("Buscar por Usuario:");
@@ -271,6 +285,7 @@ public class UsuarioPanel extends JPanel {
 			}
 		});
 		scrollPane.setViewportView(table);
+		// bloquearBotones();
 
 		// Listar
 		listar();

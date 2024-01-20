@@ -1,18 +1,11 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Usuario;
-import desk.mitienda.model.Usuario;
-import desk.mitienda.model.Proveedor;
-import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,28 +36,24 @@ public class UsuarioDao {
             // em.close();
         }
     }
-
     public Estado actualizar(Usuario usuario) {
-
         Usuario usuarioExistente;
-
-        try {
+        try{
             transaction.begin();
-            // Buscamos usuario por id
+            // Buscamos proveedor por id
             usuarioExistente = this.em.find(Usuario.class, usuario.getId());
             // Pasamos de detached a managed
             usuarioExistente = this.em.merge(usuarioExistente);
-            // Copiamos las propiedades del usuario al usuarioExistente
+            // Copiamos las propiedades del proveedor al proveedorExistente
             BeanUtils.copyProperties(usuarioExistente, usuario);
             transaction.commit();
             return new Estado(true, "Usuario actualizado");
-
-        } catch (Exception e) {
+        }catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();  // Revierte la transacción si se produce una excepción
             }
             e.printStackTrace();
-            return new Estado(false, "No se pudo actualizar el usuario");
+            return new Estado(false, "No se pudo actualizar el Usuario");
         } finally {
             // em.close();
         }
@@ -101,5 +90,6 @@ public class UsuarioDao {
     public Usuario getUsuarioId(Long id) {
         return this.em.find(Usuario.class, id);
     }
+
 
 }

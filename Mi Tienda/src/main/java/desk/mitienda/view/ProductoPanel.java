@@ -264,6 +264,7 @@ public class ProductoPanel extends JPanel {
 	 * @param panelAncho 
 	 */
 	public ProductoPanel(int panelAncho, int panelAlto) {
+		iniciarCombos();
 
 		productoController = new ProductoController();
 		categoriaController = new CategoriaController();
