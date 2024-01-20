@@ -27,7 +27,8 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
 	private JTextField txt_nombres;
 	private JButton btn_agregar_usuario;
-	private JComboBox <Categoria> comboBox_rol;
+	private JComboBox <Categoria> comboBoxCategoria;
+	private DefaultComboBoxModel<Categoria> comboBoxModelCategoria = new DefaultComboBoxModel<>();
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
@@ -36,7 +37,8 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_busqueda_usuarios;
 	private JTable table;
 	private JTextField txt_utilidades;
-	private JComboBox <Iva> Cmb_iva;
+	private JLabel labelIva;
+	private DefaultComboBoxModel <Iva> comboBoxModelIva = new DefaultComboBoxModel<>();
 	private JTextField txt_nombre_producto;
 	private JCheckBox chbx_tiene_iva;
 	private ProductoController productoController;
@@ -44,8 +46,7 @@ public class ProductoPanel extends JPanel {
 	private int columna;
 	private int row;
 	private DefaultTableModel modelo;
-	private DefaultComboBoxModel <Categoria> comboBoxModelCategoria = new DefaultComboBoxModel<>();
-	private DefaultComboBoxModel <Iva> comboBoxModelIva = new DefaultComboBoxModel<>();
+
 	private CategoriaController categoriaController;
 	private IvaController ivaController;
 
@@ -54,15 +55,12 @@ public class ProductoPanel extends JPanel {
 		//Combo Categoria
 		comboBoxModelCategoria.removeAllElements();
 		comboBoxModelCategoria.addAll(categoriaController.listar());
-		comboBox_rol.setModel(comboBoxModelCategoria);
-		comboBox_rol.setSelectedIndex(0);
+		comboBoxCategoria.setModel(comboBoxModelCategoria);
+		comboBoxCategoria.setSelectedIndex(0);
 
 		//Combo Iva
-		comboBoxModelIva.removeAllElements();
-		comboBoxModelIva.addAll(ivaController.listar());
-		Cmb_iva.setModel(comboBoxModelIva);
-		Cmb_iva.setSelectedIndex(0);
-
+		Iva iva = ivaController.ultimoIva();
+		labelIva.setText(iva.getIva().toString());
 
 	}
 	//	Llenar datos
@@ -70,17 +68,21 @@ public class ProductoPanel extends JPanel {
 	 * @return Llena los campos de producto
 	 */
 	public Producto llenarProducto(){
-		return Producto.builder()
-				.codigo(txt_usuario.getText())
-				.nombre(txt_nombre_producto.getText())
-				.descripcion(txt_nombres.getText())
-				.categoria((Categoria) comboBox_rol.getSelectedItem())
-				.utilidad((BigDecimal.valueOf(Double.parseDouble(txt_utilidades.getText()))))
-				.tieneIva(chbx_tiene_iva.isSelected())
-				.iva((Iva) Cmb_iva.getSelectedItem())
-				.estado(true)
-				.build();
 
+		Producto producto = new Producto(); // Instancia de Producto utilizando el constructor predeterminado
+
+		producto.setCodigo(txt_usuario.getText());
+		producto.setNombre(txt_nombre_producto.getText());
+		producto.setDescripcion(txt_nombres.getText());
+		producto.setCategoria((Categoria) comboBoxCategoria.getSelectedItem());
+		producto.setUtilidad(BigDecimal.valueOf(Double.parseDouble(txt_utilidades.getText())));
+		producto.setTieneIva(chbx_tiene_iva.isSelected());
+		producto.setEstado(true);
+
+		if(chbx_tiene_iva.isSelected())
+			producto.setIva(ivaController.ultimoIva());
+
+		return producto;
 	}
 
 
@@ -90,9 +92,6 @@ public class ProductoPanel extends JPanel {
 		btn_eliminar.setEnabled(false);
 		btn_modificar.setEnabled(false);
 		btn_limpiar_formulario.setEnabled(false);
-
-
-
 	}
 
 	// Llenar formulario segun Id
@@ -104,11 +103,9 @@ public class ProductoPanel extends JPanel {
 		txt_usuario.setText(producto.getCodigo());
 		txt_nombre_producto.setText(producto.getNombre());
 		txt_nombres.setText(producto.getDescripcion());
-		comboBox_rol.setSelectedItem(producto.getCategoria());
+		comboBoxCategoria.setSelectedItem(producto.getCategoria());
 		txt_utilidades.setText(String.valueOf(producto.getUtilidad()));
 		chbx_tiene_iva.setSelected(producto.getTieneIva());
-		Cmb_iva.setSelectedItem(producto.getIva());
-
 
 	}
 
@@ -122,27 +119,28 @@ public class ProductoPanel extends JPanel {
 
 
 
-	private void listarProductos(){
+	private void listarProductos(String codigo, String nombre){
 		modelo = (DefaultTableModel) table.getModel();
-		List<Producto> listaProductos = productoController.listar(null, null);
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-		modelo.addColumn("5");
-		modelo.addColumn("6");
-		modelo.addColumn("7");
+		List<Producto> listaProductos = productoController.listar(codigo, nombre);
+		modelo.addColumn("Id");
+		modelo.addColumn("Codigo");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Descripcion");
+		modelo.addColumn("Categoria");
+		modelo.addColumn("Precio");
+		modelo.addColumn("Utilidad");
+		modelo.addColumn("Stock");
+		modelo.addColumn("Iva");
 
-
-		String[] cabeceras = {"Id","Codigo", "Nombre", "Descripcion", "Categoria", "Tiene Iva", "Iva"};
-		modelo.addRow(cabeceras);
 		listaProductos.forEach(producto -> modelo.addRow(new Object[]{
 				producto.getId(),
 				producto.getCodigo(),
 				producto.getNombre(),
 				producto.getDescripcion(),
 				producto.getCategoria(),
-				producto.getTieneIva(),
+				Double.parseDouble(producto.getPrecioVenta().toString()),
+				producto.getUtilidad(),
+				producto.getStock(),
 				producto.getIva()
 		}));
 
@@ -155,16 +153,24 @@ public class ProductoPanel extends JPanel {
 
 	public void limpiarFormulario(){
 		txt_usuario.setText("");
-		comboBox_rol.setSelectedItem(null);
+		comboBoxCategoria.setSelectedItem(null);
 		txt_nombres.setText("");
 		txt_nombre_producto.setText("");
 		txt_utilidades.setText("");
-		Cmb_iva.setSelectedItem(null);
-		chbx_tiene_iva.setSelected(false);
+		chbx_tiene_iva.setSelected(true);
+		checkIva();
 	}
+
+	public void checkIva() {
+		if(chbx_tiene_iva.isSelected())
+			labelIva.setText(ivaController.ultimoIva().toString() + "%");
+		else
+			labelIva.setText("0%");
+	}
+
 	public void limpiarLista(){
 		borrarDatosTabla();
-		listarProductos();
+		listarProductos(null, null);
 	}
 
 
@@ -181,7 +187,7 @@ public class ProductoPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 			limpiarFormulario();
 			borrarDatosTabla();
-			listarProductos();
+			listarProductos(null, null);
 
 		}else{
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
@@ -198,7 +204,7 @@ public class ProductoPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 
 			borrarDatosTabla();
-			listarProductos();
+			listarProductos(null, null);
 			limpiarFormulario();
 			bloquearBotones();
 		} else {
@@ -216,7 +222,7 @@ public class ProductoPanel extends JPanel {
 			limpiarFormulario();
 			bloquearBotones();
 			borrarDatosTabla();
-			listarProductos();
+			listarProductos(null, null);
 		}else{
 			JOptionPane.showMessageDialog(null,estado.getMensaje());
 		}
@@ -305,9 +311,9 @@ public class ProductoPanel extends JPanel {
 		txt_nombres.setBounds(380, 107, 169, 28);
 		add(txt_nombres);
 		
-		comboBox_rol = new JComboBox();
-		comboBox_rol.setBounds(22, 189, 169, 28);
-		add(comboBox_rol);
+		comboBoxCategoria = new JComboBox();
+		comboBoxCategoria.setBounds(22, 189, 169, 28);
+		add(comboBoxCategoria);
 		
 		JLabel lblRol = new JLabel("Categoria ");
 		lblRol.setForeground(Color.WHITE);
@@ -411,16 +417,16 @@ public class ProductoPanel extends JPanel {
 		add(txt_busqueda_usuarios);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 355, 860, 354);
+		scrollPane.setBounds(10, 355, 1040, 354);
 		add(scrollPane);
 		
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				columna = table.getSelectedColumn();
+//				columna = table.getSelectedColumn();
 				row = table.getSelectedRow();
-				productoId = (Long) table.getValueAt(row,columna);
+				productoId = (Long) table.getValueAt(row,0);
 
 				activarBotones();
 				llenarFormulario();
@@ -442,6 +448,12 @@ public class ProductoPanel extends JPanel {
 		
 		chbx_tiene_iva = new JCheckBox("Tiene IVA");
 		chbx_tiene_iva.setBounds(381, 193, 93, 21);
+		chbx_tiene_iva.setSelected(true);
+		chbx_tiene_iva.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				checkIva();
+			}
+		});
 		add(chbx_tiene_iva);
 		
 		JLabel lblIva = new JLabel("IVA ");
@@ -451,17 +463,22 @@ public class ProductoPanel extends JPanel {
 		lblIva.setBounds(493, 151, 114, 38);
 		add(lblIva);
 		
-		Cmb_iva = new JComboBox();
-		Cmb_iva.setBounds(493, 189, 169, 28);
-		add(Cmb_iva);
+		labelIva = new JLabel();
+		labelIva.setBounds(493, 189, 169, 28);
+		labelIva.setForeground(Color.WHITE);
+		labelIva.setFont(new Font("Jockey One", Font.PLAIN, 14));
+		labelIva.setBorder(null);
+		add(labelIva);
 		
 		txt_nombre_producto = new JTextField();
 		txt_nombre_producto.setColumns(10);
 		txt_nombre_producto.setBounds(201, 107, 169, 28);
 		add(txt_nombre_producto);
 
-		listarProductos();
+		listarProductos(null, null);
+		iniciarCombos();
 		bloquearBotones();
+		checkIva();
 
 	}
 	

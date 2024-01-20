@@ -5,6 +5,7 @@ package desk.mitienda.view;
 import desk.mitienda.controller.UsuarioController;
 import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
+import desk.mitienda.utils.Utilidades;
 
 import java.awt.EventQueue;
 
@@ -30,22 +31,7 @@ public class IniciarSesionFrame extends JFrame {
 
 
 
-//------------------------------------------------------- MAIN --------------------------------------------------------------------
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IniciarSesionFrame frame = new IniciarSesionFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 	//---------------------------------------------------------------------------------------------------------------------------
 
 	//-------------------------------------------------------Redondear bordes--------------------------------------------------------------------
@@ -87,12 +73,8 @@ public class IniciarSesionFrame extends JFrame {
 		Estado estado = usuarioController.login(textField.getText(),String.valueOf(textField_1.getPassword()));
 
 		if(estado.getExito()){
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-
-			AdminFrame frame = new AdminFrame();
-			frame.setVisible(true);
-			frame.setLocationRelativeTo(null);
-
+			new AdminFrame();
+			Utilidades.setUsuario((Usuario) estado.getObject()); // Sabemos que usuario se encuentra acutalmente logeado
 			dispose();
 		}else{
 			JOptionPane.showMessageDialog(null, estado.getMensaje() + " Resigtrate");
@@ -105,7 +87,6 @@ public class IniciarSesionFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public IniciarSesionFrame() {
-
 		usuarioController = new UsuarioController();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
@@ -114,7 +95,8 @@ public class IniciarSesionFrame extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setVisible(true);
+
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(49, 51, 56));
 		panel.setBounds(0, 0, 1280, 800);
@@ -150,10 +132,12 @@ public class IniciarSesionFrame extends JFrame {
 		
 		textField_1 =  new JPasswordField();
 		textField_1.setBounds(178, 228, 378, 39);
+		textField_1.setText("hola1234@");
 		panel_11.add(textField_1);
 
 		textField = createTextField(10, 5);
 		textField.setBounds(178, 139, 378, 39);
+		textField.setText("hola");
 		panel_11.add(textField);
 
 		

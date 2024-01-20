@@ -24,7 +24,8 @@ public class AdminFrame extends JFrame implements ActionListener{
         setSize(1280, 800);
         setResizable(false);
         setLocationRelativeTo(null);
-        
+        setVisible(true);
+        setLocationRelativeTo(null);
 
         // BarraPanel
         barraPanel = new BarraLateral(this);

@@ -100,11 +100,11 @@ public class ClienteDao {
         Predicate filtro = criteriaBuilder.and();
 
         if(identificacion != null && !identificacion.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion + "%"));
         }
 
         if(nombre != null && !nombre.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre + "%"));
         }
 
         filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));

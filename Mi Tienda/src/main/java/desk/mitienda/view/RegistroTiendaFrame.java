@@ -45,8 +45,6 @@ public class RegistroTiendaFrame extends JFrame {
             public void run() {
                 try {
                     RegistroTiendaFrame frame = new RegistroTiendaFrame();
-					frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -132,13 +130,15 @@ public class RegistroTiendaFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public RegistroTiendaFrame() {
-		FlyWay.migrate();
 		datosEmpresaController = new DatosEmpresaController();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setLocationRelativeTo(null);
+		setVisible(true);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);

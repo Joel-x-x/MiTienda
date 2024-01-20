@@ -1,5 +1,9 @@
 package desk.mitienda.utils;
 
+import desk.mitienda.model.Usuario;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -11,6 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utilidades {
+    @Getter
+    @Setter
+    private static Usuario usuario;
+
     public boolean toBoolean(int numero) {
         if(numero > 0) {
             return true;

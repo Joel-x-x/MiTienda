@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JTextField;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ClientePanel extends JPanel {
@@ -27,15 +29,15 @@ public class ClientePanel extends JPanel {
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
 	private JButton btn_limpiar_formulario;
-	private JButton btn_buscar;
 	private JButton btn_limpiar_lista;
-	private JTextField txt_busqueda_usuarios;
+	private JTextField txt_busqueda_identificacion;
 	private JTable table;
 	private ClienteController clienteController;
 	private int columna;
 	private int row;
 	private Long clienteId;
 	private DefaultTableModel modelo;
+	private JTextField txt_buscador_nombre;
 
 	//-------------------------------------Utilidades--------------------------------
 
@@ -99,21 +101,17 @@ public class ClientePanel extends JPanel {
 
 	}
 
-	private void listarClientes(){
+	private void listarClientes(String identificacion, String nombre){
+		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
-		List<Cliente> listaClientes = clienteController.listar(null, null);
+		List<Cliente> listaClientes = clienteController.listar(identificacion,nombre);
 
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-		modelo.addColumn("5");
-		modelo.addColumn("6");
-		modelo.addColumn("7");
-		modelo.addColumn("8");
+		modelo.addColumn("Id");
+		modelo.addColumn("Identificación");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Apellido");
+		modelo.addColumn("Celular");
 
-		String[] cabeceras = {"Id","Identifiación", "Nombre", "Apellido", "Celular"};
-		modelo.addRow(cabeceras);
 		listaClientes.forEach(cliente -> modelo.addRow(new Object[]{
 				cliente.getId(),
 				cliente.getIdentificacion(),
@@ -136,7 +134,7 @@ public class ClientePanel extends JPanel {
 	}
 	public void limpiarLista(){
 		borrarDatosTabla();
-		listarClientes();
+		listarClientes(null, null);
 	}
 //------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------Metodos Botones----------------------------------------------------------------------------------------
@@ -148,15 +146,10 @@ public class ClientePanel extends JPanel {
 		if(estado.getExito()){
 			clienteId = cliente.getId();
 
-
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 			limpiarFormulario();
 			borrarDatosTabla();
-			listarClientes();
-
-		}else{
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-
+			listarClientes(null, null);
 		}
 
 	}
@@ -164,21 +157,13 @@ public class ClientePanel extends JPanel {
 	private void actualizar(){
 
 		Cliente cliente = llenarCliente();
+		cliente.setId(clienteId);
 		Estado estado = clienteController.actualizar(cliente);
 
-		if(estado.getExito()){
-			clienteId = cliente.getId();
-
-
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-			limpiarFormulario();
-			borrarDatosTabla();
-			listarClientes();
-
-		}else{
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-
-		}
+		JOptionPane.showMessageDialog(null, estado.getMensaje());
+		limpiarFormulario();
+		borrarDatosTabla();
+		listarClientes(null, null);
 	}
 
 	public void eliminar(){
@@ -189,32 +174,10 @@ public class ClientePanel extends JPanel {
 			limpiarFormulario();
 			bloquearBotones();
 			borrarDatosTabla();
-			listarClientes();
+			listarClientes(null, null);
 		}else{
 			JOptionPane.showMessageDialog(null,estado.getMensaje());
 		}
-	}
-
-	private void buscarIdentificacion(){
-		borrarDatosTabla();
-		modelo = (DefaultTableModel) table.getModel();
-		List<Cliente> listaClientes = clienteController.listar(txt_busqueda_usuarios.getText(), null);
-
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-
-
-		String[] cabeceras = {"Id","Identifiación", "Nombre", "Apellido", "Celular"};
-		modelo.addRow(cabeceras);
-		listaClientes.forEach(cliente -> modelo.addRow(new Object[]{
-				cliente.getId(),
-				cliente.getIdentificacion(),
-				cliente.getNombre(),
-				cliente.getApellido(),
-				cliente.getCelular()
-		}));
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -226,7 +189,7 @@ public class ClientePanel extends JPanel {
 	 */
 	public ClientePanel(int panelAncho, int panelAlto) {
 		clienteController = new ClienteController();
-		setPreferredSize (new Dimension(panelAncho, panelAlto));
+		setPreferredSize (new Dimension(1038, 745));
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
 		
@@ -342,24 +305,11 @@ public class ClientePanel extends JPanel {
 		btn_limpiar_formulario.setBounds(355, 246, 100, 28);
 		add(btn_limpiar_formulario);
 		
-		btn_buscar = new JButton("Buscar");
-		btn_buscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buscarIdentificacion();
-			}
-		});
-		btn_buscar.setForeground(Color.WHITE);
-		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
-		btn_buscar.setBorder(null);
-		btn_buscar.setBackground(Color.BLACK);
-		btn_buscar.setBounds(297, 307, 100, 28);
-		add(btn_buscar);
-		
 		btn_limpiar_lista = new JButton("Limpiar");
 		btn_limpiar_lista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarLista();
-				txt_busqueda_usuarios.setText("");
+				txt_busqueda_identificacion.setText("");
 
 			}
 		});
@@ -367,20 +317,25 @@ public class ClientePanel extends JPanel {
 		btn_limpiar_lista.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_limpiar_lista.setBorder(null);
 		btn_limpiar_lista.setBackground(Color.BLACK);
-		btn_limpiar_lista.setBounds(407, 307, 100, 28);
+		btn_limpiar_lista.setBounds(588, 309, 100, 28);
 		add(btn_limpiar_lista);
 		
-		JLabel lblBuscarPorUsuario = new JLabel("Buscar por Usuario:");
+		JLabel lblBuscarPorUsuario = new JLabel("Buscar identificación");
 		lblBuscarPorUsuario.setForeground(Color.WHITE);
 		lblBuscarPorUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblBuscarPorUsuario.setBorder(null);
-		lblBuscarPorUsuario.setBounds(10, 297, 114, 38);
+		lblBuscarPorUsuario.setBounds(11, 309, 107, 28);
 		add(lblBuscarPorUsuario);
 		
-		txt_busqueda_usuarios = new JTextField();
-		txt_busqueda_usuarios.setColumns(10);
-		txt_busqueda_usuarios.setBounds(118, 309, 169, 28);
-		add(txt_busqueda_usuarios);
+		txt_busqueda_identificacion = new JTextField();
+		txt_busqueda_identificacion.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				listarClientes(txt_busqueda_identificacion.getText(), null);
+			}
+		});
+		txt_busqueda_identificacion.setColumns(10);
+		txt_busqueda_identificacion.setBounds(127, 311, 169, 28);
+		add(txt_busqueda_identificacion);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 355, 860, 354);
@@ -390,9 +345,7 @@ public class ClientePanel extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				columna = table.getSelectedColumn();
-				row = table.getSelectedRow();
-				clienteId = (Long) table.getValueAt(row,columna);
+				clienteId = (Long) table.getValueAt(table.getSelectedRow(),0);
 
 				activarBotones();
 				llenarFormulario();
@@ -400,8 +353,26 @@ public class ClientePanel extends JPanel {
 			}
 		});
 		scrollPane.setViewportView(table);
+		
+		JLabel lblBuscarNombre = new JLabel("Buscar nombre");
+		lblBuscarNombre.setForeground(Color.WHITE);
+		lblBuscarNombre.setFont(new Font("Jockey One", Font.PLAIN, 14));
+		lblBuscarNombre.setBorder(null);
+		lblBuscarNombre.setBounds(306, 309, 107, 28);
+		add(lblBuscarNombre);
+		
+		txt_buscador_nombre = new JTextField();
+		txt_buscador_nombre.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				borrarDatosTabla();
+				listarClientes(null, txt_buscador_nombre.getText());
+			}
+		});
+		txt_buscador_nombre.setColumns(10);
+		txt_buscador_nombre.setBounds(393, 311, 169, 28);
+		add(txt_buscador_nombre);
 
-		listarClientes();
+		listarClientes(null, null);
 		bloquearBotones();
 	}
 }

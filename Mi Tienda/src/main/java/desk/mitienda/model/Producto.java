@@ -31,12 +31,12 @@ public class Producto {
     private Iva iva;
     @Column(name = "tiene_iva")
     private Boolean tieneIva;
-    private BigDecimal utilidad;
-    private Double stock;
+    private BigDecimal utilidad = BigDecimal.ZERO;
+    private Double stock = 0.0;
     @Column(name = "ultimo_precio_compra")
-    private BigDecimal ultimoPrecioCompra;
+    private BigDecimal ultimoPrecioCompra = BigDecimal.ZERO;
     @Column(name = "precio_medio")
-    private BigDecimal precioMedio;
+    private BigDecimal precioMedio = BigDecimal.ZERO;
     @Column(name = "ultima_fecha_compra")
     private LocalDate ultimaFechaCompra;
     @Column(name = "ultimo_proveedor_compra")
@@ -54,7 +54,12 @@ public class Producto {
         BigDecimal iva = (this.iva.getIva().divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP))
                 .add(new BigDecimal(1.0));
 
-        return (this.precioMedio.multiply(utilidad))
+        BigDecimal resultado = (this.precioMedio.multiply(utilidad))
                 .multiply(iva);
+
+        if(resultado != null)
+            return resultado;
+        else
+            return new BigDecimal(0);
     }
 }

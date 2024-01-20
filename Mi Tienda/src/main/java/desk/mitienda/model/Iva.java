@@ -24,4 +24,8 @@ public class Iva {
     @CreationTimestamp
     private LocalDate fecha;
 
+    @Override
+    public String toString() {
+        return this.iva.toString();
+    }
 }
