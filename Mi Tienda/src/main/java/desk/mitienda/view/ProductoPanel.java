@@ -27,7 +27,7 @@ public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
 	private JTextField txt_nombres;
 	private JButton btn_agregar_usuario;
-	private JComboBox <Categoria> comboBoxCategoria;
+	private JComboBox <Categoria> comboBoxCategoria = new JComboBox<>();
 	private DefaultComboBoxModel<Categoria> comboBoxModelCategoria = new DefaultComboBoxModel<>();
 	private JButton btn_modificar;
 	private JButton btn_eliminar;
@@ -264,7 +264,6 @@ public class ProductoPanel extends JPanel {
 	 * @param panelAncho 
 	 */
 	public ProductoPanel(int panelAncho, int panelAlto) {
-		iniciarCombos();
 
 		productoController = new ProductoController();
 		categoriaController = new CategoriaController();

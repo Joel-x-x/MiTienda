@@ -186,6 +186,7 @@ public class UsuarioPanel extends JPanel {
 		lblRol.setBounds(32, 151, 114, 38);
 		add(lblRol);
 
+		JButton btn_agregar_usuario = new JButton("Agregar");
 		btn_agregar_usuario.setForeground(Color.WHITE);
 		btn_agregar_usuario.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_agregar_usuario.setBorder(null);
@@ -281,7 +282,7 @@ public class UsuarioPanel extends JPanel {
 				usuarioId = (Long) table.getValueAt(table.getSelectedRow(),0);
 
 				llenarFormulario();
-				btn_agregar_usuario.setEnabled(false);
+//				btn_agregar_usuario.setEnabled(false);
 			}
 		});
 		scrollPane.setViewportView(table);
