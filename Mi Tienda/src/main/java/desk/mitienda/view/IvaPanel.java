@@ -24,7 +24,7 @@ public class IvaPanel extends JPanel {
 	public IvaPanel(int panelAncho, int panelAlto) {
 		setBounds(0, 0, 1080, 800);
 		setLayout(null);
-		setPreferredSize(new Dimension(panelAncho, panelAlto));
+		setPreferredSize(new Dimension(1117, 545));
 		
 		
 		JPanel contentPane = new JPanel();
@@ -34,7 +34,7 @@ public class IvaPanel extends JPanel {
 		contentPane.setBounds(285, 0, 436, 413);
 		add(contentPane);
 		
-		JLabel lblHistorialDePrecios = new JLabel("HISTORIAL DE IVAS");
+		JLabel lblHistorialDePrecios = new JLabel("IVAS");
 		lblHistorialDePrecios.setForeground(new Color(255, 255, 255));
 		lblHistorialDePrecios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistorialDePrecios.setFont(new Font("Tahoma", Font.BOLD, 18));

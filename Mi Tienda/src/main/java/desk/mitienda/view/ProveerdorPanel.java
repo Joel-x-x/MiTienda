@@ -36,8 +36,7 @@ public class ProveerdorPanel extends JPanel {
 	private JTextField textField_3;
 	private Long proveedorId;
 	private DefaultTableModel modelo;
-	private int columna;
-	private int row;
+
 
 	//-------------------------------------Utilidades--------------------------------
 
@@ -72,9 +71,6 @@ public class ProveerdorPanel extends JPanel {
 		btn_eliminar.setEnabled(false);
 		btn_modificar.setEnabled(false);
 		btn_limpiar_formulario.setEnabled(false);
-
-
-
 	}
 
 	// Llenar formulario segun Id
@@ -106,21 +102,18 @@ public class ProveerdorPanel extends JPanel {
 
 	}
 
-	private void listarProveedores(){
+	private void listarProveedores(String identificacion, String empresa){
 		modelo = (DefaultTableModel) table.getModel();
-		List <Proveedor> listaproveedores = proveedorController.listar(null, null);
-		System.out.println(listaproveedores.get(0).getRazonSocial());
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-		modelo.addColumn("5");
-		modelo.addColumn("6");
-		modelo.addColumn("7");
-		modelo.addColumn("8");
+		List <Proveedor> listaproveedores = proveedorController.listar(identificacion,empresa);
+		modelo.addColumn("Id");
+		modelo.addColumn("Identifiación");
+		modelo.addColumn("Razon Social");
+		modelo.addColumn("Empresa");
+		modelo.addColumn("Dirección");
+		modelo.addColumn("Celular");
+		modelo.addColumn("Correo");
+		modelo.addColumn("Descripción");
 
-		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
-		modelo.addRow(cabeceras);
 		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
 					proveedor.getId(),
 					proveedor.getIdentificacion(),
@@ -147,6 +140,7 @@ public class ProveerdorPanel extends JPanel {
 		txt_celular.setText("");
 		textField.setText("");
 		textField_1.setText("");
+		activarBotones();
 	}
 
 //--------------------------------------Creacion de metodos para botones---------------------------
@@ -178,7 +172,7 @@ public class ProveerdorPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 			limpiarFormulario();
 			borrarDatosTabla();
-			listarProveedores();
+			listarProveedores(null, null);
 
 		}else{
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
@@ -204,7 +198,7 @@ public class ProveerdorPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, estado.getMensaje());
 
 			borrarDatosTabla();
-			listarProveedores();
+			listarProveedores(null, null);
 			limpiarFormulario();
 			bloquearBotones();
 		} else {
@@ -221,69 +215,15 @@ public class ProveerdorPanel extends JPanel {
 			limpiarFormulario();
 			bloquearBotones();
 			borrarDatosTabla();
-			listarProveedores();
+			listarProveedores(null, null);
 		}else{
 			JOptionPane.showMessageDialog(null,estado.getMensaje());
 		}
 	}
 
-	private void buscarIdentifiacion(){
-		borrarDatosTabla();
-		modelo = (DefaultTableModel) table.getModel();
-		List <Proveedor> listaproveedores = proveedorController.listar(txt_busqueda_usuarios.getText(), null);
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-		modelo.addColumn("5");
-		modelo.addColumn("6");
-		modelo.addColumn("7");
-		modelo.addColumn("8");
-
-		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
-		modelo.addRow(cabeceras);
-		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
-				proveedor.getId(),
-				proveedor.getIdentificacion(),
-				proveedor.getRazonSocial(),
-				proveedor.getEmpresa(),
-				proveedor.getDireccion(),
-				proveedor.getCelular(),
-				proveedor.getCorreo(),
-				proveedor.getDescripcion()
-		}));
-
-	}
-	private void buscarEmpresa(){
-		borrarDatosTabla();
-		modelo = (DefaultTableModel) table.getModel();
-		List <Proveedor> listaproveedores = proveedorController.listar(null,textField_2.getText());
-		modelo.addColumn("1");
-		modelo.addColumn("2");
-		modelo.addColumn("3");
-		modelo.addColumn("4");
-		modelo.addColumn("5");
-		modelo.addColumn("6");
-		modelo.addColumn("7");
-		modelo.addColumn("8");
-
-		String[] cabeceras = {"Id","Identifiación", "Razon Social", "Empresa", "Dirección", "Celular", "Correo", "Descripción"};
-		modelo.addRow(cabeceras);
-		listaproveedores.forEach(proveedor -> modelo.addRow(new Object[]{
-				proveedor.getId(),
-				proveedor.getIdentificacion(),
-				proveedor.getRazonSocial(),
-				proveedor.getEmpresa(),
-				proveedor.getDireccion(),
-				proveedor.getCelular(),
-				proveedor.getCorreo(),
-				proveedor.getDescripcion()
-		}));
-
-	}
 	private void limpiarLista(){
 		borrarDatosTabla();
-		listarProveedores();
+		listarProveedores(null, null);
 	}
 
 
@@ -296,7 +236,7 @@ public class ProveerdorPanel extends JPanel {
 		proveedorController = new ProveedorController();
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
-		setPreferredSize(new Dimension(panelAncho, panelAlto));
+		setPreferredSize(new Dimension(1027, 484));
 
 		JLabel lblUsuarios = new JLabel("Proveedores");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
@@ -359,7 +299,6 @@ public class ProveerdorPanel extends JPanel {
 		btn_agregar_usuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				agregar();
-
 			}
 		});
 		btn_agregar_usuario.setForeground(Color.WHITE);
@@ -411,15 +350,6 @@ public class ProveerdorPanel extends JPanel {
 		add(btn_limpiar_formulario);
 
 		btn_buscar = new JButton("Buscar");
-		btn_buscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(textField_2.getText().isEmpty()){
-					buscarIdentifiacion();
-				}else if(txt_busqueda_usuarios.getText().isEmpty()){
-					buscarEmpresa();
-				}
-			}
-		});
 		btn_buscar.setForeground(Color.WHITE);
 		btn_buscar.setFont(new Font("Jockey One", Font.PLAIN, 15));
 		btn_buscar.setBorder(null);
@@ -455,16 +385,14 @@ public class ProveerdorPanel extends JPanel {
 		add(txt_busqueda_usuarios);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 355, 860, 354);
+		scrollPane.setBounds(10, 346, 860, 354);
 		add(scrollPane);
 
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				columna = table.getSelectedColumn();
-				row = table.getSelectedRow();
-				proveedorId = (Long) table.getValueAt(row,columna);
+				proveedorId = (Long) table.getValueAt(table.getSelectedRow(), 0);
 
 				activarBotones();
 				llenarFormulario();
@@ -520,7 +448,7 @@ public class ProveerdorPanel extends JPanel {
 		textField_3.setBounds(201, 107, 169, 28);
 		add(textField_3);
 
-		listarProveedores();
+		listarProveedores(null, null);
 		bloquearBotones();
 
 	}

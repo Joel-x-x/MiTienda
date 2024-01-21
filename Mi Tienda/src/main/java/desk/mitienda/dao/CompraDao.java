@@ -1,17 +1,13 @@
 package desk.mitienda.dao;
 
+import desk.mitienda.model.*;
 import desk.mitienda.model.Compra;
-import desk.mitienda.model.Compra;
-import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 public class CompraDao {
@@ -41,21 +37,23 @@ public class CompraDao {
         }
     }
 
-    public List<Compra> listar(String numero, String razonSocial) {
+    public List<Compra> listar(String numero, String empresa) {
         CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
 
         CriteriaQuery<Compra> createQuery = criteriaBuilder.createQuery(Compra.class);
 
         Root<Compra> from = createQuery.from(Compra.class);
 
+        Join<Compra, Proveedor> proveedorJoin = from.join("proveedor");
+
         Predicate filtro = criteriaBuilder.and();
 
         if(numero != null && !numero.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("numero"), numero));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("numero"), "%" + numero +  "%"));
         }
 
-        if(razonSocial != null && !razonSocial.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("razonSocial"), razonSocial));
+        if(empresa != null && !empresa.trim().isEmpty()) {
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(proveedorJoin.get("empresa"), "%" + empresa + "%"));
         }
 
         return em.createQuery(createQuery.where(filtro)).getResultList();

@@ -18,7 +18,7 @@ public class DetalleCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double cantidad;
+    private Double cantidad = 0.0;
     @Column(name = "precio_unitario")
     private BigDecimal precioUnitario = new BigDecimal(0);
     private BigDecimal iva = new BigDecimal(0);

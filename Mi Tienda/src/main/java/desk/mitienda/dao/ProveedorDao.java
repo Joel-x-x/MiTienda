@@ -99,11 +99,11 @@ public class ProveedorDao {
         Predicate filtro = criteriaBuilder.and();
 
         if(identificacion != null && !identificacion.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion + "%"));
         }
 
         if(empresa != null && !empresa.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("empresa"), empresa));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("empresa"), empresa + "%"));
         }
 
         filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));

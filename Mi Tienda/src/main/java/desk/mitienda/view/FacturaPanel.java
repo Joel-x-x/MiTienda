@@ -1,19 +1,22 @@
 package desk.mitienda.view;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
+import desk.mitienda.controller.IvaController;
+import desk.mitienda.model.Iva;
+
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.List;
 
 public class FacturaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
+	private IvaController ivaController;
+	private JTable table;
 
 	/**
 	 * Create the panel.
@@ -21,7 +24,9 @@ public class FacturaPanel extends JPanel {
 	 * @param panelAncho 
 	 */
 	public FacturaPanel(int panelAncho, int panelAlto) {
-		
+
+		// Controllers
+		ivaController = new IvaController();
 		setBounds(ALLBITS, ABORT, 1080, 800);
 		setLayout(null);
 		
@@ -91,6 +96,9 @@ public class FacturaPanel extends JPanel {
 		scrollPane.setBounds(27, 144, 1000, 547);
 		panel.add(scrollPane);
 		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		
 		JButton btnNewButton_2 = new JButton("Imprimir");
 		btnNewButton_2.setForeground(Color.WHITE);
 		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -107,6 +115,11 @@ public class FacturaPanel extends JPanel {
 		btnNewButton_3.setBorder(null);
 		btnNewButton_3.setBackground(new Color(46, 56, 64));
 		btnNewButton_3.setBounds(927, 65, 100, 30);
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new IvaFrame();
+			}
+		});
 		panel.add(btnNewButton_3);
 		
 		JButton btnFormaPago = new JButton("Forma de pago");

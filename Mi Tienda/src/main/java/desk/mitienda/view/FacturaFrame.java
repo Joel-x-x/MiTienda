@@ -14,6 +14,7 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 
 public class FacturaFrame extends JFrame {
 
@@ -22,6 +23,7 @@ public class FacturaFrame extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -179,8 +181,12 @@ public class FacturaFrame extends JFrame {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(76, 232, 988, 248);
+		scrollPane.setBounds(10, 233, 1010, 248);
 		panel.add(scrollPane);
+		
+		table = new JTable();
+		table.setBackground(Color.WHITE);
+		scrollPane.setViewportView(table);
 		
 		JLabel lblDescuento = new JLabel("Descuento");
 		lblDescuento.setForeground(Color.WHITE);

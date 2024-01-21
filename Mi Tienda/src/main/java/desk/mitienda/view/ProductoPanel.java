@@ -271,7 +271,7 @@ public class ProductoPanel extends JPanel {
 
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
-		setPreferredSize (new Dimension(panelAncho, panelAlto));
+		setPreferredSize (new Dimension(1129, 607));
 		
 		JLabel lblUsuarios = new JLabel("Productos ");
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
@@ -474,6 +474,20 @@ public class ProductoPanel extends JPanel {
 		txt_nombre_producto.setColumns(10);
 		txt_nombre_producto.setBounds(201, 107, 169, 28);
 		add(txt_nombre_producto);
+		
+		JButton botonAgregarCategoria = new JButton("Agregar categoria");
+		botonAgregarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new CategoriaFrame();
+			}
+		});
+		botonAgregarCategoria.setForeground(Color.WHITE);
+		botonAgregarCategoria.setFont(new Font("Tahoma", Font.BOLD, 11));
+		botonAgregarCategoria.setFocusPainted(false);
+		botonAgregarCategoria.setBorder(null);
+		botonAgregarCategoria.setBackground(new Color(46, 56, 64));
+		botonAgregarCategoria.setBounds(589, 107, 152, 30);
+		add(botonAgregarCategoria);
 
 		listarProductos(null, null);
 		iniciarCombos();
@@ -481,6 +495,4 @@ public class ProductoPanel extends JPanel {
 		checkIva();
 
 	}
-	
-	
 }

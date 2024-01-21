@@ -19,8 +19,8 @@ public class CompraController {
         return compraDao.guardar(compra);
     }
 
-    public List<Compra> listar(String codigo, String nombre) {
-        return compraDao.listar(codigo, nombre);
+    public List<Compra> listar(String numero, String empresa) {
+        return compraDao.listar(numero, empresa);
     }
 
     public Compra getCompraId(Long id) {

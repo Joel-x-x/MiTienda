@@ -63,7 +63,7 @@ public class IvaDao {
     }
 
     public List<Iva> listar() {
-        String jpql = "select I from Iva as I";
+        String jpql = "select I from Iva as I order by id desc";
         return this.em.createQuery(jpql, Iva.class).getResultList();
     }
 
