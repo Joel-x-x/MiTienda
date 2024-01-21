@@ -51,15 +51,30 @@ public class Producto {
         BigDecimal utilidad = (this.utilidad.divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP)
                             .add(new BigDecimal(1.0)));
 
-        BigDecimal iva = (this.iva.getIva().divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP))
-                .add(new BigDecimal(1.0));
+        BigDecimal resultado = BigDecimal.ZERO;
+        // Tiene iva
+        if(this.tieneIva) {
+            BigDecimal iva = (this.iva.getIva().divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP))
+                    .add(new BigDecimal(1.0));
 
-        BigDecimal resultado = (this.precioMedio.multiply(utilidad))
-                .multiply(iva);
+            resultado = (this.precioMedio.multiply(utilidad))
+                    .multiply(iva);
+        // No tiene iva
+        } else {
+            resultado = (this.precioMedio.multiply(utilidad));
+        }
 
         if(resultado != null)
             return resultado;
         else
             return new BigDecimal(0);
+    }
+
+    public String getIvaOpcion() {
+        if(this.tieneIva) {
+            return this.iva + "%";
+        } else {
+            return "0%";
+        }
     }
 }

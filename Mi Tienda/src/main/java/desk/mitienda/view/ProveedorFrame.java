@@ -3,8 +3,6 @@ package desk.mitienda.view;
 import desk.mitienda.controller.ProveedorController;
 import desk.mitienda.model.Proveedor;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +31,7 @@ public class ProveedorFrame extends JFrame {
 	private ProveedorController proveedorController;
 	private DefaultTableModel modelo;
 	private JTable table;
-	private GerarFrameInterfaz frame;
+	private GenerarFrameInterfaz frame;
 
 	private void listarProveedores(String empresa){
 		borrarDatosTabla();
@@ -73,12 +71,12 @@ public class ProveedorFrame extends JFrame {
 		frame.objetoSeleccionadoProveedorCliente(proveedor);
 	}
 
-	public ProveedorFrame(GerarFrameInterfaz frame) {
+	public ProveedorFrame(GenerarFrameInterfaz frame) {
 		this.frame = frame;
 		// Controllers
 		proveedorController = new ProveedorController();
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
 		setVisible(true);
 		contentPane = new JPanel();
@@ -161,5 +159,4 @@ public class ProveedorFrame extends JFrame {
 
 		listarProveedores(null);
 	}
-
 }

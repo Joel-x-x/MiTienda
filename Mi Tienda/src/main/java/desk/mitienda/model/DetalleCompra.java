@@ -37,13 +37,19 @@ public class DetalleCompra {
         this.cantidad = 1.0;
         this.precioUnitario = this.producto.getPrecioMedio();
         this.subtotal = this.precioUnitario;
-        this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+        if(this.producto.getTieneIva()) {
+            this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+        }
         this.total = this.subtotal.add(this.iva);
     }
 
     public void recalcular() {
         this.subtotal = this.precioUnitario.multiply(BigDecimal.valueOf(this.cantidad));
-        this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+        if(this.producto.getTieneIva()) {
+            this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+            this.total = this.subtotal.add(this.iva);
+        }
+
         this.total = this.subtotal.add(this.iva);
     }
 }

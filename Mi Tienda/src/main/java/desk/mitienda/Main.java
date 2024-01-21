@@ -15,7 +15,7 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
         UsuarioController usuarioController = new UsuarioController();
-
+        FlyWay.migrate();
         if(usuarioController.usuarioRegistrado()) {
             new IniciarSesionFrame();
         } else {

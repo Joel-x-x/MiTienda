@@ -52,6 +52,18 @@ public class Compra {
         this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
     }
 
+    public void actualizarValoresCompra() {
+        detalle.forEach(detalleCompra -> {
+            this.subtotal = BigDecimal.ZERO;
+            this.iva = BigDecimal.ZERO;
+            this.total = BigDecimal.ZERO;
+
+            this.subtotal = this.subtotal.add(detalleCompra.getSubtotal()); // Sumando del subtotal
+            this.iva = this.iva.add(detalleCompra.getIva()); // Sumando del iva
+            this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
+        });
+    }
+
     public void proveedorFinal(String numero) {
         this.setTieneProveedor(false);
         this.setNumero(numero);

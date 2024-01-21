@@ -141,7 +141,7 @@ public class ProductoPanel extends JPanel {
 				Double.parseDouble(producto.getPrecioVenta().toString()),
 				producto.getUtilidad(),
 				producto.getStock(),
-				producto.getIva()
+				producto.getIvaOpcion()
 		}));
 
 	}

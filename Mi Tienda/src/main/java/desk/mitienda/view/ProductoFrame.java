@@ -1,7 +1,6 @@
 package desk.mitienda.view;
 
 import desk.mitienda.controller.ProductoController;
-import desk.mitienda.controller.ProductoController;
 import desk.mitienda.model.Producto;
 
 import javax.swing.*;
@@ -24,7 +23,7 @@ public class ProductoFrame extends JFrame {
 	private ProductoController productoController;
 	private DefaultTableModel modelo;
 	private JTable table;
-	private GerarFrameInterfaz frame;
+	private GenerarFrameInterfaz frame;
 
 	private void listarProductos(String nombre){
 		borrarDatosTabla();
@@ -66,12 +65,12 @@ public class ProductoFrame extends JFrame {
 		frame.objetoSeleccionadoProducto(producto);
 	}
 
-	public ProductoFrame(GerarFrameInterfaz frame) {
+	public ProductoFrame(GenerarFrameInterfaz frame) {
 		this.frame = frame;
 		// Controllers
 		productoController = new ProductoController();
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
 		setVisible(true);
 		contentPane = new JPanel();

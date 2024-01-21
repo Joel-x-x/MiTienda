@@ -27,7 +27,6 @@ public class ProveerdorPanel extends JPanel {
 	private JButton btn_buscar;
 	private JButton btn_limpiar_lista;
 	private JTextField txt_busqueda_usuarios;
-	private JTable table;
 	private JTextField txt_celular;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -36,6 +35,7 @@ public class ProveerdorPanel extends JPanel {
 	private JTextField textField_3;
 	private Long proveedorId;
 	private DefaultTableModel modelo;
+	private JTable table;
 
 
 	//-------------------------------------Utilidades--------------------------------
@@ -103,8 +103,8 @@ public class ProveerdorPanel extends JPanel {
 	}
 
 	private void listarProveedores(String identificacion, String empresa){
-		modelo = (DefaultTableModel) table.getModel();
 		List <Proveedor> listaproveedores = proveedorController.listar(identificacion,empresa);
+		modelo = (DefaultTableModel) table.getModel();
 		modelo.addColumn("Id");
 		modelo.addColumn("Identifiación");
 		modelo.addColumn("Razon Social");
@@ -387,18 +387,8 @@ public class ProveerdorPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 346, 860, 354);
 		add(scrollPane);
-
+		
 		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				proveedorId = (Long) table.getValueAt(table.getSelectedRow(), 0);
-
-				activarBotones();
-				llenarFormulario();
-				btn_agregar_usuario.setEnabled(false);
-			}
-		});
 		scrollPane.setViewportView(table);
 
 

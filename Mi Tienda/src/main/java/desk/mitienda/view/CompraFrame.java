@@ -5,45 +5,45 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
-import desk.mitienda.model.Compra;
-import desk.mitienda.model.DetalleCompra;
-import desk.mitienda.model.Producto;
-import desk.mitienda.model.Proveedor;
+import desk.mitienda.controller.CompraController;
+import desk.mitienda.controller.DatosEmpresaController;
+import desk.mitienda.controller.KardexController;
+import desk.mitienda.model.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class CompraFrame extends JFrame implements GerarFrameInterfaz{
+public class CompraFrame extends JFrame implements GenerarFrameInterfaz, GenerarFormularioProductoInterfaz {
 	private JPanel contentPane;
 	private JTextField textProveedor;
 	private JTextField textNombrePropietario;
 	private JTable table;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_6;
+	private JTextField textPuntoEmision;
+	private JTextField textNumero;
+	private JTextField textEstablecimiento;
 	private JDateChooser dateChooser;
 	private JTextField textFormaPago;
 	private Proveedor proveedor;
 	private Compra compra;
 	private DefaultTableModel modelo;
+	private JButton btnActualizar;
+	private String codigoDetalle;
+	private JLabel labelSubtotal;
+	private JLabel labelIVA;
+	private JLabel labelTotal;
+	private DatosEmpresaController datosEmpresaController;
+	private CompraController compraController;
+	private KardexController kardexController;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CompraFrame frame = new CompraFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 //	Formulario para actualizar cantidad y precioUnitario detalle y actualizar total, iva y subtaotal con cada detalle.
 	private void listarDetalles(){
 		borrarDatosTabla();
@@ -75,9 +75,48 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		modelo.setColumnCount(0);
 	}
 
+	public void actualizarValoresCompra() {
+		compra.actualizarValoresCompra();
+		labelSubtotal.setText(compra.getSubtotal() + "");
+		labelIVA.setText(compra.getIva() + "");
+		labelTotal.setText(compra.getTotal() + "");
+	}
+
+	public void eliminarDetalle() {
+		Iterator<DetalleCompra> iterador = compra.getDetalle().iterator();
+
+		while(iterador.hasNext()) {
+			DetalleCompra detalle = iterador.next();
+			if(detalle.getProducto().getCodigo().equals(codigoDetalle)) {
+				iterador.remove();
+			}
+
+		}
+
+
+		compra.actualizarValoresCompra();
+		actualizarValoresCompra();
+		listarDetalles();
+	}
+
+	public void guardarCompra() {
+		compra.setPuntoEmision(textPuntoEmision.getText());
+		compra.setEstablecimiento(textEstablecimiento.getText());
+		compra.setNumero(textNumero.getText());
+		compra.setFecha(dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		compra.setTieneProveedor(true);
+		compra.setFormaPago(textFormaPago.getText());
+
+		compraController.guardar(compra);
+		// Kardex
+		kardexController.registrarKardexCompra(compra);
+		this.dispose();
+	}
+
 	@Override
 	public void objetoSeleccionadoProveedorCliente(Object object) {
 		proveedor = (Proveedor) object;
+		compra.setProveedor(proveedor);
 
 		textProveedor.setText(proveedor.getEmpresa());
 	}
@@ -86,6 +125,7 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 	public void objetoSeleccionadoProducto(Producto producto) {
 		DetalleCompra detalleCompra = new DetalleCompra(producto);
 		compra.agregarDetalle(detalleCompra);
+		actualizarValoresCompra();
 		listarDetalles();
 	}
 
@@ -99,11 +139,48 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		new ProductoFrame(this);
 	}
 
+	// Formulario producto
+
+	@Override
+	public void actualizarDetalle(Double cantidad, BigDecimal precio) {
+
+		compra.getDetalle().forEach(detalle -> {
+			if(detalle.getProducto().getCodigo() == codigoDetalle) {
+				if(cantidad != null) {
+					detalle.setCantidad(cantidad);
+				}
+
+				if(precio != null) {
+					detalle.setPrecioUnitario(precio);
+				}
+
+				detalle.recalcular();
+			}
+		});
+
+		listarDetalles();
+		actualizarValoresCompra();
+	}
+
+	@Override
+	public void desplegarFormulario() {
+		new DetalleCompraFrame(this);
+	}
+
+	@Override
+	public Object getObject() {
+		return this.compra;
+	}
+
 	/**
 	 * Create the frame.
 	 */
 	public CompraFrame() {
 		compra = new Compra();
+		compra.setFecha(LocalDate.now());
+		datosEmpresaController = new DatosEmpresaController();
+		compraController = new CompraController();
+		kardexController = new KardexController();
 
 		setBounds(new Rectangle(0, 0, 1080, 800));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -179,6 +256,12 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		panel.add(btnBuscarProducto);
 		
 		JButton btnEliminarProducto = new JButton("Eliminar");
+		btnEliminarProducto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarDetalle();
+				btnEliminarProducto.setEnabled(true);
+			}
+		});
 		btnEliminarProducto.setForeground(Color.WHITE);
 		btnEliminarProducto.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnEliminarProducto.setFocusPainted(false);
@@ -221,6 +304,15 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		panel.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				codigoDetalle = (String) table.getValueAt(table.getSelectedRow(), 0);
+
+				btnActualizar.setEnabled(true);
+				btnEliminarProducto.setEnabled(true);
+			}
+		});
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
 		
@@ -242,19 +334,19 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		lblTotal.setBounds(796, 662, 129, 46);
 		panel.add(lblTotal);
 		
-		JLabel labelSubtotal = new JLabel("0.0");
+		labelSubtotal = new JLabel("0.0");
 		labelSubtotal.setForeground(Color.WHITE);
 		labelSubtotal.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelSubtotal.setBounds(935, 576, 129, 46);
 		panel.add(labelSubtotal);
 		
-		JLabel labelIVA = new JLabel("0.0");
+		labelIVA = new JLabel("0.0");
 		labelIVA.setForeground(Color.WHITE);
 		labelIVA.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelIVA.setBounds(935, 618, 129, 46);
 		panel.add(labelIVA);
 		
-		JLabel labelTotal = new JLabel("0.0");
+		labelTotal = new JLabel("0.0");
 		labelTotal.setForeground(Color.WHITE);
 		labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelTotal.setBounds(935, 662, 129, 46);
@@ -267,6 +359,12 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		btnGuardar.setBorder(null);
 		btnGuardar.setBackground(new Color(46, 56, 64));
 		btnGuardar.setBounds(10, 678, 100, 30);
+		btnGuardar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				guardarCompra();
+			}
+		});
 		panel.add(btnGuardar);
 		
 		JLabel Establecimiento_2 = new JLabel("Punto de emisión");
@@ -275,12 +373,11 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		Establecimiento_2.setBounds(10, 60, 99, 14);
 		panel.add(Establecimiento_2);
 		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setDragEnabled(true);
-		textField_3.setColumns(10);
-		textField_3.setBounds(103, 55, 50, 25);
-		panel.add(textField_3);
+		textPuntoEmision = new JTextField();
+		textPuntoEmision.setDragEnabled(true);
+		textPuntoEmision.setColumns(10);
+		textPuntoEmision.setBounds(103, 55, 50, 25);
+		panel.add(textPuntoEmision);
 		
 		JLabel Establecimiento_3 = new JLabel("Número compra");
 		Establecimiento_3.setForeground(Color.WHITE);
@@ -288,12 +385,11 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		Establecimiento_3.setBounds(10, 90, 99, 14);
 		panel.add(Establecimiento_3);
 		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setDragEnabled(true);
-		textField_4.setColumns(10);
-		textField_4.setBounds(103, 85, 250, 25);
-		panel.add(textField_4);
+		textNumero = new JTextField();
+		textNumero.setDragEnabled(true);
+		textNumero.setColumns(10);
+		textNumero.setBounds(103, 85, 250, 25);
+		panel.add(textNumero);
 		
 		JLabel Establecimiento_2_1 = new JLabel("Establecimiento");
 		Establecimiento_2_1.setForeground(Color.WHITE);
@@ -301,12 +397,11 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		Establecimiento_2_1.setBounds(163, 60, 99, 14);
 		panel.add(Establecimiento_2_1);
 		
-		textField_6 = new JTextField();
-		textField_6.setEditable(false);
-		textField_6.setDragEnabled(true);
-		textField_6.setColumns(10);
-		textField_6.setBounds(256, 55, 50, 25);
-		panel.add(textField_6);
+		textEstablecimiento = new JTextField();
+		textEstablecimiento.setDragEnabled(true);
+		textEstablecimiento.setColumns(10);
+		textEstablecimiento.setBounds(256, 55, 50, 25);
+		panel.add(textEstablecimiento);
 		
 		dateChooser = new JDateChooser();
 		dateChooser.setBounds(750, 139, 250, 25);
@@ -316,18 +411,29 @@ public class CompraFrame extends JFrame implements GerarFrameInterfaz{
 		textFormaPago.setEditable(false);
 		textFormaPago.setDragEnabled(true);
 		textFormaPago.setColumns(10);
-		textFormaPago.setEnabled(false);
 		textFormaPago.setBounds(750, 101, 250, 25);
 		panel.add(textFormaPago);
 		
-		JButton btnActualizar = new JButton("Actualizar producto");
+		btnActualizar = new JButton("Actualizar producto");
 		btnActualizar.setForeground(Color.WHITE);
 		btnActualizar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnActualizar.setFocusPainted(false);
 		btnActualizar.setBorder(null);
+		btnActualizar.setEnabled(false);
 		btnActualizar.setBackground(Color.BLACK);
 		btnActualizar.setBounds(219, 197, 199, 25);
+		btnActualizar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				desplegarFormulario();
+			}
+		});
 		panel.add(btnActualizar);
+
+		// Inicializar compra
+		dateChooser.setDate(Date.from(compra.getFecha().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		textNombrePropietario.setText(datosEmpresaController.getDatosEmpresa().getNombres());
+		textFormaPago.setText("Efectivo");
 	}
 
 }

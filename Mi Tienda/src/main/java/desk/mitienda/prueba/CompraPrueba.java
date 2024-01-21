@@ -45,6 +45,7 @@ public class CompraPrueba {
         compra.setFormaPago("Efectivo");
         compra.setFecha(LocalDate.now());
         compra.setProveedor(proveedorController.getProveedorId(1L));
+        compra.actualizarValoresCompra();
         // Proveedor final
 //        compra.proveedorFinal(compraController.getSiguienteNumeroProveedorFinal());
         // Cierra el frame no pasa nada la no se ha hecho la persistencia
