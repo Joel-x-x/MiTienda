@@ -2,6 +2,7 @@ package desk.mitienda.dao;
 
 import desk.mitienda.model.Cliente;
 import desk.mitienda.model.DatosEmpresa;
+import desk.mitienda.model.Cliente;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -99,17 +100,21 @@ public class ClienteDao {
         Predicate filtro = criteriaBuilder.and();
 
         if(identificacion != null && !identificacion.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("identificacion"), identificacion + "%"));
         }
 
         if(nombre != null && !nombre.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("nombre"), nombre + "%"));
         }
 
         filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
 
         return em.createQuery(createQuery.where(filtro)).getResultList();
 
+    }
+
+    public Cliente getClienteId(Long id) {
+        return this.em.find(Cliente.class, id);
     }
 
 }

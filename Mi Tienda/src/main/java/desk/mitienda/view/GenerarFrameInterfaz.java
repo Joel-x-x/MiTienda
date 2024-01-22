@@ -1,11 +1,10 @@
 package desk.mitienda.view;
 
-import com.gym.model.Usuario;
+import desk.mitienda.model.Producto;
 
 public interface GenerarFrameInterfaz {
-	public void listarUsuarios();
-	public void usuarioSeleccionado(Usuario usuario);
-	public void listarTipoMembresias();
-	public void tipoMembresiaSeleccionada(int id);
+    public void objetoSeleccionadoProveedorCliente(Object object);
+    public void objetoSeleccionadoProducto(Producto producto);
+    public void listarProveedorCliente();
+    public void listarProductos();
 }
-

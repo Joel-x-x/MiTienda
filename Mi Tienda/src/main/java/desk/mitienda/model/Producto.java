@@ -3,6 +3,8 @@ package desk.mitienda.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
@@ -29,12 +31,12 @@ public class Producto {
     private Iva iva;
     @Column(name = "tiene_iva")
     private Boolean tieneIva;
-    private Double utilidad;
-    private Double stock;
+    private BigDecimal utilidad = BigDecimal.ZERO;
+    private Double stock = 0.0;
     @Column(name = "ultimo_precio_compra")
-    private Double ultimoPrecioCompra;
+    private BigDecimal ultimoPrecioCompra = BigDecimal.ZERO;
     @Column(name = "precio_medio")
-    private Double precioMedio;
+    private BigDecimal precioMedio = BigDecimal.ZERO;
     @Column(name = "ultima_fecha_compra")
     private LocalDate ultimaFechaCompra;
     @Column(name = "ultimo_proveedor_compra")
@@ -43,5 +45,36 @@ public class Producto {
 
     public void desactivar() {
         this.estado = false;
+    }
+
+    public BigDecimal getPrecioVenta() {
+        BigDecimal utilidad = (this.utilidad.divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP)
+                            .add(new BigDecimal(1.0)));
+
+        BigDecimal resultado = BigDecimal.ZERO;
+        // Tiene iva
+        if(this.tieneIva) {
+            BigDecimal iva = (this.iva.getIva().divide(new BigDecimal(100.0), 4, RoundingMode.HALF_UP))
+                    .add(new BigDecimal(1.0));
+
+            resultado = (this.precioMedio.multiply(utilidad))
+                    .multiply(iva);
+        // No tiene iva
+        } else {
+            resultado = (this.precioMedio.multiply(utilidad));
+        }
+
+        if(resultado != null)
+            return resultado;
+        else
+            return new BigDecimal(0);
+    }
+
+    public String getIvaOpcion() {
+        if(this.tieneIva) {
+            return this.iva + "%";
+        } else {
+            return "0%";
+        }
     }
 }

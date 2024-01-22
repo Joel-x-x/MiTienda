@@ -7,7 +7,6 @@ import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -30,7 +29,7 @@ public class BarraLateral extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+				adminFrame.cambiarPanel(new NotaVentaPanel(panelAncho, panelAlto));
 				
 			}
 		});
@@ -77,7 +76,13 @@ public class BarraLateral extends JPanel {
 		btnReportes.setBounds(10, 253, 180, 42);
 		add(btnReportes);
 		
-		JButton btnIva = new JButton("IVA");
+		JButton btnIva = new JButton("CAJA");
+		btnIva.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new CajaPanel(panelAncho, panelAlto));
+			}
+		});
 		btnIva.setForeground(Color.WHITE);
 		btnIva.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnIva.setBorder(null);
@@ -100,6 +105,13 @@ public class BarraLateral extends JPanel {
 		add(btnNewButton_1_1);
 		
 		JButton btnNewButton_2_1 = new JButton("COMPRA");
+		btnNewButton_2_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new CompraPanel(panelAncho, panelAlto));
+				
+			}
+		});
 		btnNewButton_2_1.setForeground(Color.WHITE);
 		btnNewButton_2_1.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		btnNewButton_2_1.setBorder(null);
@@ -113,6 +125,12 @@ public class BarraLateral extends JPanel {
 		btnNewButton_3_1.setBorder(null);
 		btnNewButton_3_1.setBackground(new Color(64, 66, 73));
 		btnNewButton_3_1.setBounds(10, 500, 180, 42);
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new ProveerdorPanel(panelAncho, panelAlto));
+			}
+		});
 		add(btnNewButton_3_1);
 		
 		JPanel panel = new JPanel();

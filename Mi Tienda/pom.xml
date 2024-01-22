@@ -33,6 +33,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.7.0</version>
@@ -43,12 +48,18 @@
             <artifactId>flyway-core</artifactId>
             <version>8.1.0</version>
         </dependency>
-
+        <!--Pdf-->
         <dependency>
-        	<groupId>com.gym</groupId>
-        	<artifactId>gym_management</artifactId>
-        	<version>0.0.1-SNAPSHOT</version>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.0-RC1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

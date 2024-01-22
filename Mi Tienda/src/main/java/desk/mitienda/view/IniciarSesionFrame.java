@@ -2,40 +2,39 @@ package desk.mitienda.view;
 
 
 
+import desk.mitienda.controller.UsuarioController;
+import desk.mitienda.model.Usuario;
+import desk.mitienda.utils.Estado;
+import desk.mitienda.utils.Utilidades;
+
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class IniciarSesionFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JPasswordField textField_1;
+	private UsuarioController usuarioController;
 
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IniciarSesionFrame frame = new IniciarSesionFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
+
+
+
+
+	//---------------------------------------------------------------------------------------------------------------------------
+
+	//-------------------------------------------------------Redondear bordes--------------------------------------------------------------------
 	private RoundBorderTextField createTextField() {
 	    RoundBorderTextField textField = new RoundBorderTextField(10, 5); // El segundo parámetro es el radio del borde
 	    textField.setForeground(Color.WHITE);
@@ -43,9 +42,6 @@ public class IniciarSesionFrame extends JFrame {
 	    textField.setColumns(10);
 	    return textField;
 	}
-
-
-
     private void setRoundBorder(JTextField textField) {
         int cornerRadius = 10;
         textField.setBorder(new LineBorder(new Color(64, 66, 73), 5, true) {
@@ -63,13 +59,35 @@ public class IniciarSesionFrame extends JFrame {
     private RoundBorderTextField createTextField(int columns, int cornerRadius) {
         return new RoundBorderTextField(columns, cornerRadius);
     }
+//---------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------Utilidades--------------------------------------------------------------------------------------------
+	public Usuario llenarUsuario(){
+		return Usuario.builder()
+				.usuario(textField.getText())
+				.clave(String.valueOf(textField_1.getPassword()))
+				. estado(true)
+				.build();
+	}
+	public void login(){
+		Usuario usuario = llenarUsuario();
+		Estado estado = usuarioController.login(textField.getText(),String.valueOf(textField_1.getPassword()));
 
-	/**
+		if(estado.getExito()){
+			new AdminFrame();
+			Utilidades.setUsuario((Usuario) estado.getObject()); // Sabemos que usuario se encuentra acutalmente logeado
+			dispose();
+		}else{
+			JOptionPane.showMessageDialog(null, estado.getMensaje() + " Resigtrate");
+
+		}
+	}
+//------------------------------------------------------- Constructor --------------------------------------------------------------------
 
 	/**
 	 * Create the frame.
 	 */
 	public IniciarSesionFrame() {
+		usuarioController = new UsuarioController();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
 		contentPane = new JPanel();
@@ -77,7 +95,8 @@ public class IniciarSesionFrame extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setVisible(true);
+
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(49, 51, 56));
 		panel.setBounds(0, 0, 1280, 800);
@@ -111,18 +130,25 @@ public class IniciarSesionFrame extends JFrame {
 		
 		
 		
-		textField_1 = createTextField(10, 5);
+		textField_1 =  new JPasswordField();
 		textField_1.setBounds(178, 228, 378, 39);
+		textField_1.setText("hola1234@");
 		panel_11.add(textField_1);
 
 		textField = createTextField(10, 5);
 		textField.setBounds(178, 139, 378, 39);
+		textField.setText("hola");
 		panel_11.add(textField);
 
 		
 		
 		
 		JButton btnNewButton = new JButton("OK");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login();
+			}
+		});
 		btnNewButton.setFont(new Font("Jockey One", Font.PLAIN, 25));
 		btnNewButton.setBorderPainted(false);
 		btnNewButton.setBackground(Color.BLACK);
@@ -131,6 +157,18 @@ public class IniciarSesionFrame extends JFrame {
 		panel_11.add(btnNewButton);
 		
 		JLabel lblRegistrarse = new JLabel("REGISTRARSE ");
+		lblRegistrarse.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				RegistroUsuario frame = new RegistroUsuario();
+				frame.setVisible(true);
+				frame.setLocationRelativeTo(null);
+
+				// Cierra el frame al hacer clic en el label
+				dispose();
+
+			}
+		});
 		lblRegistrarse.setForeground(Color.WHITE);
 		lblRegistrarse.setFont(new Font("Jockey One", Font.PLAIN, 18));
 		lblRegistrarse.setBounds(1087, 710, 172, 50);

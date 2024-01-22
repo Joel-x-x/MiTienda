@@ -1,6 +1,7 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Producto;
+import desk.mitienda.model.Producto;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -111,6 +112,10 @@ public class ProductoDao {
 
         return em.createQuery(createQuery.where(filtro)).getResultList();
 
+    }
+
+    public Producto getProductoId(Long id) {
+        return this.em.find(Producto.class, id);
     }
 
 }

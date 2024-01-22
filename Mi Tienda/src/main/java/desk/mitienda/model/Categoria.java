@@ -18,4 +18,8 @@ public class Categoria {
     private Long id;
     private String categoria;
 
+    @Override
+    public String toString() {
+        return this.categoria;
+    }
 }

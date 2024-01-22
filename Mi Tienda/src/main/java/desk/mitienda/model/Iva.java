@@ -5,6 +5,7 @@ import net.bytebuddy.implementation.bind.annotation.Default;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -19,8 +20,12 @@ public class Iva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double iva;
+    private BigDecimal iva;
     @CreationTimestamp
     private LocalDate fecha;
 
+    @Override
+    public String toString() {
+        return this.iva.toString();
+    }
 }

@@ -30,4 +30,8 @@ public class ProductoController {
     public List<Producto> listar(String codigo, String nombre) {
         return productoDao.listar(codigo, nombre);
     }
+
+    public Producto getProductoId(Long id) {
+        return productoDao.getProductoId(id);
+    }
 }

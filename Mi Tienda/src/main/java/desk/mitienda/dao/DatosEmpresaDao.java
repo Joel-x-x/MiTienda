@@ -2,6 +2,8 @@ package desk.mitienda.dao;
 
 import desk.mitienda.model.DatosEmpresa;
 import desk.mitienda.model.DatosEmpresa;
+import desk.mitienda.model.Producto;
+import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -59,6 +61,11 @@ public class DatosEmpresaDao {
         } finally {
             // em.close();
         }
+    }
+
+    public DatosEmpresa getDatosEmpresa() {
+        String jpql = "select D from DatosEmpresa as D where D.id = 1";
+        return this.em.createQuery(jpql, DatosEmpresa.class).getSingleResult();
     }
 
 }

@@ -366,10 +366,10 @@ public class RegistroUsuario extends JFrame {
 			return;
 		}
 
-		if(!Utilidades.validarEmail(txt_usuario.getText())) {
-			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
-			return;
-		}
+//		if(!Utilidades.validarEmail(txt_usuario.getText())) {
+//			JOptionPane.showMessageDialog(null, "El campo email no puede ir vacio o no es valido");
+//			return;
+//		}
 
 		if(usuario.getClave().equals("")) {
 			JOptionPane.showMessageDialog(null, "El campo contraseña no puede ir vacio");

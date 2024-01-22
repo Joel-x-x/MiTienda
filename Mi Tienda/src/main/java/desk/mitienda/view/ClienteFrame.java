@@ -1,71 +1,81 @@
 package desk.mitienda.view;
 
+import desk.mitienda.controller.ClienteController;
+import desk.mitienda.model.Cliente;
+
+import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-
-import com.gym.controller.UsuarioController;
-import com.gym.model.Administrador;
-import com.gym.model.Usuario;
-
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.List;
+import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.CaretEvent;
 
 public class ClienteFrame extends JFrame {
-	private int administrador_id, idSeleccionadoUsuario;
-	private UsuarioController usuarioController;
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField textField;
 	private DefaultTableModel modelo;
 	private GenerarFrameInterfaz frame;
-	
-	private static final long serialVersionUID = 4154039692586232154L;	
-	private JPanel contentPane;
-	private JTextField textBuscar;
-	private JTable tableUsuarios;
+	private ClienteController clienteController;
+	private JTable table;
+	private Long clienteId;
 
-	private void listar() {
-		String[] cabeceras = {"Id","Nombre","Apellido","Nacimiento","Sexo","Email","Cedula","Dirección","Teléfono"};
-		
-		modelo = new DefaultTableModel(usuarioController.consultar(administrador_id, textBuscar.getText()), cabeceras);
-		tableUsuarios.setModel(modelo);
+	private void listarClientes(String nombre){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		List<Cliente> listaClientes = clienteController.listar(null,nombre);
+
+		modelo.addColumn("Id");
+		modelo.addColumn("Identificación");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Apellido");
+		modelo.addColumn("Celular");
+
+		listaClientes.forEach(cliente -> modelo.addRow(new Object[]{
+				cliente.getId(),
+				cliente.getIdentificacion(),
+				cliente.getNombre(),
+				cliente.getApellido(),
+				cliente.getCelular()
+		}));
 	}
 	
-	private void usuarioSeleccionado() {
-		idSeleccionadoUsuario = (int) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),0);
-		String nombre = (String) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),1);
-		String apellido = (String) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),2);
-		String cedula = (String) tableUsuarios.getValueAt(tableUsuarios.getSelectedRow(),6);
-		
-		frame.usuarioSeleccionado(
-			new Usuario(
-			idSeleccionadoUsuario,
-			nombre,
-			apellido,
-			cedula
-			)
-		); 
-		
+	private void borrarDatosTabla() {
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
+		modelo.setColumnCount(0);
+	}
+
+	public void clienteSeleccionado() {
+		Cliente cliente = clienteController.getClienteId(clienteId);
+
+		frame.objetoSeleccionadoProveedorCliente((Cliente) cliente);
 		this.dispose();
 	}
-	
+
+
 	public ClienteFrame(GenerarFrameInterfaz frame) {
 		this.frame = frame;
-		administrador_id = new Administrador().getId();
-		usuarioController = new UsuarioController();
-		
+
+		// Controllers
+		clienteController = new ClienteController();
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
 		setLocationRelativeTo(null);
+		setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -73,38 +83,35 @@ public class ClienteFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 255, 255));
+		panel.setLayout(null);
+		panel.setBackground(new Color(49, 51, 56));
 		panel.setBounds(0, 0, 1004, 561);
 		contentPane.add(panel);
-		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("USUARIOS");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel.setBounds(10, 28, 984, 37);
-		panel.add(lblNewLabel);
+		JLabel lblClientes = new JLabel("CLIENTES");
+		lblClientes.setForeground(new Color(255, 255, 255));
+		lblClientes.setHorizontalAlignment(SwingConstants.CENTER);
+		lblClientes.setFont(new Font("Jockey One", Font.BOLD, 28));
+		lblClientes.setBounds(10, 28, 984, 37);
+		panel.add(lblClientes);
 		
 		JLabel lblNewLabel_1_4_2 = new JLabel("Buscar por nombre:");
+		lblNewLabel_1_4_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1_4_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel_1_4_2.setBounds(10, 94, 99, 14);
 		panel.add(lblNewLabel_1_4_2);
 		
-		textBuscar = new JTextField();
-		textBuscar.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				listar();
-			}
-		});
-		textBuscar.setColumns(10);
-		textBuscar.setBounds(119, 88, 137, 25);
-		panel.add(textBuscar);
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(119, 88, 137, 25);
+		panel.add(textField);
 		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setForeground(Color.WHITE);
 		btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnBuscar.setFocusPainted(false);
 		btnBuscar.setBorder(null);
-		btnBuscar.setBackground(new Color(46, 56, 64));
+		btnBuscar.setBackground(new Color(0, 0, 0));
 		btnBuscar.setBounds(266, 88, 89, 25);
 		panel.add(btnBuscar);
 		
@@ -113,7 +120,7 @@ public class ClienteFrame extends JFrame {
 		btnLimpiar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnLimpiar.setFocusPainted(false);
 		btnLimpiar.setBorder(null);
-		btnLimpiar.setBackground(new Color(46, 56, 64));
+		btnLimpiar.setBackground(new Color(0, 0, 0));
 		btnLimpiar.setBounds(365, 88, 89, 25);
 		panel.add(btnLimpiar);
 		
@@ -124,16 +131,20 @@ public class ClienteFrame extends JFrame {
 		scrollPane.setBounds(10, 127, 984, 423);
 		panel.add(scrollPane);
 		
-		tableUsuarios = new JTable();
-		tableUsuarios.addMouseListener(new MouseAdapter() {
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				usuarioSeleccionado();
+				clienteId = (Long) table.getValueAt(table.getSelectedRow(), 0);
+
+				clienteSeleccionado();
 			}
 		});
-		tableUsuarios.setBackground(Color.WHITE);
-		scrollPane.setViewportView(tableUsuarios);
-		
-		listar();
+		table.setBackground(Color.WHITE);
+		scrollPane.setViewportView(table);
+
+		// Listar
+		listarClientes(null);
 	}
+
 }

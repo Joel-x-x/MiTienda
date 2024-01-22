@@ -1,9 +1,13 @@
 package desk.mitienda.model;
 
 import lombok.*;
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,21 +23,49 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (unique = true)
+    @Column(name = "punto_emision")
     private String puntoEmision;
     private String establecimiento;
     private String numero;
     private LocalDate fecha;
+    @Column(name = "forma_pago")
     private String formaPago;
     private Double descuento;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
-    private Double subtotal;
-    private Double iva;
-    private Double total;
-
-    @OneToMany
-    private List<DetalleCompra> detalle;
+    @Column(name = "tiene_proveedor")
     private Boolean tieneProveedor;
+    private BigDecimal subtotal = new BigDecimal(0);
+    private BigDecimal iva = new BigDecimal(0);
+    private BigDecimal total = new BigDecimal(0);
 
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<DetalleCompra> detalle = new ArrayList<>();
+
+    public void agregarDetalle(DetalleCompra detalleCompra) {
+        detalleCompra.setCompra(this); // Agrega la referencia compra al detalle
+        this.detalle.add(detalleCompra);
+        this.subtotal = this.subtotal.add(detalleCompra.getSubtotal()); // Sumando del subtotal
+        this.iva = this.iva.add(detalleCompra.getIva()); // Sumando del iva
+        this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
+    }
+
+    public void actualizarValoresCompra() {
+        this.subtotal = BigDecimal.ZERO;
+        this.iva = BigDecimal.ZERO;
+        this.total = BigDecimal.ZERO;
+
+        detalle.forEach(detalleCompra -> {
+            this.subtotal = this.subtotal.add(detalleCompra.getSubtotal()); // Sumando del subtotal
+            this.iva = this.iva.add(detalleCompra.getIva()); // Sumando del iva
+            this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
+        });
+    }
+
+    public void proveedorFinal(String numero) {
+        this.setTieneProveedor(false);
+        this.setNumero(numero);
+    }
 }

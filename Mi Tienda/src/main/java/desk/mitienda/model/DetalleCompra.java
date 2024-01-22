@@ -3,9 +3,10 @@ package desk.mitienda.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalleCompras")
+@Table(name = "detalle_compras")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,13 +18,38 @@ public class DetalleCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double cantidad;
-    private Double precioUnitario;
-    private Double subtotal;
-    private Double iva;
-    private Double total;
+    private Double cantidad = 0.0;
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario = new BigDecimal(0);
+    private BigDecimal iva = new BigDecimal(0);
+    private BigDecimal subtotal = new BigDecimal(0);
+    private BigDecimal total = new BigDecimal(0);
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto producto;
     @ManyToOne(fetch = FetchType.LAZY)
     private Compra compra;
+
+    public DetalleCompra(Producto producto) {
+        this.producto = producto;
+        inicializar();
+    }
+    public void inicializar() {
+        this.cantidad = 1.0;
+        this.precioUnitario = this.producto.getPrecioMedio();
+        this.subtotal = this.precioUnitario;
+        if(this.producto.getTieneIva()) {
+            this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+        }
+        this.total = this.subtotal.add(this.iva);
+    }
+
+    public void recalcular() {
+        this.subtotal = this.precioUnitario.multiply(BigDecimal.valueOf(this.cantidad));
+        if(this.producto.getTieneIva()) {
+            this.iva = this.subtotal.multiply(this.producto.getIva().getIva().divide(new BigDecimal(100.0)));
+            this.total = this.subtotal.add(this.iva);
+        }
+
+        this.total = this.subtotal.add(this.iva);
+    }
 }

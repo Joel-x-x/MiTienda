@@ -1,7 +1,6 @@
 package desk.mitienda.controller;
 
 import desk.mitienda.dao.ProveedorDao;
-import desk.mitienda.model.Cliente;
 import desk.mitienda.model.Proveedor;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
@@ -29,5 +28,9 @@ public class ProveedorController {
 
     public List<Proveedor> listar(String identificacion, String empresa) {
         return proveedorDao.listar(identificacion, empresa);
+    }
+
+    public Proveedor getProveedorId(Long id) {
+        return proveedorDao.getProveedorId(id);
     }
 }
