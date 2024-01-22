@@ -53,11 +53,11 @@ public class Compra {
     }
 
     public void actualizarValoresCompra() {
-        detalle.forEach(detalleCompra -> {
-            this.subtotal = BigDecimal.ZERO;
-            this.iva = BigDecimal.ZERO;
-            this.total = BigDecimal.ZERO;
+        this.subtotal = BigDecimal.ZERO;
+        this.iva = BigDecimal.ZERO;
+        this.total = BigDecimal.ZERO;
 
+        detalle.forEach(detalleCompra -> {
             this.subtotal = this.subtotal.add(detalleCompra.getSubtotal()); // Sumando del subtotal
             this.iva = this.iva.add(detalleCompra.getIva()); // Sumando del iva
             this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total

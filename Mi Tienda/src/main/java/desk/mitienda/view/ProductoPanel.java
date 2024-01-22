@@ -1,12 +1,11 @@
 package desk.mitienda.view;
 
+import com.itextpdf.text.Rectangle;
 import desk.mitienda.controller.CategoriaController;
 import desk.mitienda.controller.IvaController;
+import desk.mitienda.controller.KardexController;
 import desk.mitienda.controller.ProductoController;
-import desk.mitienda.model.Categoria;
-import desk.mitienda.model.Iva;
-import desk.mitienda.model.Producto;
-import desk.mitienda.model.Proveedor;
+import desk.mitienda.model.*;
 import desk.mitienda.utils.Estado;
 
 
@@ -18,10 +17,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
+
+import java.awt.Desktop;
+import javax.swing.JPanel;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.PageSize;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ProductoPanel extends JPanel {
 	private JTextField txt_usuario;
@@ -49,6 +64,95 @@ public class ProductoPanel extends JPanel {
 
 	private CategoriaController categoriaController;
 	private IvaController ivaController;
+	private JButton btnReporteKardex;
+	private KardexController kardexController;
+
+	public void generarPdfReporte(List<Kardex> listaKardex) {
+
+		try {
+			String ruta = System.getProperty("user.home");
+			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/Reporte Kardex.pdf");
+			com.itextpdf.text.Document documento = new com.itextpdf.text.Document(PageSize.LETTER.rotate());
+			PdfWriter.getInstance(documento, archivo);
+			documento.open();
+
+
+			// Crea un objeto Font con estilo negrita
+			com.itextpdf.text.Font fuenteTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 16, Font.BOLD);
+
+			com.itextpdf.text.Font fuenteEncabezadoTabla = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+			// Crea un Paragraph y aplica el estilo de fuente negrita
+			Paragraph parrafo = new Paragraph("Reporte de membresías", fuenteTitulo);
+
+			parrafo.setAlignment(1);
+			documento.add(parrafo);
+
+			documento.add(new Paragraph("\n"));
+			documento.add(new Paragraph("Reporte Kardex"));
+			documento.add(new Paragraph("\n"));
+
+			PdfPTable tabla = new PdfPTable(11);
+
+			float[] anchosColumnas = {70f, 80f, 60f, 60f, 80f, 20f,30f, 30f, 30f, 30f, 30f}; // Ejemplo de anchos de columnas
+			tabla.setTotalWidth(anchosColumnas);
+			tabla.setWidths(anchosColumnas);
+
+			tabla.addCell(new PdfPCell(new Phrase("Fecha", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Numero", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Proveedor/Cliente", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Tipo", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Producto", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Cantidad", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Precio unitario", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Precio total", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Cantidad existencia", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Costo unitario en existencia", fuenteEncabezadoTabla)));
+			tabla.addCell(new PdfPCell(new Phrase("Costo total existencia", fuenteEncabezadoTabla)));
+
+			tabla.completeRow();
+
+			listaKardex.forEach(kardex -> {
+				tabla.addCell(new PdfPCell(new Phrase(String.valueOf(kardex.getFecha()))));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getNumero())));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getProveedorCliente())));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getTipo() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getProducto().getNombre())));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidad() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioUnitario() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioTotal() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidadExistencia() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoUnitarioExistencia() + "")));
+				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoTotalExistencia() + "")));
+
+				tabla.completeRow();
+
+			});
+
+			documento.add(tabla);
+
+			documento.close();
+
+		} catch ( FileNotFoundException e1) {
+
+			System.out.println(e1);
+		} catch (DocumentException e1) {
+
+			e1.printStackTrace();
+		}
+
+		String ruta = System.getProperty("user.home");
+		File path = new File(ruta + "/Downloads/Reporte Kardex.pdf");
+		System.out.println(path);
+
+		if (path.exists()) {
+			try {
+				Desktop.getDesktop().open(path);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 
 	//-------------------------------------Utilidades--------------------------------
 	public void iniciarCombos(){
@@ -159,6 +263,8 @@ public class ProductoPanel extends JPanel {
 		txt_utilidades.setText("");
 		chbx_tiene_iva.setSelected(true);
 		checkIva();
+
+		btn_agregar_usuario.setEnabled(true);
 	}
 
 	public void checkIva() {
@@ -268,6 +374,7 @@ public class ProductoPanel extends JPanel {
 		productoController = new ProductoController();
 		categoriaController = new CategoriaController();
 		ivaController = new IvaController();
+		kardexController = new KardexController();
 
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
@@ -431,6 +538,7 @@ public class ProductoPanel extends JPanel {
 				activarBotones();
 				llenarFormulario();
 				btn_agregar_usuario.setEnabled(false);
+				btnReporteKardex.setEnabled(true);
 			}
 		});
 		scrollPane.setViewportView(table);
@@ -485,9 +593,24 @@ public class ProductoPanel extends JPanel {
 		botonAgregarCategoria.setFont(new Font("Tahoma", Font.BOLD, 11));
 		botonAgregarCategoria.setFocusPainted(false);
 		botonAgregarCategoria.setBorder(null);
-		botonAgregarCategoria.setBackground(new Color(46, 56, 64));
+		botonAgregarCategoria.setBackground(Color.BLACK);
 		botonAgregarCategoria.setBounds(589, 107, 152, 30);
 		add(botonAgregarCategoria);
+		
+		btnReporteKardex = new JButton("Reporte Kardex");
+		btnReporteKardex.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generarPdfReporte(kardexController.listarProducto(productoId));
+			}
+		});
+		btnReporteKardex.setForeground(Color.WHITE);
+		btnReporteKardex.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnReporteKardex.setFocusPainted(false);
+		btnReporteKardex.setEnabled(false);
+		btnReporteKardex.setBorder(null);
+		btnReporteKardex.setBackground(Color.BLACK);
+		btnReporteKardex.setBounds(521, 305, 152, 30);
+		add(btnReporteKardex);
 
 		listarProductos(null, null);
 		iniciarCombos();

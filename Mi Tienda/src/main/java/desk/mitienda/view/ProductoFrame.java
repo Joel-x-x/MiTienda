@@ -85,7 +85,7 @@ public class ProductoFrame extends JFrame {
 		panel.setBounds(0, 0, 1004, 561);
 		contentPane.add(panel);
 		
-		JLabel lblClientes = new JLabel("Productoes");
+		JLabel lblClientes = new JLabel("Productos");
 		lblClientes.setForeground(new Color(255, 255, 255));
 		lblClientes.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClientes.setFont(new Font("Jockey One", Font.BOLD, 28));

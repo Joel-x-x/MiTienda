@@ -26,4 +26,8 @@ public class KardexController {
     public void registrarKardexVenta(NotaVenta notaVenta) {
         kardexService.registrarNotaVenta(notaVenta);
     }
+
+    public List<Kardex> listarProducto(Long id) {
+        return kardexDao.listar(id);
+    }
 }

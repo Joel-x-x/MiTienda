@@ -1,5 +1,8 @@
 package desk.mitienda.view;
 
+import desk.mitienda.controller.ClienteController;
+import desk.mitienda.model.Cliente;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,41 +11,71 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ClienteFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
+	private DefaultTableModel modelo;
+	private GenerarFrameInterfaz frame;
+	private ClienteController clienteController;
+	private JTable table;
+	private Long clienteId;
 
+	private void listarClientes(String nombre){
+		borrarDatosTabla();
+		modelo = (DefaultTableModel) table.getModel();
+		List<Cliente> listaClientes = clienteController.listar(null,nombre);
 
+		modelo.addColumn("Id");
+		modelo.addColumn("Identificación");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Apellido");
+		modelo.addColumn("Celular");
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClienteFrame frame = new ClienteFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		listaClientes.forEach(cliente -> modelo.addRow(new Object[]{
+				cliente.getId(),
+				cliente.getIdentificacion(),
+				cliente.getNombre(),
+				cliente.getApellido(),
+				cliente.getCelular()
+		}));
+	}
+	
+	private void borrarDatosTabla() {
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
+		modelo.setColumnCount(0);
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public ClienteFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public void clienteSeleccionado() {
+		Cliente cliente = clienteController.getClienteId(clienteId);
+
+		frame.objetoSeleccionadoProveedorCliente((Cliente) cliente);
+		this.dispose();
+	}
+
+
+	public ClienteFrame(GenerarFrameInterfaz frame) {
+		this.frame = frame;
+
+		// Controllers
+		clienteController = new ClienteController();
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1020, 600);
+		setLocationRelativeTo(null);
+		setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -97,6 +130,21 @@ public class ClienteFrame extends JFrame {
 		scrollPane.setAutoscrolls(true);
 		scrollPane.setBounds(10, 127, 984, 423);
 		panel.add(scrollPane);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				clienteId = (Long) table.getValueAt(table.getSelectedRow(), 0);
+
+				clienteSeleccionado();
+			}
+		});
+		table.setBackground(Color.WHITE);
+		scrollPane.setViewportView(table);
+
+		// Listar
+		listarClientes(null);
 	}
 
 }

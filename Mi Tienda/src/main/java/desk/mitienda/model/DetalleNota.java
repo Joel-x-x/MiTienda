@@ -38,7 +38,7 @@ public class DetalleNota {
         this.cantidad = 1.0;
         // Precio de venta
         this.precio = this.producto.getPrecioVenta().setScale(2, RoundingMode.HALF_EVEN);
-        this.total = this.precio.multiply(BigDecimal.valueOf(this.cantidad));
+        this.total = this.precio.multiply(BigDecimal.valueOf(this.cantidad)).setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public void recalcular() {

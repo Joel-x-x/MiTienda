@@ -1,6 +1,7 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Kardex;
+import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KardexDao {
@@ -38,27 +40,15 @@ public class KardexDao {
         }
     }
 
-//    public List<Kardex> listar(String numero, String razonSocial) {
-//        CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
-//
-//        CriteriaQuery<Kardex> createQuery = criteriaBuilder.createQuery(Kardex.class);
-//
-//        Root<Kardex> from = createQuery.from(Kardex.class);
-//
-//        Predicate filtro = criteriaBuilder.and();
-//
-//        if(numero != null && !numero.trim().isEmpty()) {
-//            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("numero"), numero));
-//        }
-//
-//        if(razonSocial != null && !razonSocial.trim().isEmpty()) {
-//            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("razonSocial"), razonSocial));
-//        }
-//
-//        filtro = criteriaBuilder.and(filtro, criteriaBuilder.isTrue(from.get("estado")));
-//
-//        return em.createQuery(createQuery.where(filtro)).getResultList();
-//
-//    }
+    public List<Kardex> listar(Long id) {
+        try {
+            String jpql = "select K from Kardex as K where K.producto.id = :id";
+            return this.em.createQuery(jpql, Kardex.class).setParameter("id", id).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+
+    }
 
 }

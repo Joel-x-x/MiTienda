@@ -58,6 +58,14 @@ public class NotaVenta {
         this.total = this.total.add(detalleNota.getTotal()); // Sumando del total
     }
 
+    public void actualizarValoresCompra() {
+        this.total = BigDecimal.ZERO;
+
+        detalle.forEach(detalleCompra -> {
+            this.total = this.total.add(detalleCompra.getTotal()); // Sumando del total
+        });
+    }
+
     public void consumidorFinal() {
         this.setTieneCliente(false);
     }

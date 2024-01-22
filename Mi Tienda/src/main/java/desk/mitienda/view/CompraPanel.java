@@ -36,6 +36,7 @@ public class CompraPanel extends JPanel {
 	private JButton btnModificar;
 	private JButton btnRefrescar;
 	private JButton btnImprimir;
+	
 	public void listar(String numero, String empresa) {
 		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();

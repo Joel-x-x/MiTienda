@@ -48,11 +48,11 @@ public class NotaVentaDao {
         Predicate filtro = criteriaBuilder.and();
 
         if(numero != null && !numero.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("numero"), numero));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(from.get("numero"), "%" + numero + "%"));
         }
 
         if(identificacion != null && !identificacion.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(clienteJoin.get("identificacion"), identificacion));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(clienteJoin.get("identificacion"), identificacion + "%"));
         }
 
         return em.createQuery(createQuery.where(filtro)).getResultList();

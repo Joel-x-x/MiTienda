@@ -7,7 +7,6 @@ import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -30,7 +29,7 @@ public class BarraLateral extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				adminFrame.cambiarPanel(new FacturaPanel(panelAncho, panelAlto));
+				adminFrame.cambiarPanel(new NotaVentaPanel(panelAncho, panelAlto));
 				
 			}
 		});
@@ -77,11 +76,11 @@ public class BarraLateral extends JPanel {
 		btnReportes.setBounds(10, 253, 180, 42);
 		add(btnReportes);
 		
-		JButton btnIva = new JButton("IVA");
+		JButton btnIva = new JButton("CAJA");
 		btnIva.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				adminFrame.cambiarPanel(new IvaPanel(panelAncho, panelAlto));
+				adminFrame.cambiarPanel(new CajaPanel(panelAncho, panelAlto));
 			}
 		});
 		btnIva.setForeground(Color.WHITE);
