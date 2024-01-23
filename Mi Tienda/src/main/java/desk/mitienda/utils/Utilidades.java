@@ -19,13 +19,11 @@ public class Utilidades {
     @Setter
     private static Usuario usuario;
 
-    public boolean toBoolean(int numero) {
-        if(numero > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public Boolean validarPermisos(Usuario usuario) {
+//        switch () {
+//
+//        }
+//    }
 
     public void copiar(String string) {
 

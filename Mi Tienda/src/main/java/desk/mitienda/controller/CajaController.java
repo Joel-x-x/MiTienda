@@ -30,6 +30,10 @@ public class CajaController {
         return cajaDao.getCajaAbiertaUsuarioId(id);
     }
 
+    public Boolean cajaCerrada(Long id) {
+        return cajaDao.cajaCerrada(id);
+    }
+
     public Caja getCajaId(Long id) {
         return cajaDao.getCajaId(id);
     }

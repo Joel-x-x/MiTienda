@@ -1,16 +1,9 @@
 package desk.mitienda;
 
 import desk.mitienda.controller.UsuarioController;
-import desk.mitienda.dao.UsuarioDao;
-import desk.mitienda.model.Usuario;
-import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.FlyWay;
-import desk.mitienda.utils.JPAUtils;
 import desk.mitienda.view.IniciarSesionFrame;
-import desk.mitienda.view.RegistroUsuario;
-
-import javax.swing.*;
-import java.awt.*;
+import desk.mitienda.view.RegistroUsuarioFrame;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,7 +14,7 @@ public class Main {
             System.out.println(usuarioController.usuarioRegistrado());
             new IniciarSesionFrame();
         } else {
-            new RegistroUsuario();
+            new RegistroUsuarioFrame();
         }
     }
 }

@@ -7,8 +7,6 @@ import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.Utilidades;
 
-import java.awt.EventQueue;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -25,12 +23,6 @@ public class IniciarSesionFrame extends JFrame {
 	private JTextField textField;
 	private JPasswordField textField_1;
 	private UsuarioController usuarioController;
-
-
-
-
-
-
 
 	//---------------------------------------------------------------------------------------------------------------------------
 
@@ -73,8 +65,8 @@ public class IniciarSesionFrame extends JFrame {
 		Estado estado = usuarioController.login(textField.getText(),String.valueOf(textField_1.getPassword()));
 
 		if(estado.getExito()){
-			new AdminFrame();
 			Utilidades.setUsuario((Usuario) estado.getObject()); // Sabemos que usuario se encuentra acutalmente logeado
+			new AdminFrame();
 			dispose();
 		}else{
 			JOptionPane.showMessageDialog(null, estado.getMensaje() + " Resigtrate");
@@ -160,7 +152,7 @@ public class IniciarSesionFrame extends JFrame {
 		lblRegistrarse.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				RegistroUsuario frame = new RegistroUsuario();
+				RegistroUsuarioFrame frame = new RegistroUsuarioFrame();
 				frame.setVisible(true);
 				frame.setLocationRelativeTo(null);
 

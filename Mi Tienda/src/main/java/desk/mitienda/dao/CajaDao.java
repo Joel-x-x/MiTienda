@@ -77,7 +77,7 @@ public class CajaDao {
         Predicate filtro = criteriaBuilder.and();
 
         if(nombre != null && !nombre.trim().isEmpty()) {
-            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(usuarioJoin.get("nombre"), nombre));
+            filtro = criteriaBuilder.and(filtro, criteriaBuilder.like(usuarioJoin.get("nombre"), nombre + "%"));
         }
 
         return em.createQuery(createQuery.where(filtro)).getResultList();
@@ -89,8 +89,19 @@ public class CajaDao {
             return this.em.createQuery(jpql, Caja.class).setParameter("id", id).getSingleResult();
         }
         catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
+        }
+    }
+
+    public Boolean cajaCerrada(Long id) {
+        try {
+            String jpql = "select C.cerrada from Caja as C where C.usuario.id = :id and C.id = (select max(C.id) from Caja as C)";
+            return this.em.createQuery(jpql, Boolean.class).setParameter("id", id).getSingleResult();
+        }
+        catch (Exception e) {
+            // e.printStackTrace();
+            return true;
         }
     }
 

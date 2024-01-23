@@ -43,6 +43,7 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 	private KardexController kardexController;
 	private ClienteController clienteController;
 	private DatosEmpresaController datosEmpresaController;
+	private CajaController cajaController;
 	private JLabel labelCliente;
 	private JLabel labelTotal;
 	private JTable table;
@@ -99,6 +100,11 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 	public void guardar() {
 		notaVentaController.guardar(notaVenta);
 		kardexController.registrarKardexVenta(notaVenta);
+		// Agregar monto en caja
+		Caja caja = cajaController.getCajaAbiertaUsuarioId(Utilidades.getUsuario().getId());
+		caja.agregarValor(notaVenta.getTotal());
+		cajaController.actualizar(caja);
+
 		this.dispose();
 	}
 
@@ -167,6 +173,7 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 		kardexController = new KardexController();
 		clienteController = new ClienteController();
 		datosEmpresaController = new DatosEmpresaController();
+		cajaController = new CajaController();
 
 		notaVenta = new NotaVenta(notaVentaController.getSiguienteNumeroConsumidorFinal());
 
