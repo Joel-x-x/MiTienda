@@ -1,13 +1,9 @@
 
 package desk.mitienda.view;
 
-import java.awt.EventQueue;
-import java.awt.BasicStroke;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -30,11 +26,10 @@ import desk.mitienda.model.Rol;
 import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.FlyWay;
-import desk.mitienda.utils.Utilidades;
 
 import javax.swing.event.CaretEvent;
 
-public class RegistroUsuario extends JFrame {
+public class RegistroUsuarioFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField txt_confirmar_contraseña;
@@ -49,27 +44,6 @@ public class RegistroUsuario extends JFrame {
 	private Estado estado;
 	private int usuario_id;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                try {
-                    RegistroUsuario frame = new RegistroUsuario();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-        });
-
-    }
 	private RoundBorderTextField createTextField() {
 	    RoundBorderTextField textField = new RoundBorderTextField(10, 5); // El segundo parámetro es el radio del borde
 	    textField.setForeground(Color.WHITE);
@@ -129,13 +103,14 @@ public class RegistroUsuario extends JFrame {
 	 */
 
 
-	public RegistroUsuario() {
+	public RegistroUsuarioFrame() {
 		FlyWay.migrate();
 		usuarioController = new UsuarioController();
 
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 800);
+		setVisible(true);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

@@ -1,5 +1,8 @@
 package desk.mitienda.view;
 
+import desk.mitienda.model.Rol;
+import desk.mitienda.utils.Utilidades;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -18,7 +21,6 @@ public class AdminFrame extends JFrame implements ActionListener{
     }
     public AdminFrame() {
     	
-//    	setIconImage(new ImageIcon(getClass().getResource("/com/gym/resources/pesa.png")).getImage());
     	setTitle("Mi Tienda");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1280, 800);
@@ -37,9 +39,14 @@ public class AdminFrame extends JFrame implements ActionListener{
         panelPrincipal.setPreferredSize(new Dimension(1080, 750));
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        
-        cambiarPanel(new UsuarioPanel(panelAncho, panelAlto));
-        
+
+        // Panel de inicio en base al rol
+        if(Utilidades.getUsuario().getRol() == Rol.ADMINISTRADOR || Utilidades.getUsuario().getRol() == Rol.VENDEDOR) {
+            cambiarPanel(new NotaVentaPanel(panelAncho, panelAlto));
+        } else if(Utilidades.getUsuario().getRol() == Rol.BODEGUERO) {
+            cambiarPanel(new ProductoPanel(panelAncho, panelAlto));
+        }
+
         // Agregar BarraPanel y panelPrincipal al JFrame
         getContentPane().add(barraPanel, BorderLayout.WEST);
         getContentPane().add(panelPrincipal, BorderLayout.CENTER);
