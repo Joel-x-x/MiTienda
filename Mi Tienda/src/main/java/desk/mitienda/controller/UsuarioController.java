@@ -37,11 +37,10 @@ public class UsuarioController {
     }
 
     public Boolean usuarioRegistrado() {
-        try {
-            usuarioDao.getUsuarioId(1L);
-            return true;
-        } catch (Exception e) {
+        if(usuarioDao.getUsuarioId(1L) == null) {
             return false;
+        } else {
+            return true;
         }
     }
 }
