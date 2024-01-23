@@ -37,6 +37,7 @@ public class UsuarioController {
     }
 
     public Boolean usuarioRegistrado() {
+        
         try {
             usuarioDao.getUsuarioId(1L);
             return true;
