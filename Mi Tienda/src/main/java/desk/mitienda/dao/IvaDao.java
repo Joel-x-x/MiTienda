@@ -69,7 +69,7 @@ public class IvaDao {
             return this.em.createQuery(jpql, Iva.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 

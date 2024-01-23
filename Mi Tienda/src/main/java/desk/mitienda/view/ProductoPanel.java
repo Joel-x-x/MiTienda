@@ -628,7 +628,9 @@ public class ProductoPanel extends JPanel {
 		add(btnReporteKardex);
 
 		listarProductos(null, null);
-		iniciarCombos();
+		if(ivaController.listar() != null && categoriaController.listar() != null) {
+			iniciarCombos();
+		}
 		bloquearBotones();
 		checkIva();
 

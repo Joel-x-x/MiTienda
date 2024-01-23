@@ -73,7 +73,7 @@ public class CategoriaDao {
             return this.em.createQuery(jpql, Categoria.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 
