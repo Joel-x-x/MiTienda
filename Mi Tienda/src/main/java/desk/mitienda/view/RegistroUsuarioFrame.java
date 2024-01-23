@@ -171,19 +171,11 @@ public class RegistroUsuarioFrame extends JFrame {
 		lblCorreo.setBounds(10, 411, 357, 47);
 		panel_11.add(lblCorreo);
 
-
-
-
-
-
-
 		JLabel lblDireccin = new JLabel("Cédula");
 		lblDireccin.setForeground(Color.WHITE);
 		lblDireccin.setFont(new Font("Jockey One", Font.PLAIN, 23));
 		lblDireccin.setBounds(10, 240, 357, 47);
 		panel_11.add(lblDireccin);
-
-
 
 		JLabel lblNombreDeLa = new JLabel("Apellidos");
 		lblNombreDeLa.setForeground(Color.WHITE);
@@ -199,9 +191,7 @@ public class RegistroUsuarioFrame extends JFrame {
 		lblNombreDeDueo.setBounds(10, 126, 189, 47);
 		panel_11.add(lblNombreDeDueo);
 
-
 		txt_confirmar_contraseña = createPasswordField(10,5);
-
 
 		txt_confirmar_contraseña.setBounds(291, 411, 357, 35);
 		panel_11.add(txt_confirmar_contraseña);
@@ -229,7 +219,6 @@ public class RegistroUsuarioFrame extends JFrame {
         					mayusculas = true;
         				}
         			}
-
         			if(mayusculas) {
         				if(contraseña.matches(".*\\d.*")) {
         					if(contraseña.matches(".*[^a-zA-Z0-9\\s].*")) {
@@ -351,21 +340,14 @@ public class RegistroUsuarioFrame extends JFrame {
 			return;
 		}
 
-
-
 		// Registrar
 		estado = usuarioController.registrar(usuario);
 		if(estado.getExito()) {
-
-
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
+//			JOptionPane.showMessageDialog(null, estado.getMensaje());
 			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
 			registroTiendaFrame.setLocationRelativeTo(null);
 			registroTiendaFrame.setVisible(true);
 			dispose();
-
-
-
 
 		} else {
 			JOptionPane.showMessageDialog(null, estado.getMensaje());

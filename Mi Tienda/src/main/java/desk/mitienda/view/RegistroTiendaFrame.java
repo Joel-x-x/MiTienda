@@ -113,12 +113,9 @@ public class RegistroTiendaFrame extends JFrame {
 
 		// Registrar
 		Estado estado = datosEmpresaController.guardar(datosEmpresa);
-		if(estado.getExito()) {
 
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
-			RegistroTiendaFrame registroTiendaFrame = new RegistroTiendaFrame();
-			registroTiendaFrame.setLocationRelativeTo(null);
-			registroTiendaFrame.setVisible(true);
+		if(estado.getExito()) {
+			IniciarSesionFrame iniciarSesionFrame = new IniciarSesionFrame();
 			dispose();
 
 		} else {

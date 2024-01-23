@@ -172,7 +172,26 @@ public class ProductoPanel extends JPanel {
 	 * @return Llena los campos de producto
 	 */
 	public Producto llenarProducto(){
+		// Tomar en cuanta solo cuando se actualiza
+		Producto producto = new Producto();
 
+		producto.setCodigo(textCodigo.getText());
+		producto.setNombre(textNombre.getText());
+		producto.setDescripcion(textDescripcion.getText());
+		producto.setCategoria((Categoria) comboBoxCategoria.getSelectedItem());
+		producto.setUtilidad(BigDecimal.valueOf(Double.parseDouble(textUtilidad.getText())));
+		producto.setTieneIva(chbx_tiene_iva.isSelected());
+		producto.setEstado(true);
+
+		if(chbx_tiene_iva.isSelected())
+			producto.setIva(ivaController.ultimoIva());
+
+		return producto;
+	}
+
+
+	public Producto llenarProductoActualizar(){
+		// Tomar en cuanta solo cuando se actualiza
 		Producto producto = productoController.getProductoId(productoId); // Instancia de Producto utilizando el constructor predeterminado
 
 		producto.setCodigo(textCodigo.getText());
@@ -302,7 +321,7 @@ public class ProductoPanel extends JPanel {
 
 	public void actualizar(){
 
-		Producto producto = llenarProducto();
+		Producto producto = llenarProductoActualizar();
 		producto.setId(productoId);
 
 		Estado estado = productoController.actualizar(producto);

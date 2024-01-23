@@ -5,14 +5,17 @@ import desk.mitienda.utils.FlyWay;
 import desk.mitienda.view.IniciarSesionFrame;
 import desk.mitienda.view.RegistroUsuarioFrame;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
         UsuarioController usuarioController = new UsuarioController();
         FlyWay.migrate();
         
         if(usuarioController.usuarioRegistrado()) {
-            System.out.println(usuarioController.usuarioRegistrado());
-            new IniciarSesionFrame();
+            SwingUtilities.invokeLater(() -> {
+                new IniciarSesionFrame();
+            });
         } else {
             new RegistroUsuarioFrame();
         }

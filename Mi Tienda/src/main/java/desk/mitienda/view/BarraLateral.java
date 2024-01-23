@@ -91,6 +91,12 @@ public class BarraLateral extends JPanel {
 		btnReportes.setBorder(null);
 		btnReportes.setBackground(new Color(64, 66, 73));
 		btnReportes.setBounds(10, 253, 180, 42);
+		btnReportes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				adminFrame.cambiarPanel(new ReportePanel(panelAncho, panelAlto));
+			}
+		});
 		add(btnReportes);
 		
 		btnCaja = new JButton("CAJA");
@@ -179,6 +185,39 @@ public class BarraLateral extends JPanel {
 		labelTienda.setBounds(10, 11, 180, 28);
 		add(labelTienda);
 
-		
+		switch (Utilidades.getUsuario().getRol()) {
+			case ADMINISTRADOR ->  {
+				btnVenta.setEnabled(true);
+				btnProductos.setEnabled(true);
+				btnClientes.setEnabled(true);
+				btnReportes.setEnabled(true);
+				btnCaja.setEnabled(true);
+				btnUsuario.setEnabled(true);
+				btnCompra.setEnabled(true);
+				btnProveedores.setEnabled(true);
+			}
+			case VENDEDOR -> {
+				btnVenta.setEnabled(true);
+				btnProductos.setEnabled(true);
+				btnClientes.setEnabled(true);
+				btnReportes.setEnabled(false);
+				btnCaja.setEnabled(false);
+				btnUsuario.setEnabled(false);
+				btnCompra.setEnabled(false);
+				btnProveedores.setEnabled(false);
+			}
+			case BODEGUERO -> {
+				btnVenta.setEnabled(false);
+				btnProductos.setEnabled(true);
+				btnClientes.setEnabled(false);
+				btnReportes.setEnabled(false);
+				btnCaja.setEnabled(false);
+				btnUsuario.setEnabled(false);
+				btnCompra.setEnabled(false);
+				btnProveedores.setEnabled(false);
+			}
+		}
+
+
 	}
 }
