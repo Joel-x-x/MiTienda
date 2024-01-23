@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         UsuarioController usuarioController = new UsuarioController();
         FlyWay.migrate();
-        FlyWay.repair();
+        
         if(usuarioController.usuarioRegistrado()) {
             System.out.println(usuarioController.usuarioRegistrado());
             new IniciarSesionFrame();
