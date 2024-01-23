@@ -7,6 +7,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.List;
 
 public class IvaDao {
@@ -63,13 +64,23 @@ public class IvaDao {
     }
 
     public List<Iva> listar() {
-        String jpql = "select I from Iva as I order by id desc";
-        return this.em.createQuery(jpql, Iva.class).getResultList();
+        try {
+            String jpql = "select I from Iva as I order by id desc";
+            return this.em.createQuery(jpql, Iva.class).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public Iva ultimoIva() {
-        String jpql = "select I from Iva as I where id = (select max(I.id) from Iva as I)";
-        return this.em.createQuery(jpql, Iva.class).getSingleResult();
+        try {
+            String jpql = "select I from Iva as I where id = (select max(I.id) from Iva as I)";
+            return this.em.createQuery(jpql, Iva.class).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

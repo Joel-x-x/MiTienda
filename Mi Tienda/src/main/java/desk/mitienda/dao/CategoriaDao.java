@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaDao {
@@ -67,8 +68,13 @@ public class CategoriaDao {
     }
 
     public List<Categoria> listar() {
-        String jpql = "select C from Categoria as C";
-        return this.em.createQuery(jpql, Categoria.class).getResultList();
+        try {
+            String jpql = "select C from Categoria as C";
+            return this.em.createQuery(jpql, Categoria.class).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public Categoria getCategoriaId(Long id) {
