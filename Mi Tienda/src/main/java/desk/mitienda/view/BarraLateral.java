@@ -198,7 +198,7 @@ public class BarraLateral extends JPanel {
 			}
 			case VENDEDOR -> {
 				btnVenta.setEnabled(true);
-				btnProductos.setEnabled(true);
+				btnProductos.setEnabled(false);
 				btnClientes.setEnabled(true);
 				btnReportes.setEnabled(false);
 				btnCaja.setEnabled(false);
@@ -213,8 +213,8 @@ public class BarraLateral extends JPanel {
 				btnReportes.setEnabled(false);
 				btnCaja.setEnabled(false);
 				btnUsuario.setEnabled(false);
-				btnCompra.setEnabled(false);
-				btnProveedores.setEnabled(false);
+				btnCompra.setEnabled(true);
+				btnProveedores.setEnabled(true);
 			}
 		}
 
