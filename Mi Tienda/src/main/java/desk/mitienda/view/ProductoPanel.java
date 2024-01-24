@@ -160,6 +160,7 @@ public class ProductoPanel extends JPanel {
 		comboBoxModelCategoria.removeAllElements();
 		comboBoxModelCategoria.addAll(categoriaController.listar());
 		comboBoxCategoria.setModel(comboBoxModelCategoria);
+
 		comboBoxCategoria.setSelectedIndex(0);
 
 		//Combo Iva
@@ -628,7 +629,8 @@ public class ProductoPanel extends JPanel {
 		add(btnReporteKardex);
 
 		listarProductos(null, null);
-		if(ivaController.listar() != null && categoriaController.listar() != null) {
+//		categoriaController.listar();
+		if(!ivaController.listar().isEmpty() && !categoriaController.listar().isEmpty() ) {
 			iniciarCombos();
 		}
 		bloquearBotones();
