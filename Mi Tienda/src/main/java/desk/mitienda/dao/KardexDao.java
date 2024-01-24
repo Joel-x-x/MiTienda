@@ -1,6 +1,7 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Kardex;
+import desk.mitienda.model.Kardex;
 import desk.mitienda.model.Usuario;
 import desk.mitienda.utils.Estado;
 
@@ -10,6 +11,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +51,18 @@ public class KardexDao {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
 
+    public List<Kardex> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+        CriteriaQuery<Kardex> createQuery = criteriaBuilder.createQuery(Kardex.class);
+
+        Root<Kardex> from = createQuery.from(Kardex.class);
+
+        Predicate filtro = criteriaBuilder.and(criteriaBuilder.between(from.get("fecha"), fechaInicio, fechaFin));
+
+        return em.createQuery(createQuery.where(filtro)).getResultList();
     }
 
 }

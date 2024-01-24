@@ -90,7 +90,7 @@ public class ProveedorDao {
     }
 
     public List<Proveedor> listar(String identificacion, String empresa) {
-        CriteriaBuilder criteriaBuilder =em.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
 
         CriteriaQuery<Proveedor> createQuery = criteriaBuilder.createQuery(Proveedor.class);
 

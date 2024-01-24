@@ -6,6 +6,7 @@ import desk.mitienda.controller.IvaController;
 import desk.mitienda.controller.KardexController;
 import desk.mitienda.controller.ProductoController;
 import desk.mitienda.model.*;
+import desk.mitienda.service.ReportesService;
 import desk.mitienda.utils.Estado;
 
 
@@ -67,92 +68,7 @@ public class ProductoPanel extends JPanel {
 	private JButton btnReporteKardex;
 	private KardexController kardexController;
 
-	public void generarPdfReporte(List<Kardex> listaKardex) {
-
-		try {
-			String ruta = System.getProperty("user.home");
-			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/Reporte Kardex.pdf");
-			com.itextpdf.text.Document documento = new com.itextpdf.text.Document(PageSize.LETTER.rotate());
-			PdfWriter.getInstance(documento, archivo);
-			documento.open();
-
-
-			// Crea un objeto Font con estilo negrita
-			com.itextpdf.text.Font fuenteTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 16, Font.BOLD);
-
-			com.itextpdf.text.Font fuenteEncabezadoTabla = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD);
-
-			// Crea un Paragraph y aplica el estilo de fuente negrita
-			Paragraph parrafo = new Paragraph("Reporte de membresías", fuenteTitulo);
-
-			parrafo.setAlignment(1);
-			documento.add(parrafo);
-
-			documento.add(new Paragraph("\n"));
-			documento.add(new Paragraph("Reporte Kardex"));
-			documento.add(new Paragraph("\n"));
-
-			PdfPTable tabla = new PdfPTable(11);
-
-			float[] anchosColumnas = {70f, 80f, 60f, 60f, 80f, 20f,30f, 30f, 30f, 30f, 30f}; // Ejemplo de anchos de columnas
-			tabla.setTotalWidth(anchosColumnas);
-			tabla.setWidths(anchosColumnas);
-
-			tabla.addCell(new PdfPCell(new Phrase("Fecha", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Numero", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Proveedor/Cliente", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Tipo", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Producto", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Cantidad", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Precio unitario", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Precio total", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Cantidad existencia", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Costo unitario en existencia", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Costo total existencia", fuenteEncabezadoTabla)));
-
-			tabla.completeRow();
-
-			listaKardex.forEach(kardex -> {
-				tabla.addCell(new PdfPCell(new Phrase(String.valueOf(kardex.getFecha()))));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getNumero())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getProveedorCliente())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getTipo() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getProducto().getNombre())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidad() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioUnitario() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioTotal() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidadExistencia() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoUnitarioExistencia() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoTotalExistencia() + "")));
-
-				tabla.completeRow();
-
-			});
-
-			documento.add(tabla);
-
-			documento.close();
-
-		} catch ( FileNotFoundException e1) {
-
-			System.out.println(e1);
-		} catch (DocumentException e1) {
-
-			e1.printStackTrace();
-		}
-
-		String ruta = System.getProperty("user.home");
-		File path = new File(ruta + "/Downloads/Reporte Kardex.pdf");
-		System.out.println(path);
-
-		if (path.exists()) {
-			try {
-				Desktop.getDesktop().open(path);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
+	private ReportesService reportesService;
 
 	//-------------------------------------Utilidades--------------------------------
 	public void iniciarCombos(){
@@ -391,6 +307,7 @@ public class ProductoPanel extends JPanel {
 		categoriaController = new CategoriaController();
 		ivaController = new IvaController();
 		kardexController = new KardexController();
+		reportesService = new ReportesService();
 
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
@@ -616,7 +533,7 @@ public class ProductoPanel extends JPanel {
 		btnReporteKardex = new JButton("Reporte Kardex");
 		btnReporteKardex.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				generarPdfReporte(kardexController.listarProducto(productoId));
+				reportesService.generarReporteKardex(kardexController.listarProducto(productoId));
 			}
 		});
 		btnReporteKardex.setForeground(Color.WHITE);

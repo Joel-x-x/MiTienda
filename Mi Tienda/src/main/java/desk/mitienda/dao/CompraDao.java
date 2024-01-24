@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class CompraDao {
@@ -74,5 +75,17 @@ public class CompraDao {
             e.printStackTrace();
             return "000000000";
          }
+    }
+
+    public List<Compra> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+        CriteriaQuery<Compra> createQuery = criteriaBuilder.createQuery(Compra.class);
+
+        Root<Compra> from = createQuery.from(Compra.class);
+
+        Predicate filtro = criteriaBuilder.and(criteriaBuilder.between(from.get("fecha"), fechaInicio, fechaFin));
+
+        return em.createQuery(createQuery.where(filtro)).getResultList();
     }
 }

@@ -6,6 +6,7 @@ import desk.mitienda.model.Compra;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CompraController {
@@ -39,5 +40,9 @@ public class CompraController {
             ceros += "0";
         }
         return ceros + numero;
+    }
+
+    public List<Compra> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        return compraDao.listarFiltroFechas(fechaInicio, fechaFin);
     }
 }

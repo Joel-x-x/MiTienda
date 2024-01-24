@@ -1,9 +1,12 @@
 package desk.mitienda.view;
 
 import desk.mitienda.controller.CajaController;
+import desk.mitienda.controller.DatosEmpresaController;
 import desk.mitienda.controller.IvaController;
 import desk.mitienda.controller.NotaVentaController;
+import desk.mitienda.model.DatosEmpresa;
 import desk.mitienda.model.NotaVenta;
+import desk.mitienda.service.ComprobantesService;
 import desk.mitienda.utils.Utilidades;
 import jdk.jshell.execution.Util;
 
@@ -14,6 +17,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
@@ -34,7 +39,9 @@ public class NotaVentaPanel extends JPanel implements CajaInterfaz {
 	private CajaController cajaController;
 	private JButton btnAbrirCaja;
 	private JButton btnCerrarCaja;
-
+	private Long notaVentaId;
+	private ComprobantesService comprobantesService;
+	private DatosEmpresaController datosEmpresaController;
 	public void listar(String numero, String identificacion) {
 		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
@@ -65,6 +72,12 @@ public class NotaVentaPanel extends JPanel implements CajaInterfaz {
 		modelo.setColumnCount(0);
 	}
 
+	public void imprimir() {
+		NotaVenta notaVenta = notaVentaController.getNotaVentaId(notaVentaId);
+		DatosEmpresa datosEmpresa = datosEmpresaController.getDatosEmpresa();
+
+		comprobantesService.generarNotaVentaPdf(notaVenta, datosEmpresa);
+	}
 	public void validarBotonesCaja() {
 		// Validar caja abierta
 		if(cajaController.cajaCerrada(Utilidades.getUsuario().getId())) {
@@ -100,6 +113,8 @@ public class NotaVentaPanel extends JPanel implements CajaInterfaz {
 		notaVentaController = new NotaVentaController();
 		ivaController = new IvaController();
 		cajaController = new CajaController();
+		datosEmpresaController = new DatosEmpresaController();
+		comprobantesService = new ComprobantesService();
 		setBounds(ALLBITS, ABORT, 1080, 800);
 		setLayout(null);
 
@@ -162,6 +177,12 @@ public class NotaVentaPanel extends JPanel implements CajaInterfaz {
 		panel.add(scrollPane);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				notaVentaId = (Long) table.getValueAt(table.getSelectedRow(), 0);
+			}
+		});
 		scrollPane.setViewportView(table);
 
 		btnImprimir = new JButton("Imprimir");
@@ -171,6 +192,12 @@ public class NotaVentaPanel extends JPanel implements CajaInterfaz {
 		btnImprimir.setBorder(null);
 		btnImprimir.setBackground(Color.BLACK);
 		btnImprimir.setBounds(357, 103, 100, 30);
+		btnImprimir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				imprimir();
+			}
+		});
 		panel.add(btnImprimir);
 
 		JButton btnNewButton_3 = new JButton("Actualizar IVA");

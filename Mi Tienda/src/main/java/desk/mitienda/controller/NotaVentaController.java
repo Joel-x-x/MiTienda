@@ -5,6 +5,7 @@ import desk.mitienda.model.NotaVenta;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class NotaVentaController {
@@ -40,5 +41,9 @@ public class NotaVentaController {
         }
 
         return ceros + numero;
+    }
+
+    public List<NotaVenta> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        return notaVentaDao.listarFiltroFechas(fechaInicio, fechaFin);
     }
 }
