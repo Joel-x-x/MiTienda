@@ -62,6 +62,11 @@ public class ProductoFrame extends JFrame {
 	public void productoSeleccionado(Long id) {
 		Producto producto = productoController.getProductoId(id);
 
+		if(producto.getStock() <= 0) {
+			JOptionPane.showMessageDialog(null, "Este producto no tiene stock");
+			return;
+		}
+
 		frame.objetoSeleccionadoProducto(producto);
 	}
 

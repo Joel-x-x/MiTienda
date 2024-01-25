@@ -148,14 +148,14 @@ public class CompraPanel extends JPanel {
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
 		
-		btnImprimir = new JButton("Imprimir");
-		btnImprimir.setForeground(Color.WHITE);
-		btnImprimir.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnImprimir.setFocusPainted(false);
-		btnImprimir.setBorder(null);
-		btnImprimir.setBackground(Color.BLACK);
-		btnImprimir.setBounds(357, 103, 100, 30);
-		add(btnImprimir);
+//		btnImprimir = new JButton("Imprimir");
+//		btnImprimir.setForeground(Color.WHITE);
+//		btnImprimir.setFont(new Font("Tahoma", Font.BOLD, 11));
+//		btnImprimir.setFocusPainted(false);
+//		btnImprimir.setBorder(null);
+//		btnImprimir.setBackground(Color.BLACK);
+//		btnImprimir.setBounds(357, 103, 100, 30);
+//		add(btnImprimir);
 		
 		JLabel lblBuscarPorNumero = new JLabel("Buscar por numero");
 		lblBuscarPorNumero.setForeground(Color.WHITE);

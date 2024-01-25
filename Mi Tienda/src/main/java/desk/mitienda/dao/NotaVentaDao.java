@@ -1,12 +1,14 @@
 package desk.mitienda.dao;
 
 import desk.mitienda.model.Cliente;
+import desk.mitienda.model.NotaVenta;
 import desk.mitienda.model.NotaVenta ;
 import desk.mitienda.utils.Estado;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class NotaVentaDao {
@@ -73,5 +75,17 @@ public class NotaVentaDao {
             e.printStackTrace();
             return "000000000";
          }
+    }
+
+    public List<NotaVenta> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+        CriteriaQuery<NotaVenta> createQuery = criteriaBuilder.createQuery(NotaVenta.class);
+
+        Root<NotaVenta> from = createQuery.from(NotaVenta.class);
+
+        Predicate filtro = criteriaBuilder.and(criteriaBuilder.between(from.get("fecha"), fechaInicio, fechaFin));
+
+        return em.createQuery(createQuery.where(filtro)).getResultList();
     }
 }

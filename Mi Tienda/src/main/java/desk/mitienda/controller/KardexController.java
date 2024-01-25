@@ -8,6 +8,8 @@ import desk.mitienda.service.KardexService;
 import desk.mitienda.utils.Estado;
 import desk.mitienda.utils.JPAUtils;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class KardexController {
@@ -29,5 +31,9 @@ public class KardexController {
 
     public List<Kardex> listarProducto(Long id) {
         return kardexDao.listar(id);
+    }
+
+    public List<Kardex> listarFiltroFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        return kardexDao.listarFiltroFechas(fechaInicio, fechaFin);
     }
 }

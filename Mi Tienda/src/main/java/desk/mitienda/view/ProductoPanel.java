@@ -6,6 +6,7 @@ import desk.mitienda.controller.IvaController;
 import desk.mitienda.controller.KardexController;
 import desk.mitienda.controller.ProductoController;
 import desk.mitienda.model.*;
+import desk.mitienda.service.ReportesService;
 import desk.mitienda.utils.Estado;
 
 
@@ -39,8 +40,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ProductoPanel extends JPanel {
-	private JTextField txt_usuario;
-	private JTextField txt_nombres;
+	private JTextField textCodigo;
+	private JTextField textDescripcion;
 	private JButton btn_agregar_usuario;
 	private JComboBox <Categoria> comboBoxCategoria = new JComboBox<>();
 	private DefaultComboBoxModel<Categoria> comboBoxModelCategoria = new DefaultComboBoxModel<>();
@@ -49,12 +50,12 @@ public class ProductoPanel extends JPanel {
 	private JButton btn_limpiar_formulario;
 	private JButton btn_buscar;
 	private JButton btn_limpiar_lista;
-	private JTextField txt_busqueda_usuarios;
+	private JTextField textBusquedaUsuarios;
 	private JTable table;
-	private JTextField txt_utilidades;
+	private JTextField textUtilidad;
 	private JLabel labelIva;
 	private DefaultComboBoxModel <Iva> comboBoxModelIva = new DefaultComboBoxModel<>();
-	private JTextField txt_nombre_producto;
+	private JTextField textNombre;
 	private JCheckBox chbx_tiene_iva;
 	private ProductoController productoController;
 	private Long productoId;
@@ -67,92 +68,7 @@ public class ProductoPanel extends JPanel {
 	private JButton btnReporteKardex;
 	private KardexController kardexController;
 
-	public void generarPdfReporte(List<Kardex> listaKardex) {
-
-		try {
-			String ruta = System.getProperty("user.home");
-			FileOutputStream archivo = new FileOutputStream(ruta + "/Downloads/Reporte Kardex.pdf");
-			com.itextpdf.text.Document documento = new com.itextpdf.text.Document(PageSize.LETTER.rotate());
-			PdfWriter.getInstance(documento, archivo);
-			documento.open();
-
-
-			// Crea un objeto Font con estilo negrita
-			com.itextpdf.text.Font fuenteTitulo = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 16, Font.BOLD);
-
-			com.itextpdf.text.Font fuenteEncabezadoTabla = new com.itextpdf.text.Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 12, Font.BOLD);
-
-			// Crea un Paragraph y aplica el estilo de fuente negrita
-			Paragraph parrafo = new Paragraph("Reporte de membresías", fuenteTitulo);
-
-			parrafo.setAlignment(1);
-			documento.add(parrafo);
-
-			documento.add(new Paragraph("\n"));
-			documento.add(new Paragraph("Reporte Kardex"));
-			documento.add(new Paragraph("\n"));
-
-			PdfPTable tabla = new PdfPTable(11);
-
-			float[] anchosColumnas = {70f, 80f, 60f, 60f, 80f, 20f,30f, 30f, 30f, 30f, 30f}; // Ejemplo de anchos de columnas
-			tabla.setTotalWidth(anchosColumnas);
-			tabla.setWidths(anchosColumnas);
-
-			tabla.addCell(new PdfPCell(new Phrase("Fecha", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Numero", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Proveedor/Cliente", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Tipo", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Producto", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Cantidad", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Precio unitario", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Precio total", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Cantidad existencia", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Costo unitario en existencia", fuenteEncabezadoTabla)));
-			tabla.addCell(new PdfPCell(new Phrase("Costo total existencia", fuenteEncabezadoTabla)));
-
-			tabla.completeRow();
-
-			listaKardex.forEach(kardex -> {
-				tabla.addCell(new PdfPCell(new Phrase(String.valueOf(kardex.getFecha()))));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getNumero())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getProveedorCliente())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getTipo() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getProducto().getNombre())));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidad() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioUnitario() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getPrecioTotal() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCantidadExistencia() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoUnitarioExistencia() + "")));
-				tabla.addCell(new PdfPCell(new Phrase(kardex.getCostoTotalExistencia() + "")));
-
-				tabla.completeRow();
-
-			});
-
-			documento.add(tabla);
-
-			documento.close();
-
-		} catch ( FileNotFoundException e1) {
-
-			System.out.println(e1);
-		} catch (DocumentException e1) {
-
-			e1.printStackTrace();
-		}
-
-		String ruta = System.getProperty("user.home");
-		File path = new File(ruta + "/Downloads/Reporte Kardex.pdf");
-		System.out.println(path);
-
-		if (path.exists()) {
-			try {
-				Desktop.getDesktop().open(path);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
+	private ReportesService reportesService;
 
 	//-------------------------------------Utilidades--------------------------------
 	public void iniciarCombos(){
@@ -160,6 +76,7 @@ public class ProductoPanel extends JPanel {
 		comboBoxModelCategoria.removeAllElements();
 		comboBoxModelCategoria.addAll(categoriaController.listar());
 		comboBoxCategoria.setModel(comboBoxModelCategoria);
+
 		comboBoxCategoria.setSelectedIndex(0);
 
 		//Combo Iva
@@ -172,14 +89,33 @@ public class ProductoPanel extends JPanel {
 	 * @return Llena los campos de producto
 	 */
 	public Producto llenarProducto(){
+		// Tomar en cuanta solo cuando se actualiza
+		Producto producto = new Producto();
 
-		Producto producto = new Producto(); // Instancia de Producto utilizando el constructor predeterminado
-
-		producto.setCodigo(txt_usuario.getText());
-		producto.setNombre(txt_nombre_producto.getText());
-		producto.setDescripcion(txt_nombres.getText());
+		producto.setCodigo(textCodigo.getText());
+		producto.setNombre(textNombre.getText());
+		producto.setDescripcion(textDescripcion.getText());
 		producto.setCategoria((Categoria) comboBoxCategoria.getSelectedItem());
-		producto.setUtilidad(BigDecimal.valueOf(Double.parseDouble(txt_utilidades.getText())));
+		producto.setUtilidad(BigDecimal.valueOf(Double.parseDouble(textUtilidad.getText())));
+		producto.setTieneIva(chbx_tiene_iva.isSelected());
+		producto.setEstado(true);
+
+		if(chbx_tiene_iva.isSelected())
+			producto.setIva(ivaController.ultimoIva());
+
+		return producto;
+	}
+
+
+	public Producto llenarProductoActualizar(){
+		// Tomar en cuanta solo cuando se actualiza
+		Producto producto = productoController.getProductoId(productoId); // Instancia de Producto utilizando el constructor predeterminado
+
+		producto.setCodigo(textCodigo.getText());
+		producto.setNombre(textNombre.getText());
+		producto.setDescripcion(textDescripcion.getText());
+		producto.setCategoria((Categoria) comboBoxCategoria.getSelectedItem());
+		producto.setUtilidad(BigDecimal.valueOf(Double.parseDouble(textUtilidad.getText())));
 		producto.setTieneIva(chbx_tiene_iva.isSelected());
 		producto.setEstado(true);
 
@@ -204,11 +140,11 @@ public class ProductoPanel extends JPanel {
 
 		Producto producto = productoController.getProductoId(productoId);
 
-		txt_usuario.setText(producto.getCodigo());
-		txt_nombre_producto.setText(producto.getNombre());
-		txt_nombres.setText(producto.getDescripcion());
+		textCodigo.setText(producto.getCodigo());
+		textNombre.setText(producto.getNombre());
+		textDescripcion.setText(producto.getDescripcion());
 		comboBoxCategoria.setSelectedItem(producto.getCategoria());
-		txt_utilidades.setText(String.valueOf(producto.getUtilidad()));
+		textUtilidad.setText(String.valueOf(producto.getUtilidad()));
 		chbx_tiene_iva.setSelected(producto.getTieneIva());
 
 	}
@@ -221,9 +157,8 @@ public class ProductoPanel extends JPanel {
 
 	}
 
-
-
 	private void listarProductos(String codigo, String nombre){
+		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
 		List<Producto> listaProductos = productoController.listar(codigo, nombre);
 		modelo.addColumn("Id");
@@ -256,11 +191,11 @@ public class ProductoPanel extends JPanel {
 	}
 
 	public void limpiarFormulario(){
-		txt_usuario.setText("");
+		textCodigo.setText("");
 		comboBoxCategoria.setSelectedItem(null);
-		txt_nombres.setText("");
-		txt_nombre_producto.setText("");
-		txt_utilidades.setText("");
+		textDescripcion.setText("");
+		textNombre.setText("");
+		textUtilidad.setText("");
 		chbx_tiene_iva.setSelected(true);
 		checkIva();
 
@@ -303,20 +238,17 @@ public class ProductoPanel extends JPanel {
 
 	public void actualizar(){
 
-		Producto producto = llenarProducto();
+		Producto producto = llenarProductoActualizar();
 		producto.setId(productoId);
+
 		Estado estado = productoController.actualizar(producto);
-		if(estado.getExito()){
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
 
-			borrarDatosTabla();
-			listarProductos(null, null);
-			limpiarFormulario();
-			bloquearBotones();
-		} else {
-			JOptionPane.showMessageDialog(null, estado.getMensaje());
+		JOptionPane.showMessageDialog(null, estado.getMensaje());
 
-		}
+		borrarDatosTabla();
+		listarProductos(null, null);
+		limpiarFormulario();
+		bloquearBotones();
 
 	}
 
@@ -337,7 +269,7 @@ public class ProductoPanel extends JPanel {
 	public void buscarCodigo(){
 		borrarDatosTabla();
 		modelo = (DefaultTableModel) table.getModel();
-		List<Producto> listaProductos = productoController.listar(txt_busqueda_usuarios.getText(), null);
+		List<Producto> listaProductos = productoController.listar(textBusquedaUsuarios.getText(), null);
 		modelo.addColumn("1");
 		modelo.addColumn("2");
 		modelo.addColumn("3");
@@ -375,6 +307,7 @@ public class ProductoPanel extends JPanel {
 		categoriaController = new CategoriaController();
 		ivaController = new IvaController();
 		kardexController = new KardexController();
+		reportesService = new ReportesService();
 
 		setBackground(new Color(49, 51, 56));
 		setLayout(null);
@@ -394,10 +327,10 @@ public class ProductoPanel extends JPanel {
 		lblUsuario.setBounds(32, 69, 114, 38);
 		add(lblUsuario);
 		
-		txt_usuario = new JTextField();
-		txt_usuario.setBounds(22, 107, 169, 28);
-		add(txt_usuario);
-		txt_usuario.setColumns(10);
+		textCodigo = new JTextField();
+		textCodigo.setBounds(22, 107, 169, 28);
+		add(textCodigo);
+		textCodigo.setColumns(10);
 		
 		JLabel lblClave = new JLabel("Nombre");
 		lblClave.setForeground(Color.WHITE);
@@ -413,10 +346,10 @@ public class ProductoPanel extends JPanel {
 		lblNombre.setBounds(380, 69, 114, 38);
 		add(lblNombre);
 		
-		txt_nombres = new JTextField();
-		txt_nombres.setColumns(10);
-		txt_nombres.setBounds(380, 107, 169, 28);
-		add(txt_nombres);
+		textDescripcion = new JTextField();
+		textDescripcion.setColumns(10);
+		textDescripcion.setBounds(380, 107, 169, 28);
+		add(textDescripcion);
 		
 		comboBoxCategoria = new JComboBox();
 		comboBoxCategoria.setBounds(22, 189, 169, 28);
@@ -501,7 +434,7 @@ public class ProductoPanel extends JPanel {
 		btn_limpiar_lista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarLista();
-				txt_busqueda_usuarios.setText("");
+				textBusquedaUsuarios.setText("");
 			}
 		});
 		btn_limpiar_lista.setForeground(Color.WHITE);
@@ -515,13 +448,13 @@ public class ProductoPanel extends JPanel {
 		lblBuscarPorUsuario.setForeground(Color.WHITE);
 		lblBuscarPorUsuario.setFont(new Font("Jockey One", Font.PLAIN, 14));
 		lblBuscarPorUsuario.setBorder(null);
-		lblBuscarPorUsuario.setBounds(10, 297, 114, 38);
+		lblBuscarPorUsuario.setBounds(10, 302, 114, 38);
 		add(lblBuscarPorUsuario);
 		
-		txt_busqueda_usuarios = new JTextField();
-		txt_busqueda_usuarios.setColumns(10);
-		txt_busqueda_usuarios.setBounds(118, 309, 169, 28);
-		add(txt_busqueda_usuarios);
+		textBusquedaUsuarios = new JTextField();
+		textBusquedaUsuarios.setColumns(10);
+		textBusquedaUsuarios.setBounds(118, 309, 169, 28);
+		add(textBusquedaUsuarios);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 355, 1040, 354);
@@ -543,9 +476,9 @@ public class ProductoPanel extends JPanel {
 		});
 		scrollPane.setViewportView(table);
 		
-		txt_utilidades = new JTextField();
-		txt_utilidades.setBounds(201, 189, 169, 28);
-		add(txt_utilidades);
+		textUtilidad = new JTextField();
+		textUtilidad.setBounds(201, 189, 169, 28);
+		add(textUtilidad);
 		
 		JLabel lblUtilidad = new JLabel("Utilidad");
 		lblUtilidad.setForeground(Color.WHITE);
@@ -578,10 +511,10 @@ public class ProductoPanel extends JPanel {
 		labelIva.setBorder(null);
 		add(labelIva);
 		
-		txt_nombre_producto = new JTextField();
-		txt_nombre_producto.setColumns(10);
-		txt_nombre_producto.setBounds(201, 107, 169, 28);
-		add(txt_nombre_producto);
+		textNombre = new JTextField();
+		textNombre.setColumns(10);
+		textNombre.setBounds(201, 107, 169, 28);
+		add(textNombre);
 		
 		JButton botonAgregarCategoria = new JButton("Agregar categoria");
 		botonAgregarCategoria.addActionListener(new ActionListener() {
@@ -600,7 +533,7 @@ public class ProductoPanel extends JPanel {
 		btnReporteKardex = new JButton("Reporte Kardex");
 		btnReporteKardex.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				generarPdfReporte(kardexController.listarProducto(productoId));
+				reportesService.generarReporteKardex(kardexController.listarProducto(productoId));
 			}
 		});
 		btnReporteKardex.setForeground(Color.WHITE);
@@ -613,7 +546,10 @@ public class ProductoPanel extends JPanel {
 		add(btnReporteKardex);
 
 		listarProductos(null, null);
-		iniciarCombos();
+//		categoriaController.listar();
+		if(!ivaController.listar().isEmpty() && !categoriaController.listar().isEmpty() ) {
+			iniciarCombos();
+		}
 		bloquearBotones();
 		checkIva();
 

@@ -1,17 +1,10 @@
 package desk.mitienda.view;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Rectangle;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
@@ -43,6 +36,7 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 	private KardexController kardexController;
 	private ClienteController clienteController;
 	private DatosEmpresaController datosEmpresaController;
+	private CajaController cajaController;
 	private JLabel labelCliente;
 	private JLabel labelTotal;
 	private JTable table;
@@ -99,6 +93,11 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 	public void guardar() {
 		notaVentaController.guardar(notaVenta);
 		kardexController.registrarKardexVenta(notaVenta);
+		// Agregar monto en caja
+		Caja caja = cajaController.getCajaAbiertaUsuarioId(Utilidades.getUsuario().getId());
+		caja.agregarValor(notaVenta.getTotal());
+		cajaController.actualizar(caja);
+
 		this.dispose();
 	}
 
@@ -136,6 +135,10 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 		notaVenta.getDetalle().forEach(detalle -> {
 			if(detalle.getProducto().getCodigo() == codigoProducto) {
 				if(cantidad != null) {
+					if(detalle.getProducto().getStock() < cantidad) {
+						JOptionPane.showMessageDialog(null, "La cantidad es superior al stock actual");
+						return;
+					}
 					detalle.setCantidad(cantidad);
 				}
 
@@ -167,6 +170,7 @@ public class NotaVentaFrame extends JFrame implements GenerarFrameInterfaz, Gene
 		kardexController = new KardexController();
 		clienteController = new ClienteController();
 		datosEmpresaController = new DatosEmpresaController();
+		cajaController = new CajaController();
 
 		notaVenta = new NotaVenta(notaVentaController.getSiguienteNumeroConsumidorFinal());
 
